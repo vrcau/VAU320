@@ -12,7 +12,7 @@ using VRC.SDKBase;
 using SaccFlightAndVehicles;
 using EsnyaSFAddons.SFEXT;
 using EsnyaSFAddons.DFUNC;
-using YuxiPlanes;
+using A320VAU.Common;
 
 namespace YuxiFlightInstruments.ECAM {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
