@@ -11,10 +11,6 @@ namespace A320VAU.FWS
 
         public void MonitorEngine()
         {
-            if (!DUAL_ENGINE_FAULT.IsVisable) {
-                DUAL_ENGINE_FAULT.IsVisable = true;
-                _hasWarningVisableChange = true;
-            }
         }
     }
 }

@@ -17,8 +17,13 @@ namespace A320VAU.FWS
         public bool IsVisable = false;
         public DisplayZone Zone; // on the left or right of the ecam
         public WarningType Type;
-        public WarningMessageLine[] MessageLine;
         public WarningLevel Level;
         public SystemPage SystemPage;
+        [HideInInspector]
+        public WarningMessageLine[] MessageLine;
+
+        private void Start() {
+            MessageLine = GetComponentsInChildren<WarningMessageLine>();
+        }
     }
 }

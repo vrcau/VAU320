@@ -13,9 +13,12 @@ namespace A320VAU.FWS
 
         public bool Monitor(FWS fws)
         {
+            _hasWarningVisableChange = false;
             FWS = fws;
 
             MonitorEngine();
+            MonitorConfigMemo();
+            MonitorGear();
             return _hasWarningVisableChange;
         }
     }

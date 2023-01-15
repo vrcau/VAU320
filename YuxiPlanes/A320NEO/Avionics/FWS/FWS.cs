@@ -4,6 +4,7 @@ using A320VAU.Brake;
 using A320VAU.ECAM;
 using EsnyaSFAddons.DFUNC;
 using EsnyaSFAddons.SFEXT;
+using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -15,9 +16,14 @@ namespace A320VAU.FWS
 {
     public class FWS : UdonSharpBehaviour
     {
+        [HideInInspector]
         public FWSWarningMessageData[] FWSWarningMessageDatas;
+        [HideInInspector]
         public FWSWarningData FWSWarningData;
         public ECAMController ECAMController;
+
+        public SaccAirVehicle SaccAirVehicle;
+        public SaccEntity SaccEntity;
 
         #region Aircraft Systems
         [Header("Aircraft Systems")]
@@ -41,6 +47,13 @@ namespace A320VAU.FWS
         #endregion
 
         private bool _hasWarningVisableChange = false;
+
+        private void Start()
+        {
+            FWSWarningMessageDatas = GetComponentsInChildren<FWSWarningMessageData>();
+            FWSWarningData = GetComponentInChildren<FWSWarningData>();
+        }
+
         private void LateUpdate()
         {
             _hasWarningVisableChange = FWSWarningData.Monitor(this);

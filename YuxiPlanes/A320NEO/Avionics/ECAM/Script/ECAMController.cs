@@ -379,17 +379,37 @@ namespace A320VAU.ECAM
             {
                 if (memo.IsVisable)
                 {
-                    memoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningGroup} {memo.WarningTitle}</color>\n";
-                    foreach (var messageLine in memo.MessageLine)
+                    switch (memo.Type)
                     {
-                        if (messageLine.IsMessageVisable)
-                        {
-                            memoText += $"<color={getColorHexByWarningColor(messageLine.MessageColor)}>{messageLine.MessageText}</color>";
-                            if (messageLine.MessageText.Length == SingleLineMaxLength)
-                                memoText += "\n";
-                        }
+                        case WarningType.SpecialLine:
+                            break;
+                        case WarningType.Memo:
+                            break;
+                        case WarningType.Secondary:
+                            break;
+                        default:
+                            memoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningGroup} {memo.WarningTitle}</color>";
+                            if (memo.Type != WarningType.ConfigMemo) memoText += "\n";
+
+                            var lastLineLength = 0;
+                            foreach (var messageLine in memo.MessageLine)
+                            {
+                                if (messageLine.IsMessageVisable)
+                                {
+                                    memoText += $"<color={getColorHexByWarningColor(messageLine.MessageColor)}>{messageLine.MessageText}</color>";
+                                    if (lastLineLength + messageLine.MessageText.Length >= SingleLineMaxLength)
+                                    {
+                                        memoText += "\n";
+                                        lastLineLength = 0;
+                                    } else {
+                                        lastLineLength = messageLine.MessageText.Length;
+                                    }
+                                }
+                            }
+                            break;
                     }
                 }
+
             }
 
             LeftMemoText.text = memoText;

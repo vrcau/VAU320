@@ -21,7 +21,8 @@ namespace A320VAU.FWS
         ConfigMemo = 1,
         Memo = 2,
         Secondary = 3,
-        Primary = 4
+        Primary = 4,
+        Independent = 5
     }
 
     public enum WarningLevel
