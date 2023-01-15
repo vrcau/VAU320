@@ -11,7 +11,8 @@ namespace A320VAU.FWS
         Danger = 0,
         Amber = 1,
         Green = 2,
-        White = 3
+        White = 3,
+        Blue = 4
     }
 
     public enum WarningType
@@ -35,5 +36,11 @@ namespace A320VAU.FWS
         None = 0,
         Engine = 1,
         Bleed = 2
+    }
+
+    public enum WarningStyle {
+        None = 0,
+        Underline = 1,
+        Boxed = 2
     }
 }

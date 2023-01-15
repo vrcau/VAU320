@@ -1,6 +1,7 @@
 ﻿
 using System;
 using A320VAU.Brake;
+using A320VAU.ECAM;
 using EsnyaSFAddons.DFUNC;
 using EsnyaSFAddons.SFEXT;
 using UdonSharp;
@@ -16,6 +17,7 @@ namespace A320VAU.FWS
     {
         public FWSWarningMessageData[] FWSWarningMessageDatas;
         public FWSWarningData FWSWarningData;
+        public ECAMController ECAMController;
 
         #region Aircraft Systems
         [Header("Aircraft Systems")]
@@ -38,11 +40,12 @@ namespace A320VAU.FWS
         public DFUNC_ElevatorTrim ElevatorTrim;
         #endregion
 
+        private bool _hasWarningVisableChange = false;
         private void LateUpdate()
         {
-            Debug.Log("Invoke Monitor");
-            FWSWarningData.Monitor();
+            _hasWarningVisableChange = FWSWarningData.Monitor(this);
+
+            if (_hasWarningVisableChange) ECAMController.SendCustomEvent("UpdateMemo");
         }
     }
-
 }

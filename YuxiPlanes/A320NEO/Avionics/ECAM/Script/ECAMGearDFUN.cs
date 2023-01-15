@@ -5,7 +5,7 @@ using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
-namespace YuxiFlightInstruments.ECAM {
+namespace A320VAU.ECAM {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class ECAMGearDFUN : UdonSharpBehaviour {
         public ECAMController ECAMController;

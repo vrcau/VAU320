@@ -21,7 +21,7 @@ MonoBehaviour:
   compiledVersion: 2
   behaviourSyncMode: 2
   hasInteractEvent: 0
-  scriptID: 9138885220072646483
+  scriptID: 6463714862774093073
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
@@ -62,7 +62,7 @@ MonoBehaviour:
       Data: 3|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: YuxiFlightInstruments.ECAM.ECAMController, Assembly-CSharp
+      Data: A320VAU.ECAM.ECAMController, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
