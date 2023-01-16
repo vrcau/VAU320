@@ -51,10 +51,6 @@ namespace A320VAU.ECAM
         public Text HHMMText;
         public Text SSText;
 
-        [Header("Memos")]
-        public ChecklistItem[] Checklists;
-        public ChecklistItem[] ActiveChecklists = new ChecklistItem[0];
-
         public Text LeftMemoText;
         public Text RightMemoText;
 
@@ -96,11 +92,6 @@ namespace A320VAU.ECAM
         }
         public void Start()
         {
-            ActiveChecklists = new ChecklistItem[] {
-                Checklists[1]
-            };
-
-            // UpdateChecklist();
             eng1AvailFlag.SetActive(false);
             eng2AvailFlag.SetActive(false);
             flapText.text = "0";
