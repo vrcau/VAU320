@@ -73,56 +73,6 @@ namespace A320VAU.ECAM
         private bool isStartingL = false;
         private bool isStartingR = false;
 
-        [UdonSynced, FieldChangeCallback(nameof(IsLadingGearDown))]
-        private bool _isLadingGearDown;
-        public bool IsLadingGearDown
-        {
-            get => _isLadingGearDown;
-            set
-            {
-                _isLadingGearDown = value;
-                UpdateECAMMemo();
-            }
-        }
-
-        public bool IsCrazyThrusday = false;
-
-        [UdonSynced, FieldChangeCallback(nameof(IsSeatBeltsSignOn))]
-        private bool _isSeatBeltsSignOn;
-        public bool IsSeatBeltsSignOn
-        {
-            get => _isSeatBeltsSignOn;
-            set
-            {
-                _isSeatBeltsSignOn = value;
-                UpdateECAMMemo();
-            }
-        }
-
-        [UdonSynced, FieldChangeCallback(nameof(IsNoSmoking))]
-        private bool _isNoSmoking;
-        public bool IsNoSmoking
-        {
-            get => _isNoSmoking;
-            set
-            {
-                _isNoSmoking = value;
-                UpdateECAMMemo();
-            }
-        }
-
-        [UdonSynced, FieldChangeCallback(nameof(IsSplrsArmed))]
-        private bool _isSplrsArmed;
-        public bool IsSplrsArmed
-        {
-            get => _isSplrsArmed;
-            set
-            {
-                _isSplrsArmed = value;
-                UpdateECAMMemo();
-            }
-        }
-
         [UdonSynced, FieldChangeCallback(nameof(FlapPosition))]
         private int _flapPosition;
         public int FlapPosition
@@ -144,51 +94,8 @@ namespace A320VAU.ECAM
                 _flapTargetPosition = value;
             }
         }
-
-        [UdonSynced, FieldChangeCallback(nameof(IsCabinReady))]
-        private bool _isCabinReady;
-        public bool IsCabinReady
-        {
-            get => _isCabinReady;
-            set
-            {
-                _isCabinReady = value;
-                UpdateECAMMemo();
-            }
-        }
-
-        [UdonSynced, FieldChangeCallback(nameof(IsParkbrakeSet))]
-        private bool _isParkbrakeSet;
-        public bool IsParkbrakeSet
-        {
-            get => _isParkbrakeSet;
-            set
-            {
-                _isParkbrakeSet = value;
-                UpdateECAMMemo();
-            }
-        }
-
-        [UdonSynced, FieldChangeCallback(nameof(IsHookDown))]
-        private bool _isHookDown;
-        public bool IsHookDown
-        {
-            get => _isHookDown;
-            set
-            {
-                _isHookDown = value;
-                UpdateECAMMemo();
-            }
-        }
-
         public void Start()
         {
-            IsParkbrakeSet = false;
-            IsSeatBeltsSignOn = true;
-
-            System.DateTime today = System.DateTime.Today;
-            if (today.DayOfWeek == System.DayOfWeek.Thursday) IsCrazyThrusday = true;
-
             ActiveChecklists = new ChecklistItem[] {
                 Checklists[1]
             };
@@ -208,11 +115,6 @@ namespace A320VAU.ECAM
             UpdateFlapStatus();
         }
 
-        public override void OnDeserialization()
-        {
-            UpdateECAMMemo();
-        }
-
         private void UpdateClock()
         {
             HHMMText.text = DateTime.UtcNow.ToShortTimeString();
@@ -226,7 +128,6 @@ namespace A320VAU.ECAM
             if (FlapPosition != flapController.detentIndex)
             {
                 FlapPosition = flapController.detentIndex;
-                UpdateECAMMemo();
             }
 
             if (FlapTargetPosition != flapController.targetDetentIndex)
@@ -327,52 +228,15 @@ namespace A320VAU.ECAM
             if (IsAPUStart != APUControllor.run)
             {
                 IsAPUStart = APUControllor.run;
-                UpdateECAMMemo();
             }
         }
-
-        // public void UpdateChecklist() {
-        //     LeftMemoText.text = "";
-        //     foreach (var item in ActiveChecklists) {
-        //         var hasTitle = !string.IsNullOrEmpty(item.Title);
-
-        //         if (hasTitle) {
-        //             LeftMemoText.text += $"{item.Prefix} {item.Title}\n";
-        //         } else {
-        //             LeftMemoText.text += $"{item.Prefix} ";
-        //         }
-
-        //         var prefix = "".PadLeft((item.Prefix + " ").Length);
-
-        //         for (int index = 0; index != item.CheckItems.Length; index++) {
-        //             var checkitem = item.CheckItems[index];
-        //             var checkItemTextLength = 20 + $"<color={MemoItemColor.Blue}>".Length - checkitem.ValueText.Length;
-        //             var isChecked = GetProgramVariable(checkitem.PropertyName).ToString() == checkitem.Value;
-        //             var checkItemText = "";
-
-        //             if (!hasTitle && index == 0) {
-        //                 checkItemTextLength -= (item.Prefix + " ").Length;
-        //             } else {
-        //                 checkItemText = prefix;
-        //             }
-
-        //             if (isChecked) {
-        //                 checkItemText += $"{checkitem.Title} {checkitem.ValueText}\n";
-        //             } else {
-        //                 checkItemText += $"{checkitem.Title}<color={ MemoItemColor.Blue }>";
-        //                 checkItemText = checkItemText.PadRight(checkItemTextLength, '.');
-        //                 checkItemText += $"{checkitem.ValueText}</color>\n";
-        //             }
-
-        //             LeftMemoText.text += checkItemText;
-        //         }
-        //     }
-        // }
 
         private readonly int SingleLineMaxLength = 24;
         public void UpdateMemo()
         {
-            var memoText = "";
+            var rightMemoText = "";
+            var leftMemoText = "";
+            var hasWarning = false;
             foreach (var memo in FWS.FWSWarningMessageDatas)
             {
                 if (memo.IsVisable)
@@ -380,27 +244,47 @@ namespace A320VAU.ECAM
                     switch (memo.Type)
                     {
                         case WarningType.SpecialLine:
+                            rightMemoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningTitle}</color>\n";
                             break;
                         case WarningType.Memo:
+                            switch (memo.Zone)
+                            {
+                                case DisplayZone.Left:
+                                    if (!hasWarning)
+                                    {
+                                        leftMemoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningTitle}</color>\n";
+                                    }
+                                    break;
+                                case DisplayZone.Right:
+                                    rightMemoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningTitle}</color>\n";
+                                    break;
+                            }
                             break;
                         case WarningType.Secondary:
+                            rightMemoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningTitle}</color>\n";
                             break;
                         default:
-                            memoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningGroup} {memo.WarningTitle}</color>";
-                            if (memo.Type != WarningType.ConfigMemo) memoText += "\n";
+                            leftMemoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningGroup} {memo.WarningTitle}</color>";
+                            hasWarning = !hasWarning & memo.Type != WarningType.ConfigMemo;
 
-                            var lastLineLength = 0;
-                            foreach (var messageLine in memo.MessageLine)
+                            if (!(memo.Type != WarningType.ConfigMemo & hasWarning))
                             {
-                                if (messageLine.IsMessageVisable)
+                                if (memo.Type != WarningType.ConfigMemo) leftMemoText += "\n";
+                                var lastLineLength = 0;
+                                foreach (var messageLine in memo.MessageLine)
                                 {
-                                    memoText += $"<color={getColorHexByWarningColor(messageLine.MessageColor)}>{messageLine.MessageText}</color>";
-                                    if (lastLineLength + messageLine.MessageText.Length >= SingleLineMaxLength)
+                                    if (messageLine.IsMessageVisable)
                                     {
-                                        memoText += "\n";
-                                        lastLineLength = 0;
-                                    } else {
-                                        lastLineLength = messageLine.MessageText.Length;
+                                        leftMemoText += $"<color={getColorHexByWarningColor(messageLine.MessageColor)}>{messageLine.MessageText}</color>";
+                                        if (lastLineLength + messageLine.MessageText.Length >= SingleLineMaxLength)
+                                        {
+                                            leftMemoText += "\n";
+                                            lastLineLength = 0;
+                                        }
+                                        else
+                                        {
+                                            lastLineLength = messageLine.MessageText.Length;
+                                        }
                                     }
                                 }
                             }
@@ -410,7 +294,8 @@ namespace A320VAU.ECAM
 
             }
 
-            LeftMemoText.text = memoText;
+            LeftMemoText.text = leftMemoText;
+            RightMemoText.text = rightMemoText;
         }
 
         private string getColorHexByWarningColor(WarningColor color)
@@ -431,36 +316,5 @@ namespace A320VAU.ECAM
                     return AirbusAvionicsTheme.Green;
             };
         }
-
-        public void UpdateECAMMemo()
-        {
-            return;
-            // UpdateLeftMemo();
-            // UpdateRightMemo();
-            // UpdateChecklist();
-        }
-
-        // public void UpdateLeftMemo() {
-        //     var leftMemo = "";
-        //     if (IsSplrsArmed) leftMemo += CreateECAMMemo(MemoItemColor.Green, "GND SPLRS ARMED");
-        //     if (IsSeatBeltsSignOn) leftMemo += CreateECAMMemo(MemoItemColor.Green, "SEAT BELTS");
-        //     if (IsNoSmoking) leftMemo += CreateECAMMemo(MemoItemColor.Green, "NO SMOKING");
-
-        //     LeftMemoText.text = leftMemo;
-        // }
-
-        // public void UpdateRightMemo() {
-        //     var rightMemo = "";
-        //     if (IsCrazyThrusday) rightMemo += CreateECAMMemo(MemoItemColor.Green, "V ME 50!");
-        //     if (IsParkbrakeSet) rightMemo += CreateECAMMemo(MemoItemColor.Green, "PARK BRAKE");
-        //     if (IsCabinReady) rightMemo += CreateECAMMemo(MemoItemColor.Green, "CABIN READY");
-        //     if (IsHookDown) rightMemo += CreateECAMMemo(MemoItemColor.Green, "HOOK");
-        //     if (IsAPUStart) rightMemo += CreateECAMMemo(MemoItemColor.Green, "APU BLEED");
-        //     RightMemoText.text = rightMemo;
-        // }
-
-        // public string CreateECAMMemo(string color, string text) {
-        //     return $"<color={color}>{text}</color>\n";
-        // }
     }
 }
