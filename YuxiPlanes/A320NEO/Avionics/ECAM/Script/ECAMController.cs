@@ -372,8 +372,6 @@ namespace A320VAU.ECAM
         private readonly int SingleLineMaxLength = 24;
         public void UpdateMemo()
         {
-            Debug.Log("Update memo");
-
             var memoText = "";
             foreach (var memo in FWS.FWSWarningMessageDatas)
             {

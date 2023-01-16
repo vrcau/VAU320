@@ -58,6 +58,54 @@ namespace A320VAU.FWS
             #endregion
 
             #region Landing Memo
+            LANDING_MEMO.IsVisable = !FWS.SaccAirVehicle.Taxiing & isEngine1Running & isEngine2Running & (float)FWS.GPWS.GetProgramVariable("radioAltitude") < 1000f;
+
+            // GEAR DN
+            if (FWS.LeftLadingGear.targetPosition == 1)
+            {
+                LANDING_MEMO.MessageLine[0].IsMessageVisable = false;
+                LANDING_MEMO.MessageLine[1].IsMessageVisable = false;
+                LANDING_MEMO.MessageLine[2].IsMessageVisable = true;
+            }
+            else
+            {
+                LANDING_MEMO.MessageLine[0].IsMessageVisable = false;
+                LANDING_MEMO.MessageLine[1].IsMessageVisable = false;
+                LANDING_MEMO.MessageLine[2].IsMessageVisable = true;
+            }
+
+            // SINGS ON
+            LANDING_MEMO.MessageLine[3].IsMessageVisable = false;
+            LANDING_MEMO.MessageLine[4].IsMessageVisable = false;
+            LANDING_MEMO.MessageLine[5].IsMessageVisable = true;
+
+            // CABIN READY
+            LANDING_MEMO.MessageLine[6].IsMessageVisable = false;
+            LANDING_MEMO.MessageLine[7].IsMessageVisable = false;
+            LANDING_MEMO.MessageLine[8].IsMessageVisable = true;
+
+            // SPLRS ARM
+            LANDING_MEMO.MessageLine[9].IsMessageVisable = false;
+            LANDING_MEMO.MessageLine[10].IsMessageVisable = false;
+            LANDING_MEMO.MessageLine[11].IsMessageVisable = true;
+
+            // FLAPS FULL
+            if (FWS.Flaps.targetDetentIndex == 4)
+            {
+                LANDING_MEMO.MessageLine[12].IsMessageVisable = false;
+                LANDING_MEMO.MessageLine[13].IsMessageVisable = false;
+                LANDING_MEMO.MessageLine[14].IsMessageVisable = true;
+            }
+            else
+            {
+                LANDING_MEMO.MessageLine[12].IsMessageVisable = true;
+                LANDING_MEMO.MessageLine[13].IsMessageVisable = true;
+                LANDING_MEMO.MessageLine[14].IsMessageVisable = false;
+            }
+
+            // FLAPS CONF3
+            LANDING_MEMO.MessageLine[15].IsMessageVisable = false;
+            LANDING_MEMO.MessageLine[16].IsMessageVisable = false;
             #endregion
 
             _hasWarningVisableChange = true;

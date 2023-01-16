@@ -2,6 +2,7 @@
 using System;
 using A320VAU.Brake;
 using A320VAU.ECAM;
+using EsnyaSFAddons.Avionics;
 using EsnyaSFAddons.DFUNC;
 using EsnyaSFAddons.SFEXT;
 using SaccFlightAndVehicles;
@@ -42,6 +43,7 @@ namespace A320VAU.FWS
 
         public YFI_NavigationReceiver NavigationReceiver1;
         public YFI_NavigationReceiver NavigationReceiver2;
+        public GPWS GPWS;
 
         public DFUNC_ElevatorTrim ElevatorTrim;
         #endregion
