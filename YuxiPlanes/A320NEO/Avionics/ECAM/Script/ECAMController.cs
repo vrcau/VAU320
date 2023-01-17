@@ -1,28 +1,25 @@
-﻿using Assets.YuxiFlightInstruments.ECAM.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
-using VRC.SDKBase;
 using SaccFlightAndVehicles;
 using EsnyaSFAddons.SFEXT;
 using EsnyaSFAddons.DFUNC;
-using YuxiPlanes;
+using A320VAU.Common;
+using A320VAU.FWS;
 
-namespace YuxiFlightInstruments.ECAM {
+namespace A320VAU.ECAM
+{
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
-    public partial class ECAMController : UdonSharpBehaviour {
+    public partial class ECAMController : UdonSharpBehaviour
+    {
         public SaccAirVehicle airVehicle;
         public AirbusAvionicsTheme AirbusAvionicsTheme;
+        public FWS.FWS FWS;
         [Header("Engines")]
         public SFEXT_AdvancedEngine EngineControllorL;
         public SFEXT_AdvancedEngine EngineControllorR;
-        
+
         [Header("Left Engine")]
         public Text N1L;
         public Text N2L;
@@ -54,13 +51,9 @@ namespace YuxiFlightInstruments.ECAM {
         public Text HHMMText;
         public Text SSText;
 
-        [Header("Memos")]
-        public ChecklistItem[] Checklists;
-        public ChecklistItem[] ActiveChecklists = new ChecklistItem[0];
-
         public Text LeftMemoText;
         public Text RightMemoText;
-        
+
         [Header("Animator")]
         public Animator ECAMAnimator;
         private int ENG1N1_HASH = Animator.StringToHash("ENG1N1");
@@ -76,108 +69,29 @@ namespace YuxiFlightInstruments.ECAM {
         private bool isStartingL = false;
         private bool isStartingR = false;
 
-        [UdonSynced, FieldChangeCallback(nameof(IsLadingGearDown))]
-        private bool _isLadingGearDown;
-        public bool IsLadingGearDown {
-            get => _isLadingGearDown;
-            set {
-                _isLadingGearDown = value;
-                UpdateECAMMemo();
-            }
-        }
-        
-        public bool IsCrazyThrusday = false;
-
-        [UdonSynced, FieldChangeCallback(nameof(IsSeatBeltsSignOn))]
-        private bool _isSeatBeltsSignOn;
-        public bool IsSeatBeltsSignOn {
-            get => _isSeatBeltsSignOn;
-            set {
-                _isSeatBeltsSignOn = value;
-                UpdateECAMMemo();
-            }
-        }
-
-        [UdonSynced, FieldChangeCallback(nameof(IsNoSmoking))]
-        private bool _isNoSmoking;
-        public bool IsNoSmoking {
-            get => _isNoSmoking;
-            set {
-                _isNoSmoking = value;
-                UpdateECAMMemo();
-            }
-        }
-
-        [UdonSynced, FieldChangeCallback(nameof(IsSplrsArmed))]
-        private bool _isSplrsArmed;
-        public bool IsSplrsArmed {
-            get => _isSplrsArmed;
-            set {
-                _isSplrsArmed = value;
-                UpdateECAMMemo();
-            }
-        }
-
         [UdonSynced, FieldChangeCallback(nameof(FlapPosition))]
         private int _flapPosition;
-        public int FlapPosition {
+        public int FlapPosition
+        {
             get => _flapPosition;
-            set {
+            set
+            {
                 _flapPosition = value;
             }
         }
 
         [UdonSynced, FieldChangeCallback(nameof(FlapTargetPosition))]
         private int _flapTargetPosition;
-        public int FlapTargetPosition {
+        public int FlapTargetPosition
+        {
             get => _flapTargetPosition;
-            set {
+            set
+            {
                 _flapTargetPosition = value;
             }
         }
-
-        [UdonSynced, FieldChangeCallback(nameof(IsCabinReady))]
-        private bool _isCabinReady;
-        public bool IsCabinReady {
-            get => _isCabinReady;
-            set {
-                _isCabinReady = value;
-                UpdateECAMMemo();
-            }
-        }
-
-        [UdonSynced, FieldChangeCallback(nameof(IsParkbrakeSet))]
-        private bool _isParkbrakeSet;
-        public bool IsParkbrakeSet {
-            get => _isParkbrakeSet;
-            set {
-                _isParkbrakeSet = value;
-                UpdateECAMMemo();
-            }
-        }
-
-        [UdonSynced, FieldChangeCallback(nameof(IsHookDown))]
-        private bool _isHookDown;
-        public bool IsHookDown {
-            get => _isHookDown;
-            set {
-                _isHookDown = value;
-                UpdateECAMMemo();
-            }
-        }
-
-        public void Start() {
-            IsParkbrakeSet = false;
-            IsSeatBeltsSignOn = true;
-
-            System.DateTime today = System.DateTime.Today;
-            if (today.DayOfWeek == System.DayOfWeek.Thursday) IsCrazyThrusday = true;
-
-            ActiveChecklists = new ChecklistItem[] {
-                Checklists[1]
-            };
-            
-            UpdateChecklist();
+        public void Start()
+        {
             eng1AvailFlag.SetActive(false);
             eng2AvailFlag.SetActive(false);
             flapText.text = "0";
@@ -188,13 +102,8 @@ namespace YuxiFlightInstruments.ECAM {
             UpdateClock();
             UpdateEngineStatus();
             UpdateAPUStatus();
-            UpdateRightMemo();
+            // UpdateRightMemo();
             UpdateFlapStatus();
-        }
-
-        public override void OnDeserialization()
-        {
-            UpdateECAMMemo();
         }
 
         private void UpdateClock()
@@ -207,9 +116,9 @@ namespace YuxiFlightInstruments.ECAM {
         {
             ECAMAnimator.SetFloat(FLAP_HASH, flapController.angle / flapController.maxAngle);
 
-            if (FlapPosition != flapController.detentIndex) {
+            if (FlapPosition != flapController.detentIndex)
+            {
                 FlapPosition = flapController.detentIndex;
-                UpdateECAMMemo();
             }
 
             if (FlapTargetPosition != flapController.targetDetentIndex)
@@ -238,7 +147,7 @@ namespace YuxiFlightInstruments.ECAM {
                 }
             }
 
-            
+
         }
 
         private void UpdateEngineStatus()
@@ -257,11 +166,11 @@ namespace YuxiFlightInstruments.ECAM {
             FFL.text = (Mathf.Round(EngineControllorL.ff / 20) * 20).ToString("F0");
 
             if (EngineControllorL.starter)
-                StartingL.color = new Color(0.376f, 0.376f, 0.376f);   
+                StartingL.color = new Color(0.376f, 0.376f, 0.376f);
             else
                 StartingL.color = new Color(0, 0, 0);
 
-            ECAMAnimator.SetFloat(ENG1N1_HASH, n1LRef/(N1RefMax));
+            ECAMAnimator.SetFloat(ENG1N1_HASH, n1LRef / (N1RefMax));
             ECAMAnimator.SetFloat(ENG1EGT_HASH, EngineControllorL.egt / EgtMax);
             ECAMAnimator.SetFloat(ENG1N1CMD_HASH, EngineControllorL.throttleInput);
 
@@ -282,9 +191,9 @@ namespace YuxiFlightInstruments.ECAM {
             N1R.text = (n1RRef * 100).ToString("F1");
             N2R.text = (n2RRef * 100).ToString("F1");
             EGTR.text = EngineControllorR.egt.ToString("F0");
-            FFR.text = (Mathf.Round(EngineControllorR.ff/20)*20).ToString("F0");
+            FFR.text = (Mathf.Round(EngineControllorR.ff / 20) * 20).ToString("F0");
 
-            if (EngineControllorR.starter) 
+            if (EngineControllorR.starter)
                 StartingR.color = new Color(0.376f, 0.376f, 0.376f);
             else
                 StartingR.color = new Color(0, 0, 0);
@@ -294,91 +203,109 @@ namespace YuxiFlightInstruments.ECAM {
             ECAMAnimator.SetFloat(ENG2N1CMD_HASH, EngineControllorR.throttleInput);
 
             //AVAIL FLAG
-            var isEng2Running = EngineControllorR.fuel && EngineControllorR.n1 > 0.63f* EngineControllorR.idleN1 && !EngineControllorR.stall;
+            var isEng2Running = EngineControllorR.fuel && EngineControllorR.n1 > 0.63f * EngineControllorR.idleN1 && !EngineControllorR.stall;
             if (isEng2Running)
             {
-                if(!isEng2RunnningLastFarme) eng2AvailFlag.SetActive(true);
+                if (!isEng2RunnningLastFarme) eng2AvailFlag.SetActive(true);
                 if (EngineControllorR.n1 > 0.9f * EngineControllorR.idleN1) eng2AvailFlag.SetActive(false);
             }
             else
                 eng2AvailFlag.SetActive(false);
             isEng2RunnningLastFarme = isEng2Running;
         }
-        
+
         private void UpdateAPUStatus()
         {
             if (IsAPUStart != APUControllor.run)
             {
                 IsAPUStart = APUControllor.run;
-                UpdateECAMMemo();
-            }   
-        }
-        
-        public void UpdateChecklist() {
-            LeftMemoText.text = "";
-            foreach (var item in ActiveChecklists) {
-                var hasTitle = !string.IsNullOrEmpty(item.Title);
-
-                if (hasTitle) {
-                    LeftMemoText.text += $"{item.Prefix} {item.Title}\n";
-                } else {
-                    LeftMemoText.text += $"{item.Prefix} ";
-                }
-
-                var prefix = "".PadLeft((item.Prefix + " ").Length);
-
-                for (int index = 0; index != item.CheckItems.Length; index++) {
-                    var checkitem = item.CheckItems[index];
-                    var checkItemTextLength = 20 + $"<color={MemoItemColor.Blue}>".Length - checkitem.ValueText.Length;
-                    var isChecked = GetProgramVariable(checkitem.PropertyName).ToString() == checkitem.Value;
-                    var checkItemText = "";
-
-                    if (!hasTitle && index == 0) {
-                        checkItemTextLength -= (item.Prefix + " ").Length;
-                    } else {
-                        checkItemText = prefix;
-                    }
-
-                    if (isChecked) {
-                        checkItemText += $"{checkitem.Title} {checkitem.ValueText}\n";
-                    } else {
-                        checkItemText += $"{checkitem.Title}<color={ MemoItemColor.Blue }>";
-                        checkItemText = checkItemText.PadRight(checkItemTextLength, '.');
-                        checkItemText += $"{checkitem.ValueText}</color>\n";
-                    }
-
-                    LeftMemoText.text += checkItemText;
-                }
             }
         }
 
-        public void UpdateECAMMemo() { 
-            UpdateLeftMemo();
-            UpdateRightMemo();
-            UpdateChecklist();
+        private readonly int SingleLineMaxLength = 24;
+        public void UpdateMemo()
+        {
+            var rightMemoText = "";
+            var leftMemoText = "";
+            var hasWarning = false;
+            foreach (var memo in FWS.FWSWarningMessageDatas)
+            {
+                if (memo.IsVisable)
+                {
+                    switch (memo.Type)
+                    {
+                        case WarningType.SpecialLine:
+                            rightMemoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningTitle}</color>\n";
+                            break;
+                        case WarningType.Memo:
+                            switch (memo.Zone)
+                            {
+                                case DisplayZone.Left:
+                                    if (!hasWarning)
+                                    {
+                                        leftMemoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningTitle}</color>\n";
+                                    }
+                                    break;
+                                case DisplayZone.Right:
+                                    rightMemoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningTitle}</color>\n";
+                                    break;
+                            }
+                            break;
+                        case WarningType.Secondary:
+                            rightMemoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningTitle}</color>\n";
+                            break;
+                        default:
+                            leftMemoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningGroup} {memo.WarningTitle}</color>";
+                            hasWarning = !hasWarning & memo.Type != WarningType.ConfigMemo;
+
+                            if (!(memo.Type != WarningType.ConfigMemo & hasWarning))
+                            {
+                                if (memo.Type != WarningType.ConfigMemo) leftMemoText += "\n";
+                                var lastLineLength = 0;
+                                foreach (var messageLine in memo.MessageLine)
+                                {
+                                    if (messageLine.IsMessageVisable)
+                                    {
+                                        leftMemoText += $"<color={getColorHexByWarningColor(messageLine.MessageColor)}>{messageLine.MessageText}</color>";
+                                        if (lastLineLength + messageLine.MessageText.Length >= SingleLineMaxLength)
+                                        {
+                                            leftMemoText += "\n";
+                                            lastLineLength = 0;
+                                        }
+                                        else
+                                        {
+                                            lastLineLength = messageLine.MessageText.Length;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+
+            }
+
+            LeftMemoText.text = leftMemoText;
+            RightMemoText.text = rightMemoText;
         }
 
-        public void UpdateLeftMemo() {
-            var leftMemo = "";
-            if (IsSplrsArmed) leftMemo += CreateECAMMemo(MemoItemColor.Green, "GND SPLRS ARMED");
-            if (IsSeatBeltsSignOn) leftMemo += CreateECAMMemo(MemoItemColor.Green, "SEAT BELTS");
-            if (IsNoSmoking) leftMemo += CreateECAMMemo(MemoItemColor.Green, "NO SMOKING");
-
-            LeftMemoText.text = leftMemo;
-        }
-
-        public void UpdateRightMemo() {
-            var rightMemo = "";
-            if (IsCrazyThrusday) rightMemo += CreateECAMMemo(MemoItemColor.Green, "V ME 50!");
-            if (IsParkbrakeSet) rightMemo += CreateECAMMemo(MemoItemColor.Green, "PARK BRAKE");
-            if (IsCabinReady) rightMemo += CreateECAMMemo(MemoItemColor.Green, "CABIN READY");
-            if (IsHookDown) rightMemo += CreateECAMMemo(MemoItemColor.Green, "HOOK");
-            if (IsAPUStart) rightMemo += CreateECAMMemo(MemoItemColor.Green, "APU BLEED");
-            RightMemoText.text = rightMemo;
-        }
-
-        public string CreateECAMMemo(string color, string text) {
-            return $"<color={color}>{text}</color>\n";
+        private string getColorHexByWarningColor(WarningColor color)
+        {
+            switch (color)
+            {
+                case WarningColor.Amber:
+                    return AirbusAvionicsTheme.Amber;
+                case WarningColor.Danger:
+                    return AirbusAvionicsTheme.Danger;
+                case WarningColor.Green:
+                    return AirbusAvionicsTheme.Green;
+                case WarningColor.Blue:
+                    return AirbusAvionicsTheme.Blue;
+                case WarningColor.White:
+                    return "#FFFFFF";
+                default:
+                    return AirbusAvionicsTheme.Green;
+            };
         }
     }
 }

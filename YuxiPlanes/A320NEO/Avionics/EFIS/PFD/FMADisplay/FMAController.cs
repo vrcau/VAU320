@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using VRC.SDKBase;
 using VRC.Udon;
-using YuxiPlanes;
+using A320VAU.Common;
 
 public class FMAController : UdonSharpBehaviour
 {

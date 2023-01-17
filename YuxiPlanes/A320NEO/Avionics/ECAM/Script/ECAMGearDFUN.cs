@@ -5,7 +5,7 @@ using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
-namespace YuxiFlightInstruments.ECAM {
+namespace A320VAU.ECAM {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class ECAMGearDFUN : UdonSharpBehaviour {
         public ECAMController ECAMController;
@@ -120,7 +120,6 @@ namespace YuxiFlightInstruments.ECAM {
             }
             if (Dial_Funcon) { Dial_Funcon.SetActive(false); }
             GearUp = true;
-            ECAMController.IsLadingGearDown = !GearUp;
             GearAnimator.SetBool("gearup", true);
             if (DragApplied) {
                 SAVControl.SetProgramVariable("ExtraDrag", (float)SAVControl.GetProgramVariable("ExtraDrag") - LandingGearDragMulti);
@@ -138,7 +137,6 @@ namespace YuxiFlightInstruments.ECAM {
             }
             if (Dial_Funcon) { Dial_Funcon.SetActive(true); }
             GearUp = false;
-            ECAMController.IsLadingGearDown = !GearUp;
             GearAnimator.SetBool("gearup", false);
             if (!DragApplied) {
                 SAVControl.SetProgramVariable("ExtraDrag", (float)SAVControl.GetProgramVariable("ExtraDrag") + LandingGearDragMulti);
