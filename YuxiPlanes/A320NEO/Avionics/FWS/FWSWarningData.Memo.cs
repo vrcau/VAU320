@@ -8,12 +8,11 @@ namespace A320VAU.FWS
         public FWSWarningMessageData PARK_BRK;
         public FWSWarningMessageData APU_AVAIL;
 
-        public void MonitorMemo() {
-            APU_BLEED.IsVisable = FWS.APU.started;
-            APU_AVAIL.IsVisable = FWS.APU.started;
-            PARK_BRK.IsVisable = FWS.Brake.ParkBreakSet;
-
-            _hasWarningVisableChange = true;
+        public void MonitorMemo()
+        {
+            setWarningMessageVisableValue(ref APU_BLEED.IsVisable, FWS.APU.started);
+            setWarningMessageVisableValue(ref APU_AVAIL.IsVisable, FWS.APU.started);
+            setWarningMessageVisableValue(ref PARK_BRK.IsVisable, FWS.Brake.ParkBreakSet);
         }
     }
 }

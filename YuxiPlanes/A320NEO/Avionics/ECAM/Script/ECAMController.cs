@@ -262,7 +262,6 @@ namespace A320VAU.ECAM
                         // Config Memo (Like T.O CONFIG, LDG CONFIG MEMO) and Primary System failure (Like ENG1 FIRE)
                         default:
                             if (memo.Type != WarningType.ConfigMemo) hasWarning = true;
-                            Debug.Log($"isConfigMemo: {memo.Type} hasWarning: {hasWarning} bool: {memo.Type == WarningType.ConfigMemo & hasWarning}");
                             // Do not show Config Memo when already a System Failure Warning visable
                             if (!(memo.Type == WarningType.ConfigMemo & hasWarning))
                             {
