@@ -69,9 +69,9 @@ namespace A320VAU.FWS
             }
             else
             {
-                LANDING_MEMO.MessageLine[0].IsMessageVisable = false;
-                LANDING_MEMO.MessageLine[1].IsMessageVisable = false;
-                LANDING_MEMO.MessageLine[2].IsMessageVisable = true;
+                LANDING_MEMO.MessageLine[0].IsMessageVisable = true;
+                LANDING_MEMO.MessageLine[1].IsMessageVisable = true;
+                LANDING_MEMO.MessageLine[2].IsMessageVisable = false;
             }
 
             // SINGS ON

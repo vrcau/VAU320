@@ -20,6 +20,7 @@ namespace A320VAU.FWS
             MonitorConfigMemo();
             MonitorGear();
             MonitorMemo();
+            MonitorConfig();
             return _hasWarningVisableChange;
         }
     }
