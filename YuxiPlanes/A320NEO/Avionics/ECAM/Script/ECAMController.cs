@@ -101,8 +101,6 @@ namespace A320VAU.ECAM
         {
             UpdateClock();
             UpdateEngineStatus();
-            UpdateAPUStatus();
-            // UpdateRightMemo();
             UpdateFlapStatus();
         }
 
@@ -212,14 +210,6 @@ namespace A320VAU.ECAM
             else
                 eng2AvailFlag.SetActive(false);
             isEng2RunnningLastFarme = isEng2Running;
-        }
-
-        private void UpdateAPUStatus()
-        {
-            if (IsAPUStart != APUControllor.run)
-            {
-                IsAPUStart = APUControllor.run;
-            }
         }
 
         private readonly int SingleLineMaxLength = 24;
