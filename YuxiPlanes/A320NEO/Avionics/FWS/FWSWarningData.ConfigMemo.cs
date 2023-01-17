@@ -35,43 +35,44 @@ namespace A320VAU.FWS
                 // FLAP T.O & T.O CONFIG TEST
                 if (FWS.Flaps.detentIndex == 1 && FWS.Flaps.targetDetentIndex == 1)
                 {
-                    TAKEOFF_MEMO.MessageLine[12].IsMessageVisable = false;
-                    TAKEOFF_MEMO.MessageLine[13].IsMessageVisable = false;
-                    TAKEOFF_MEMO.MessageLine[14].IsMessageVisable = true;
+                    // FLAP T.O
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[12].IsMessageVisable, false);
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[13].IsMessageVisable, false);
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[14].IsMessageVisable, true);
                     // T.O CONFIG
-                    TAKEOFF_MEMO.MessageLine[15].IsMessageVisable = false;
-                    TAKEOFF_MEMO.MessageLine[16].IsMessageVisable = false;
-                    TAKEOFF_MEMO.MessageLine[17].IsMessageVisable = true;
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[15].IsMessageVisable, false);
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[16].IsMessageVisable, false);
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[17].IsMessageVisable, true);
                 }
                 else
                 {
                     // FLAP T.O
-                    TAKEOFF_MEMO.MessageLine[12].IsMessageVisable = true;
-                    TAKEOFF_MEMO.MessageLine[13].IsMessageVisable = true;
-                    TAKEOFF_MEMO.MessageLine[14].IsMessageVisable = false;
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[12].IsMessageVisable, true);
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[13].IsMessageVisable, true);
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[14].IsMessageVisable, false);
                     // T.O CONFIG
-                    TAKEOFF_MEMO.MessageLine[15].IsMessageVisable = true;
-                    TAKEOFF_MEMO.MessageLine[16].IsMessageVisable = true;
-                    TAKEOFF_MEMO.MessageLine[17].IsMessageVisable = false;
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[15].IsMessageVisable, true);
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[16].IsMessageVisable, true);
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[17].IsMessageVisable, false);
                 }
             }
             #endregion
 
             #region Landing Memo
-            LANDING_MEMO.IsVisable = !FWS.SaccAirVehicle.Taxiing & isEngine1Running & isEngine2Running & (float)FWS.GPWS.GetProgramVariable("radioAltitude") < 1000f;
+            setWarningMessageVisableValue(ref LANDING_MEMO.IsVisable, !FWS.SaccAirVehicle.Taxiing & isEngine1Running & isEngine2Running & (float)FWS.GPWS.GetProgramVariable("radioAltitude") < 1000f);
 
             // GEAR DN
             if (FWS.LeftLadingGear.targetPosition == 1)
             {
-                LANDING_MEMO.MessageLine[0].IsMessageVisable = false;
-                LANDING_MEMO.MessageLine[1].IsMessageVisable = false;
-                LANDING_MEMO.MessageLine[2].IsMessageVisable = true;
+                setWarningMessageVisableValue(ref LANDING_MEMO.MessageLine[0].IsMessageVisable, false);
+                setWarningMessageVisableValue(ref LANDING_MEMO.MessageLine[1].IsMessageVisable, false);
+                setWarningMessageVisableValue(ref LANDING_MEMO.MessageLine[2].IsMessageVisable, true);
             }
             else
             {
-                LANDING_MEMO.MessageLine[0].IsMessageVisable = false;
-                LANDING_MEMO.MessageLine[1].IsMessageVisable = false;
-                LANDING_MEMO.MessageLine[2].IsMessageVisable = true;
+                setWarningMessageVisableValue(ref LANDING_MEMO.MessageLine[0].IsMessageVisable, true);
+                setWarningMessageVisableValue(ref LANDING_MEMO.MessageLine[1].IsMessageVisable, true);
+                setWarningMessageVisableValue(ref LANDING_MEMO.MessageLine[2].IsMessageVisable, false);
             }
 
             // SINGS ON
@@ -92,23 +93,21 @@ namespace A320VAU.FWS
             // FLAPS FULL
             if (FWS.Flaps.targetDetentIndex == 4)
             {
-                LANDING_MEMO.MessageLine[12].IsMessageVisable = false;
-                LANDING_MEMO.MessageLine[13].IsMessageVisable = false;
-                LANDING_MEMO.MessageLine[14].IsMessageVisable = true;
+                setWarningMessageVisableValue(ref LANDING_MEMO.MessageLine[12].IsMessageVisable, false);
+                setWarningMessageVisableValue(ref LANDING_MEMO.MessageLine[13].IsMessageVisable, false);
+                setWarningMessageVisableValue(ref LANDING_MEMO.MessageLine[14].IsMessageVisable, true);
             }
             else
             {
-                LANDING_MEMO.MessageLine[12].IsMessageVisable = true;
-                LANDING_MEMO.MessageLine[13].IsMessageVisable = true;
-                LANDING_MEMO.MessageLine[14].IsMessageVisable = false;
+                setWarningMessageVisableValue(ref LANDING_MEMO.MessageLine[12].IsMessageVisable, true);
+                setWarningMessageVisableValue(ref LANDING_MEMO.MessageLine[13].IsMessageVisable, true);
+                setWarningMessageVisableValue(ref LANDING_MEMO.MessageLine[14].IsMessageVisable, false);
             }
 
             // FLAPS CONF3
             LANDING_MEMO.MessageLine[15].IsMessageVisable = false;
             LANDING_MEMO.MessageLine[16].IsMessageVisable = false;
             #endregion
-
-            _hasWarningVisableChange = true;
         }
     }
 }

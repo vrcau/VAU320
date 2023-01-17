@@ -20,7 +20,15 @@ namespace A320VAU.FWS
             MonitorConfigMemo();
             MonitorGear();
             MonitorMemo();
+            MonitorConfig();
             return _hasWarningVisableChange;
+        }
+
+        private void setWarningMessageVisableValue(ref bool isVisable, bool newValue)
+        {
+            if (isVisable == newValue) return;
+            isVisable = newValue;
+            _hasWarningVisableChange = true;
         }
     }
 }

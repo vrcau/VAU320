@@ -101,8 +101,6 @@ namespace A320VAU.ECAM
         {
             UpdateClock();
             UpdateEngineStatus();
-            UpdateAPUStatus();
-            // UpdateRightMemo();
             UpdateFlapStatus();
         }
 
@@ -214,14 +212,6 @@ namespace A320VAU.ECAM
             isEng2RunnningLastFarme = isEng2Running;
         }
 
-        private void UpdateAPUStatus()
-        {
-            if (IsAPUStart != APUControllor.run)
-            {
-                IsAPUStart = APUControllor.run;
-            }
-        }
-
         private readonly int SingleLineMaxLength = 24;
         public void UpdateMemo()
         {
@@ -234,32 +224,39 @@ namespace A320VAU.ECAM
                 {
                     switch (memo.Type)
                     {
+                        // Like LDG INHIBIT, T.O INHIBIT, LAND ASAP
                         case WarningType.SpecialLine:
                             rightMemoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningTitle}</color>\n";
                             break;
+                        // Like GND SPRLS AMRED, APU BLEED
                         case WarningType.Memo:
                             switch (memo.Zone)
                             {
+                                // Left of the ECAM
                                 case DisplayZone.Left:
                                     if (!hasWarning)
                                     {
                                         leftMemoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningTitle}</color>\n";
                                     }
                                     break;
+                                // Right of the ECAM
                                 case DisplayZone.Right:
                                     rightMemoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningTitle}</color>\n";
                                     break;
                             }
                             break;
+                        // System failure casued by other System failure, Like *HYD *F/CTL
                         case WarningType.Secondary:
                             rightMemoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningTitle}</color>\n";
                             break;
+                        // Config Memo (Like T.O CONFIG, LDG CONFIG MEMO) and Primary System failure (Like ENG1 FIRE)
                         default:
-                            leftMemoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningGroup} {memo.WarningTitle}</color>";
-                            hasWarning = !hasWarning & memo.Type != WarningType.ConfigMemo;
-
-                            if (!(memo.Type != WarningType.ConfigMemo & hasWarning))
+                            if (memo.Type != WarningType.ConfigMemo) hasWarning = true;
+                            // Do not show Config Memo when already a System Failure Warning visable
+                            if (!(memo.Type == WarningType.ConfigMemo & hasWarning))
                             {
+                                leftMemoText += $"<color={getColorHexByWarningColor(memo.TitleColor)}>{memo.WarningGroup} {memo.WarningTitle}</color>";
+                                // Config Memo don't require title warp
                                 if (memo.Type != WarningType.ConfigMemo) leftMemoText += "\n";
                                 var lastLineLength = 0;
                                 foreach (var messageLine in memo.MessageLine)
@@ -267,6 +264,7 @@ namespace A320VAU.ECAM
                                     if (messageLine.IsMessageVisable)
                                     {
                                         leftMemoText += $"<color={getColorHexByWarningColor(messageLine.MessageColor)}>{messageLine.MessageText}</color>";
+                                        // Warp when a single line text length >= 24
                                         if (lastLineLength + messageLine.MessageText.Length >= SingleLineMaxLength)
                                         {
                                             leftMemoText += "\n";

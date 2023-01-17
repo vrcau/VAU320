@@ -35,8 +35,6 @@ namespace A320VAU.FWS
                     BRAKES_HOT.MessageLine[4].IsMessageVisable = FWS.LeftLadingGear.targetPosition != 1;
                     BRAKES_HOT.MessageLine[5].IsMessageVisable = true;
                 }
-
-                _hasWarningVisableChange = true;
             }
         }
     }
