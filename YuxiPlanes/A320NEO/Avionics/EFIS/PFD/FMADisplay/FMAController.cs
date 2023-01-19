@@ -11,6 +11,9 @@ public class FMAController : UdonSharpBehaviour
     public SaccEntity SaccEntity;
     public SaccAirVehicle SaccAirVehicle;
 
+    public DFUNC_Cruise DFUNC_Cruise;
+    public DFUNC_AltHold DFUNC_AltHold;
+
     #region UI Control
     #region Autothrust Mode
     public Text AutoThrustModeText;
@@ -91,9 +94,11 @@ public class FMAController : UdonSharpBehaviour
     }
 
     [FieldChangeCallback(nameof(ManThrType))] public ManThrType _manThrType = ManThrType.None;
-    public ManThrType ManThrType {
+    public ManThrType ManThrType
+    {
         get => _manThrType;
-        set {
+        set
+        {
             _manThrType = value;
             UpdateAutoThrustDisplay();
         }
@@ -122,9 +127,11 @@ public class FMAController : UdonSharpBehaviour
     }
 
     [FieldChangeCallback(nameof(IsAutoBrakeActive))] public bool _isAutoBrakeArm = false;
-    public bool IsAutoBrakeArm {
+    public bool IsAutoBrakeArm
+    {
         get => _isAutoBrakeArm;
-        set {
+        set
+        {
             _isAutoBrakeArm = value;
             UpdateAutoThrustDisplay();
         }
@@ -134,18 +141,22 @@ public class FMAController : UdonSharpBehaviour
 
     #region Vertical Mode
     [FieldChangeCallback(nameof(VerticalActiveMode))] public string _verticalActiveMode = "";
-    public string VerticalActiveMode {
+    public string VerticalActiveMode
+    {
         get => _verticalActiveMode;
-        set {
+        set
+        {
             _verticalActiveMode = value;
             UpdateVerticalModeDisplay();
         }
     }
 
     [FieldChangeCallback(nameof(VerticalArmMode))] public string _verticalArmMode = "";
-    public string VerticalArmMode {
+    public string VerticalArmMode
+    {
         get => _verticalArmMode;
-        set {
+        set
+        {
             _verticalArmMode = value;
             UpdateVerticalModeDisplay();
         }
@@ -165,9 +176,11 @@ public class FMAController : UdonSharpBehaviour
     }
 
     [FieldChangeCallback(nameof(LateralArmMode))] public string _lateralArmMode = "";
-    public string LateralArmMode {
+    public string LateralArmMode
+    {
         get => _lateralArmMode;
-        set {
+        set
+        {
             _lateralArmMode = value;
             UpdateLateralModeDisplay();
         }
@@ -176,26 +189,32 @@ public class FMAController : UdonSharpBehaviour
 
     #region Approach
     [FieldChangeCallback(nameof(ApproachAbility))] public ApproachAbility _approachAbility = ApproachAbility.None;
-    public ApproachAbility ApproachAbility {
+    public ApproachAbility ApproachAbility
+    {
         get => _approachAbility;
-        set {
+        set
+        {
             _approachAbility = value;
             UpdateApproachDisplay();
         }
     }
 
     [FieldChangeCallback(nameof(ApproachMinimumType))] public ApproachMinimumType _approachMinimumType = ApproachMinimumType.None;
-    public ApproachMinimumType ApproachMinimumType {
+    public ApproachMinimumType ApproachMinimumType
+    {
         get => _approachMinimumType;
-        set {
+        set
+        {
             _approachMinimumType = value;
             UpdateApproachDisplay();
         }
     }
     [FieldChangeCallback(nameof(ApproachMinimumHeight))] public int _approachMinimumHeight = 0;
-    public int ApproachMinimumHeight {
+    public int ApproachMinimumHeight
+    {
         get => _approachMinimumHeight;
-        set {
+        set
+        {
             _approachMinimumHeight = value;
             UpdateApproachDisplay();
         }
@@ -205,9 +224,11 @@ public class FMAController : UdonSharpBehaviour
     #region Autopilot Status
     #region Autopilot
     [FieldChangeCallback(nameof(IsAutoPilot1Active))] public bool _isAutoPilot1Active = false;
-    public bool IsAutoPilot1Active {
+    public bool IsAutoPilot1Active
+    {
         get => _isAutoPilot1Active;
-        set {
+        set
+        {
             _isAutoPilot1Active = value;
             UpdateAutopilotStatusDisplay();
         }
@@ -215,9 +236,11 @@ public class FMAController : UdonSharpBehaviour
 
 
     [FieldChangeCallback(nameof(IsAutoPilot2Active))] public bool _isAutoPilot2Active = false;
-    public bool IsAutoPilot2Active {
+    public bool IsAutoPilot2Active
+    {
         get => _isAutoPilot2Active;
-        set {
+        set
+        {
             _isAutoPilot2Active = value;
             UpdateAutopilotStatusDisplay();
         }
@@ -226,18 +249,22 @@ public class FMAController : UdonSharpBehaviour
 
     #region FlightDirector
     [FieldChangeCallback(nameof(IsFlightDirector1Active))] public bool _isFlightDirector1Active = false;
-    public bool IsFlightDirector1Active {
+    public bool IsFlightDirector1Active
+    {
         get => _isFlightDirector1Active;
-        set {
+        set
+        {
             _isFlightDirector1Active = value;
             UpdateAutopilotStatusDisplay();
         }
     }
 
     [FieldChangeCallback(nameof(IsFlightDirector2Active))] public bool _isFlightDirector2Active = false;
-    public bool IsFlightDirector2Active {
+    public bool IsFlightDirector2Active
+    {
         get => _isFlightDirector2Active;
-        set {
+        set
+        {
             _isFlightDirector2Active = value;
             UpdateAutopilotStatusDisplay();
         }
@@ -247,18 +274,22 @@ public class FMAController : UdonSharpBehaviour
 
     #region Special Message
     [FieldChangeCallback(nameof(SpecialMessage))] public string _specialMessage = "";
-    public string SpecialMessage {
+    public string SpecialMessage
+    {
         get => _specialMessage;
-        set {
+        set
+        {
             _specialMessage = value;
             UpdateSpecialMessageDisplay();
         }
     }
 
     [FieldChangeCallback(nameof(SpecialMessageColor))] public string _specialMessageColor = "";
-    public string SpecialMessageColor {
+    public string SpecialMessageColor
+    {
         get => _specialMessageColor;
-        set {
+        set
+        {
             _specialMessageColor = value;
             UpdateSpecialMessageDisplay();
         }
@@ -394,7 +425,7 @@ public class FMAController : UdonSharpBehaviour
 
             approachAbilityString += channels;
         }
-        
+
         ApproachAbilityText.text = approachAbilityString;
     }
 
@@ -416,7 +447,8 @@ public class FMAController : UdonSharpBehaviour
             AutoPilotText.text = "AP2";
 
         FlightDirectorText.text = "";
-        if (IsFlightDirector1Active && IsFlightDirector2Active) {
+        if (IsFlightDirector1Active && IsFlightDirector2Active)
+        {
             FlightDirectorText.text = "1 FD 2";
             return;
         }
@@ -438,13 +470,37 @@ public class FMAController : UdonSharpBehaviour
 
     private void UpdateCommonModeDisplay()
     {
-        CommonModeRoot.SetActive(LateralActiveMode == VerticalActiveMode);
-        CommonModeText.text = LateralActiveMode;
+        if (!string.IsNullOrWhiteSpace(LateralActiveMode) && !string.IsNullOrWhiteSpace(VerticalActiveMode))
+        {
+            CommonModeRoot.SetActive(LateralActiveMode == VerticalActiveMode);
+            CommonModeText.text = LateralActiveMode;
+        }
     }
 
     public void LateUpdate()
     {
         ManThrType = SaccAirVehicle.ThrottleInput == 1f ? ManThrType.TOGA : ManThrType.None;
+        if ((bool)DFUNC_AltHold.GetProgramVariable("AltHold"))
+        {
+            VerticalActiveMode = "ALT";
+            IsAutoPilot1Active = true;
+        }
+        else
+        {
+            VerticalActiveMode = "";
+            IsAutoBrakeActive = false;
+        }
+
+        if ((bool)DFUNC_Cruise.GetProgramVariable("Cruise"))
+        {
+            IsAutoThrustActive = true;
+            AutoThrustMode = "SPEED";
+        }
+        else
+        {
+            IsAutoThrustActive = false;
+            AutoThrustMode = "";
+        }
     }
 }
 
@@ -456,7 +512,8 @@ public enum ManThrType
     None = 3
 }
 
-public enum AutoBrakeMode {
+public enum AutoBrakeMode
+{
     MAX = 0,
     MED = 1,
     LOW = 3,
@@ -471,7 +528,8 @@ public enum ApproachAbility
     None
 }
 
-public enum ApproachMinimumType {
+public enum ApproachMinimumType
+{
     BARO,
     RADIO,
     None
