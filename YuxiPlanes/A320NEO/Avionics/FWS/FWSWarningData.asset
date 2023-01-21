@@ -164,13 +164,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: APU_BLEED
+      Data: DUAL_ENGINE_FAULT
     - Name: $v
       Entry: 7
       Data: 9|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: APU_BLEED
+      Data: DUAL_ENGINE_FAULT
     - Name: <UserType>k__BackingField
       Entry: 7
       Data: 10|System.RuntimeType, mscorlib
@@ -218,13 +218,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: PARK_BRK
+      Data: APU_BLEED
     - Name: $v
       Entry: 7
       Data: 12|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: PARK_BRK
+      Data: APU_BLEED
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 10
@@ -266,13 +266,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: APU_AVAIL
+      Data: PARK_BRK
     - Name: $v
       Entry: 7
       Data: 14|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: APU_AVAIL
+      Data: PARK_BRK
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 10
@@ -314,13 +314,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: BRAKES_HOT
+      Data: APU_AVAIL
     - Name: $v
       Entry: 7
       Data: 16|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: BRAKES_HOT
+      Data: APU_AVAIL
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 10
@@ -362,13 +362,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: DUAL_ENGINE_FAULT
+      Data: BRAKES_HOT
     - Name: $v
       Entry: 7
       Data: 18|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: DUAL_ENGINE_FAULT
+      Data: BRAKES_HOT
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 10
