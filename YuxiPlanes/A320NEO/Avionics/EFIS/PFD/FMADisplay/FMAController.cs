@@ -483,12 +483,14 @@ public class FMAController : UdonSharpBehaviour
         if ((bool)DFUNC_AltHold.GetProgramVariable("AltHold"))
         {
             VerticalActiveMode = "ALT";
+            LateralActiveMode = "HDG";
             IsAutoPilot1Active = true;
         }
         else
         {
             VerticalActiveMode = "";
-            IsAutoBrakeActive = false;
+            LateralActiveMode = "";
+            IsAutoPilot1Active = false;
         }
 
         if ((bool)DFUNC_Cruise.GetProgramVariable("Cruise"))
