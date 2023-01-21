@@ -21,7 +21,7 @@ MonoBehaviour:
   compiledVersion: 2
   behaviourSyncMode: 0
   hasInteractEvent: 0
-  scriptID: -8896436326055411689
+  scriptID: -8011526331339342889
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
@@ -1382,7 +1382,7 @@ MonoBehaviour:
       Data: 67|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: ManThrType, Assembly-CSharp
+      Data: A320VAU.PFD.ManThrType, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -1448,7 +1448,7 @@ MonoBehaviour:
       Data: 72|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: AutoBrakeMode, Assembly-CSharp
+      Data: A320VAU.PFD.AutoBrakeMode, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -1832,7 +1832,7 @@ MonoBehaviour:
       Data: 94|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: ApproachAbility, Assembly-CSharp
+      Data: A320VAU.PFD.ApproachAbility, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -1892,7 +1892,7 @@ MonoBehaviour:
       Data: 98|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: ApproachMinimumType, Assembly-CSharp
+      Data: A320VAU.PFD.ApproachMinimumType, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
