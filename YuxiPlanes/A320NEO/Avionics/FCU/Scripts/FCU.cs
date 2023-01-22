@@ -1,4 +1,6 @@
-﻿using UdonSharp;
+﻿using System;
+using SaccFlightAndVehicles;
+using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
 using VRC.SDKBase;
@@ -8,6 +10,8 @@ namespace A320VAU.FCU
 {
     public class FCU : UdonSharpBehaviour
     {
+        public DFUNC_Cruise DFUNC_Cruise;
+        public DFUNC_AltHold DFUNC_AltHold;
 
         #region Property
         [FieldChangeCallback(nameof(FCUMode))] public FCUMode _fcuMode = FCUMode.HeadingVerticalSpeed;
@@ -151,6 +155,10 @@ namespace A320VAU.FCU
         public void OnEnable()
         {
             UpdateFCUMode();
+        }
+
+        private void LateUpdate() {
+            TargetSpeed = Convert.ToInt32(DFUNC_Cruise.SetSpeed * 1.9438445f);
         }
 
         private void UpdateFCUMode()
