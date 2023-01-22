@@ -21,7 +21,7 @@ namespace A320VAU.Brake
         [Tooltip("Because you have to hold the break, and the keyboardcontrols script can only send events, this option is here.")]
         public KeyCode KeyboardControl = KeyCode.B;
         public KeyCode ParkBreakControl = KeyCode.P;
-        public bool ParkBreakSet = false;
+        [UdonSynced] public bool ParkBreakSet = false;
         public float AirbrakeStrength = 4f;
         public float GroundBrakeStrength = 6;
         [Tooltip("Water brake functionality requires that floatscript is being used")]
