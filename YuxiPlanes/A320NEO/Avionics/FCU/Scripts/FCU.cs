@@ -47,6 +47,17 @@ namespace A320VAU.FCU
             }
         }
 
+        [FieldChangeCallback(nameof(IsMachSpeed))] public bool _isMachSpeed = false;
+        public bool IsMachSpeed
+        {
+            get => _isMachSpeed;
+            set
+            {
+                _isMachSpeed = value;
+                UpdateSpeedWindow();
+            }
+        }
+
         [FieldChangeCallback(nameof(TargetMach))] public double _targetMach = 0.6;
         public double TargetMach
         {
@@ -157,7 +168,8 @@ namespace A320VAU.FCU
             UpdateFCUMode();
         }
 
-        private void LateUpdate() {
+        private void LateUpdate()
+        {
             TargetSpeed = Convert.ToInt32(DFUNC_Cruise.SetSpeed * 1.9438445f);
         }
 
@@ -193,20 +205,19 @@ namespace A320VAU.FCU
                 SpeedText.text = "---";
             }
 
-            switch (FCUMode)
+            if (IsMachSpeed)
             {
-                case FCUMode.HeadingVerticalSpeed:
-                    SpeedModeIndicate.SetActive(true);
-                    MachModeIndicate.SetActive(false);
+                SpeedModeIndicate.SetActive(false);
+                MachModeIndicate.SetActive(true);
 
-                    if (!IsSpeedManaged) SpeedText.text = TargetSpeed.ToString("D3");
-                    break;
-                case FCUMode.TrackFPA:
-                    SpeedModeIndicate.SetActive(false);
-                    MachModeIndicate.SetActive(true);
+                if (!IsSpeedManaged) SpeedText.text = TargetMach.ToString();
+            }
+            else
+            {
+                SpeedModeIndicate.SetActive(true);
+                MachModeIndicate.SetActive(false);
 
-                    if (!IsSpeedManaged) SpeedText.text = TargetMach.ToString();
-                    break;
+                if (!IsSpeedManaged) SpeedText.text = TargetSpeed.ToString("D3");
             }
         }
 
