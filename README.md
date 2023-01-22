@@ -11,6 +11,7 @@ but feel free to do whatever you want with these scripts.
 
 # 写给群友
 ## 安装方法
+> 也可以参考 [将飞机导入到项目](https://yuxiaviation.com/v320neo/developer/install-aircraft.html)
 ### 安装依赖
 - 首先导入SF1.61 (https://github.com/Sacchan-VRC/SaccFlightAndVehicles)
 
