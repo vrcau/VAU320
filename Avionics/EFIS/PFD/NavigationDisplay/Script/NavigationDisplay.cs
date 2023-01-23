@@ -76,7 +76,7 @@ namespace A320VAU.PFD
                 (int)naviData1.frequency,
                 (naviData1.frequency- (int)naviData1.frequency)*10,
                 (int)distance,
-                (int)(distance - (int)distance) *10
+                ((distance - (int)distance) * 10)
                 );
 
         }
