@@ -48,7 +48,7 @@ namespace A320VAU.PFD
 
         void LateUpdate()
         {
-            if (isSelfTestComplete) return;
+            if (isSelfTestComplete) gameObject.SetActive(false);
 
             if (inSelfTest & DateTimeOffset.Now > selfTestCompleteTime)
             {
@@ -103,7 +103,7 @@ namespace A320VAU.PFD
         {
             Debug.Log("DU Init");
 
-            PowerPage.SetActive(false);
+            PowerPage.SetActive(true);
             PowerFlashCover.SetActive(false);
             InvaildDataPage.SetActive(false);
             SelfTestPage.SetActive(false);
