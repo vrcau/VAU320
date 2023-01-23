@@ -14,6 +14,7 @@ namespace A320VAU.ECAM
     public partial class ECAMController : UdonSharpBehaviour
     {
         public SaccAirVehicle airVehicle;
+        public SaccEntity EntityControl;
         public AirbusAvionicsTheme AirbusAvionicsTheme;
         public FWS.FWS FWS;
         [Header("Engines")]
@@ -172,15 +173,22 @@ namespace A320VAU.ECAM
             ECAMAnimator.SetFloat(ENG1EGT_HASH, EngineControllorL.egt / EgtMax);
             ECAMAnimator.SetFloat(ENG1N1CMD_HASH, EngineControllorL.throttleInput);
 
-            //AVAIL FLAG
+            //AVAIL FLAG 因为只要是正常工作转速就不会低于EngineControllorL.idleN1，所以没啥问题
             var isEng1Running = EngineControllorL.fuel && EngineControllorL.n1 > 0.63f * EngineControllorL.idleN1 && !EngineControllorL.stall;
             if (isEng1Running)
             {
-                if (!isEng1RunnningLastFarme) eng1AvailFlag.SetActive(true);
+                if (!isEng1RunnningLastFarme)
+                {
+                    eng1AvailFlag.SetActive(true);
+                    EntityControl.SendEventToExtensions("SFEXT_G_SFEXT_G_EngineStarted");
+                }
                 if (EngineControllorL.n1 > 0.9f * EngineControllorL.idleN1) eng1AvailFlag.SetActive(false);
             }
             else
+            {
+                if (isEng1RunnningLastFarme) EntityControl.SendEventToExtensions("SFEXT_G_EngineShutDown");
                 eng1AvailFlag.SetActive(false);
+            }
             isEng1RunnningLastFarme = isEng1Running;
 
             //2发
@@ -204,11 +212,19 @@ namespace A320VAU.ECAM
             var isEng2Running = EngineControllorR.fuel && EngineControllorR.n1 > 0.63f * EngineControllorR.idleN1 && !EngineControllorR.stall;
             if (isEng2Running)
             {
-                if (!isEng2RunnningLastFarme) eng2AvailFlag.SetActive(true);
+                if (!isEng2RunnningLastFarme)
+                {
+                    eng2AvailFlag.SetActive(true);
+                    EntityControl.SendEventToExtensions("SFEXT_G_SFEXT_G_EngineStarted");
+                }
                 if (EngineControllorR.n1 > 0.9f * EngineControllorR.idleN1) eng2AvailFlag.SetActive(false);
             }
             else
+            {
+                if(isEng2RunnningLastFarme) EntityControl.SendEventToExtensions("SFEXT_G_EngineShutDown");
                 eng2AvailFlag.SetActive(false);
+            }
+                
             isEng2RunnningLastFarme = isEng2Running;
         }
 
