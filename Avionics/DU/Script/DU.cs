@@ -12,6 +12,7 @@ namespace A320VAU.PFD
         public GameObject InvaildDataPage;
         public GameObject PowerPage;
         public GameObject PowerFlashCover;
+        public GameObject PowerSource;
 
         public bool BypassSlefTest = false;
 
@@ -29,9 +30,9 @@ namespace A320VAU.PFD
         {
             // power up!
             // We need Delay function!!!!!
-            InitDU();
+            if(!PowerSource)
+                InitDU();
             powerUpTime = DateTimeOffset.Now;
-
             if (BypassSlefTest)
             {
                 inSelfTest = false;

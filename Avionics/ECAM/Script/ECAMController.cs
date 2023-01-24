@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using SaccFlightAndVehicles;
 using EsnyaSFAddons.SFEXT;
 using EsnyaSFAddons.DFUNC;
+using A320VAU.SFEXT;
 using A320VAU.Common;
 using A320VAU.FWS;
 
@@ -18,8 +19,8 @@ namespace A320VAU.ECAM
         public AirbusAvionicsTheme AirbusAvionicsTheme;
         public FWS.FWS FWS;
         [Header("Engines")]
-        public SFEXT_AdvancedEngine EngineControllorL;
-        public SFEXT_AdvancedEngine EngineControllorR;
+        public SFEXT_a320_AdvancedEngine EngineControllorL;
+        public SFEXT_a320_AdvancedEngine EngineControllorR;
 
         [Header("Left Engine")]
         public Text N1L;

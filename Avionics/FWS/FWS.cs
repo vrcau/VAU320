@@ -2,7 +2,7 @@
 using System;
 using A320VAU.Brake;
 using A320VAU.ECAM;
-using EsnyaSFAddons.Avionics;
+using A320VAU.Avionics;
 using EsnyaSFAddons.DFUNC;
 using EsnyaSFAddons.SFEXT;
 using SaccFlightAndVehicles;
@@ -12,6 +12,7 @@ using VRC.SDKBase;
 using VRC.Udon;
 using YuxiFlightInstruments.BasicFlightData;
 using YuxiFlightInstruments.Navigation;
+using A320VAU.SFEXT;
 
 namespace A320VAU.FWS
 {
@@ -33,21 +34,21 @@ namespace A320VAU.FWS
         #region Aircraft Systems
         [Header("Aircraft Systems")]
         public YFI_FlightDataInterface FlightData;
-        public SFEXT_AdvancedEngine Engine1;
-        public SFEXT_AdvancedEngine Engine2;
+        public SFEXT_a320_AdvancedEngine Engine1;
+        public SFEXT_a320_AdvancedEngine Engine2;
         public SFEXT_AuxiliaryPowerUnit APU;
         public DFUNC_AdvancedFlaps Flaps;
 
-        public SFEXT_AdvancedGear LeftLadingGear;
-        public SFEXT_AdvancedGear RightLadingGear;
-        public SFEXT_AdvancedGear FrontLadingGear;
+        public SFEXT_a320_AdvancedGear LeftLadingGear;
+        public SFEXT_a320_AdvancedGear RightLadingGear;
+        public SFEXT_a320_AdvancedGear FrontLadingGear;
         public DFUNC_a320_Brake Brake;
 
         public DFUNC_LandingLight LandingLight;
 
         public YFI_NavigationReceiver NavigationReceiver1;
         public YFI_NavigationReceiver NavigationReceiver2;
-        public GPWS GPWS;
+        public GPWS_OWML GPWS;
 
         public DFUNC_ElevatorTrim ElevatorTrim;
         #endregion

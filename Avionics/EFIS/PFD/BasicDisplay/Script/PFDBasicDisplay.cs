@@ -5,7 +5,8 @@ using VRC.SDKBase;
 using VRC.Udon;
 using UnityEngine.UI;
 using YuxiFlightInstruments.BasicFlightData;
-using EsnyaSFAddons.Avionics;
+using A320VAU.Avionics;
+
 namespace A320VAU.PFD
 {
     public class PFDBasicDisplay : UdonSharpBehaviour
@@ -13,7 +14,7 @@ namespace A320VAU.PFD
         [Tooltip("Flight Data Interface")]
         public YFI_FlightDataInterface FlightData;
         [Tooltip("RadioHeight")]
-        public GPWS GPWSController;
+        public GPWS_OWML GPWSController;
 
         [Tooltip("仪表的动画控制器")]
         public Animator IndicatorAnimator;
