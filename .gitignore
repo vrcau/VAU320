@@ -42,6 +42,8 @@ ExportedObj/
 *.mdb
 *.opendb
 *.VC.db
+*.asset
+*.asset.meta
 
 # Unity3D generated meta files
 *.pidb.meta
@@ -67,3 +69,11 @@ Fuselage*
 SFX*
 物理材质*
 README.md.meta
+Prefab/A320neo_main 1.prefab
+Prefab/A320neo_main 1.prefab.meta
+Prefab/A320neo_main 1126.prefab
+Prefab/A320neo_main 1126.prefab.meta
+Prefab/A320neo_main 1203.prefab
+Prefab/A320neo_main 1203.prefab.meta
+Prefab/A320neo_main 1203_2.prefab
+Prefab/A320neo_main 1203_2.prefab.meta
