@@ -28,10 +28,12 @@ namespace A320VAU.PFD
 
         void OnEnable()
         {
-            // power up!
-            // We need Delay function!!!!!
-            if(!PowerSource)
+            //power up!
+            //We need Delay function!!!!!
+            if (!PowerSource.activeSelf)
+            {
                 InitDU();
+            }
             powerUpTime = DateTimeOffset.Now;
             if (BypassSlefTest)
             {
@@ -49,7 +51,7 @@ namespace A320VAU.PFD
 
         void LateUpdate()
         {
-            if (isSelfTestComplete) gameObject.SetActive(false);
+            if (isSelfTestComplete && PowerSource.activeSelf) gameObject.SetActive(false);
 
             if (inSelfTest & DateTimeOffset.Now > selfTestCompleteTime)
             {
