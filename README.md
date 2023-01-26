@@ -18,13 +18,13 @@ but feel free to do whatever you want with these scripts.
 - 然后安装 YuxiFlightInstruments (https://github.com/Heriyadi235/YuxiFlightInstrumentsforSF)
 
   建议fork或直接下载解压后，使用unity包管理器导入
-- 然后安装udonradioncommunication(https://github.com/Heriyadi235/UdonRadioCommunication/tree/beta)
+- 然后安装 udonradioncommunication (https://github.com/Heriyadi235/UdonRadioCommunication/tree/beta)
 
   新版的udonradio移除了一些utilities,这个仓库的版本将他们恢复到了***\Packages\com.nekometer.esnya.udon-radio-communications-sf\Scripts\Utilities***
 
 - 然后安装 EsnyaSFAddons (https://github.com/Esnya/EsnyaSFAddons/tree/beta)
 
-    使用包管理器导入，请注意EsnyaSFAddons需要一些依赖，在此页面（https://github.com/Esnya/EsnyaSFAddons/tree/beta）可以查看。如果不希望安装udonchip,可以***只导入***com.nekometer.esnya.esnya-sf-addons
+    使用包管理器导入，请注意EsnyaSFAddons需要一些额外依赖，在此页面 (https://github.com/Esnya/EsnyaSFAddons/tree/beta) 可以查看。如果不希望安装udonchip,可以***只导入***com.nekometer.esnya.esnya-sf-addons
   ***而不需导入***com.nekometer.esnya.esnya-sf-addons-ucs
   
 
