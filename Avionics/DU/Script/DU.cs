@@ -16,90 +16,53 @@ namespace A320VAU.PFD
 
         public bool BypassSlefTest = false;
 
-        private DateTimeOffset powerUpTime;
-        private DateTimeOffset flashStartTime;
-        private DateTimeOffset flashEndTime;
-        private DateTimeOffset selfTestStartTime;
-        private DateTimeOffset selfTestCompleteTime;
-        private bool inSelfTest = false;
-        private bool isSelfTestComplete = false;
-        private bool inFlash = false;
-        private bool isFlashComplete = false;
+        private bool inSelftest = false;
+        private bool isSelftestCompleted = false;
 
         void OnEnable()
         {
-            //power up!
-            //We need Delay function!!!!!
-            if (!PowerSource.activeSelf)
-            {
-                InitDU();
-            }
-            powerUpTime = DateTimeOffset.Now;
-            if (BypassSlefTest)
-            {
-                inSelfTest = false;
-                isSelfTestComplete = true;
-                inFlash = false;
-                isFlashComplete = true;
-                return;
-            }
+            if (inSelftest | isSelftestCompleted) return;
+            InitDU();
 
-            PowerPage.SetActive(true);
-            var flashStartDelay = UnityEngine.Random.Range(2f, 5f);
-            flashStartTime = DateTimeOffset.Now.AddSeconds(flashStartDelay);
+            PowerPage.SetActive(!isSelftestCompleted);
+            if (PowerSource.activeSelf)
+            {
+                inSelftest = true;
+                var flashStartDelay = UnityEngine.Random.Range(2f, 5f);
+                SendCustomEventDelayedSeconds(nameof(StartFlash), flashStartDelay);
+            }
         }
 
-        void LateUpdate()
+        public void StartFlash()
         {
-            if (isSelfTestComplete && PowerSource.activeSelf) gameObject.SetActive(false);
+            Debug.Log("DU Start Flash");
+            PowerFlashCover.SetActive(true);
+            SendCustomEventDelayedSeconds(nameof(EndFlash), 0.2f);
+        }
 
-            if (inSelfTest & DateTimeOffset.Now > selfTestCompleteTime)
-            {
-                Debug.Log("DU boot complete");
-                SelfTestPage.SetActive(false);
+        public void EndFlash()
+        {
+            PowerFlashCover.SetActive(false);
+            var selfTestStartDelay = UnityEngine.Random.Range(1f, 2f);
+            SendCustomEventDelayedSeconds(nameof(StartSelftest), selfTestStartDelay);
+        }
 
-                isSelfTestComplete = true;
-                inSelfTest = false;
-                return;
-            }
+        public void StartSelftest()
+        {
+            Debug.Log("DU Start Selftest");
+            PowerPage.SetActive(false);
+            SelfTestPage.SetActive(true);
 
-            if (!inSelfTest & selfTestStartTime > powerUpTime & DateTimeOffset.Now > selfTestStartTime)
-            {
-                Debug.Log("DU Start Selftest");
-                PowerPage.SetActive(false);
-                SelfTestPage.SetActive(true);
+            var selfTestDelay = UnityEngine.Random.Range(25f, 40f);
+            SendCustomEventDelayedSeconds(nameof(EndSelftest), selfTestDelay);
+        }
 
-                var selfTestDelay = UnityEngine.Random.Range(25f, 40f);
-                selfTestCompleteTime = DateTimeOffset.Now.AddSeconds(selfTestDelay);
-
-                inSelfTest = true;
-
-                SelfTestPage.SetActive(true);
-                return;
-            }
-
-            if (isFlashComplete) return;
-
-            if (inFlash & flashEndTime > powerUpTime & DateTimeOffset.Now > flashEndTime)
-            {
-                Debug.Log("DU Flash End");
-                inFlash = false;
-                isFlashComplete = true;
-                PowerFlashCover.SetActive(false);
-
-                var selfTestStartDelay = UnityEngine.Random.Range(1f, 2f);
-                selfTestStartTime = DateTimeOffset.Now.AddSeconds(selfTestStartDelay);
-            }
-
-            if (!isFlashComplete & !inFlash & DateTimeOffset.Now > flashStartTime)
-            {
-                Debug.Log("DU Start Flash");
-                inFlash = true;
-
-                flashEndTime = DateTimeOffset.Now.AddMilliseconds(200);
-                PowerFlashCover.SetActive(true);
-                return;
-            }
+        public void EndSelftest()
+        {
+            Debug.Log("DU boot complete");
+            SelfTestPage.SetActive(false);
+            inSelftest = false;
+            isSelftestCompleted = true;
         }
 
         private void InitDU()
@@ -111,10 +74,8 @@ namespace A320VAU.PFD
             InvaildDataPage.SetActive(false);
             SelfTestPage.SetActive(false);
 
-            inSelfTest = false;
-            isSelfTestComplete = false;
-            inFlash = false;
-            isFlashComplete = false;
+            inSelftest = false;
+            isSelftestCompleted = false;
         }
     }
 }
