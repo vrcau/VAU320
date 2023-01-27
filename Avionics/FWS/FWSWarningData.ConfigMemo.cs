@@ -27,8 +27,19 @@ namespace A320VAU.FWS
                 TAKEOFF_MEMO.MessageLine[3].IsMessageVisable = false;
                 TAKEOFF_MEMO.MessageLine[4].IsMessageVisable = false;
                 // CABIN READY
-                TAKEOFF_MEMO.MessageLine[6].IsMessageVisable = false;
-                TAKEOFF_MEMO.MessageLine[7].IsMessageVisable = false;
+                if (!FWS.Canopy.CanopyOpen)
+                {
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[5].IsMessageVisable, true);
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[6].IsMessageVisable, false);
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[7].IsMessageVisable, false);
+                }
+                else
+                {
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[5].IsMessageVisable, false);
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[6].IsMessageVisable, true);
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[7].IsMessageVisable, true);
+                }
+
                 // SPLRS ARM
                 TAKEOFF_MEMO.MessageLine[9].IsMessageVisable = false;
                 TAKEOFF_MEMO.MessageLine[10].IsMessageVisable = false;

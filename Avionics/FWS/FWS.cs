@@ -8,6 +8,7 @@ using EsnyaSFAddons.SFEXT;
 using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
+using A320VAU.DFUNC;
 using VRC.SDKBase;
 using VRC.Udon;
 using YuxiFlightInstruments.BasicFlightData;
@@ -44,7 +45,8 @@ namespace A320VAU.FWS
         public SFEXT_a320_AdvancedGear FrontLadingGear;
         public DFUNC_a320_Brake Brake;
 
-        public DFUNC_LandingLight LandingLight;
+        public DFUNC_a320_LandingLight LandingLight;
+        public DFUNC_Canopy Canopy;
 
         public YFI_NavigationReceiver NavigationReceiver1;
         public YFI_NavigationReceiver NavigationReceiver2;
