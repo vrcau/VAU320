@@ -15,6 +15,8 @@ namespace A320VAU.PFD
         public YFI_FlightDataInterface FlightData;
         [Tooltip("RadioHeight")]
         public GPWS_OWML GPWSController;
+        [Tooltip("FCU")]
+        public FCU.FCU FCU;
 
         [Tooltip("仪表的动画控制器")]
         public Animator IndicatorAnimator;
@@ -53,6 +55,7 @@ namespace A320VAU.PFD
         private float altitude = 0f;
         //animator strings that are sent every frame are converted to int for optimization
         private int AIRSPEED_HASH = Animator.StringToHash("AirSpeedNormalize");
+        private int AIRSPEED_SECLECT_HASH = Animator.StringToHash("AirSpeedSelectNormalize");
         private int PITCH_HASH = Animator.StringToHash("PitchAngleNormalize");
         private int BANK_HASH = Animator.StringToHash("BankAngleNormalize");
         private int ALT_HASH = Animator.StringToHash("AltitudeNormalize");
@@ -110,7 +113,9 @@ namespace A320VAU.PFD
         private void UpdateAirspeed()
         {
             IndicatorAnimator.SetFloat(AIRSPEED_HASH, FlightData.TAS / MAXSPEED);
+            // IndicatorAnimator.SetFloat(AIRSPEED_SECLECT_HASH, FCU.TargetSpeed / MAXSPEED);
         }
+
         private void UpdateAltitude()
         {
 
@@ -140,7 +145,7 @@ namespace A320VAU.PFD
                 var RadioAltitudeNormal = Remap01(RadioHeight, -MAXRHE, MAXRHE);
                 IndicatorAnimator.SetFloat(RH_HASH, RadioAltitudeNormal);
             }
-            
+
         }
         private void UpdateVerticalSpeed()
         {
@@ -188,8 +193,8 @@ namespace A320VAU.PFD
                 MachNumberText.text = "." + (FlightData.mach * 100).ToString("f0");
             }
             else
-            { 
-            MachNumberText.gameObject.SetActive(false);
+            {
+                MachNumberText.gameObject.SetActive(false);
             }
         }
         private void UpdateTrickPitch()
@@ -198,7 +203,7 @@ namespace A320VAU.PFD
         }
         private float Remap01(float value, float valueMin, float valueMax)
         {
-            value =  Mathf.Clamp01((value - valueMin) / (valueMax - valueMin));
+            value = Mathf.Clamp01((value - valueMin) / (valueMax - valueMin));
             return value;
         }
     }

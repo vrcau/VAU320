@@ -19,13 +19,28 @@ TextureImporter:
     second: HDG_arrow
   - first:
       213: -4344615827158156795
-    second: PFD_IAS_HDG_5
+    second: SPEED_VR
   - first:
       213: -8072622731538276985
     second: PFD_ILS
   - first:
       213: -4053935606227167044
     second: PFD_ILS_Pointer
+  - first:
+      213: 4671231037042643878
+    second: SPEED_VMAX
+  - first:
+      213: -3257972142984786412
+    second: SPEED_VLS
+  - first:
+      213: -8190416847078239227
+    second: SPEED_ALPHA_PROT
+  - first:
+      213: -7406065464356745632
+    second: SPEED_ALPHA_MIN
+  - first:
+      213: 2950028048870293489
+    second: SPEED_MAX_FLAP_DOWN
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -228,7 +243,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PFD_IAS_HDG_5
+      name: SPEED_VR
       rect:
         serializedVersion: 2
         x: 91
@@ -257,7 +272,7 @@ TextureImporter:
         width: 22
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -278,7 +293,7 @@ TextureImporter:
         width: 28
         height: 18
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -286,6 +301,237 @@ TextureImporter:
       bones: []
       spriteID: cb895887b078db7c0800000000000000
       internalID: -4053935606227167044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SELECT
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 1989
+        width: 18
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: acdf0e64eb39c7c50800000000000000
+      internalID: 6664363994043710922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MANGED_SELECT
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 1989
+        width: 18
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c4af93359bfdb930800000000000000
+      internalID: 4160758248995005633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPD_V1
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 1894
+        width: 21
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a03ac13097ae6a50800000000000000
+      internalID: 6516329948604149920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPD_S_SPEED
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 1959
+        width: 22
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b7325e214f828e60800000000000000
+      internalID: 7963084601257244601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPD_FLAP_SPEED
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 1959
+        width: 21
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b6267f3577cabd90800000000000000
+      internalID: -7081128157696874832
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPEED_GREEN_DOT
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 1930
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72dca274bcbeb0950800000000000000
+      internalID: 6416481352424279335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPEED_VMAX
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 0
+        width: 8
+        height: 508
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a3d4b201eb83d040800000000000000
+      internalID: 4671231037042643878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPEED_VLS
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 1
+        width: 7
+        height: 505
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41e0641f89b59c2d0800000000000000
+      internalID: -3257972142984786412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPEED_ALPHA_PROT
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 1
+        width: 10
+        height: 505
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 504d683b54bc55e80800000000000000
+      internalID: -8190416847078239227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPEED_ALPHA_MIN
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 0
+        width: 11
+        height: 506
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06e4abdf2be583990800000000000000
+      internalID: -7406065464356745632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPEED_MAX_FLAP_DOWN
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 1931
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ff3a5a61ea90f820800000000000000
+      internalID: 2950028048870293489
       vertices: []
       indices: 
       edges: []
