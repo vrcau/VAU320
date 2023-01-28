@@ -7,17 +7,20 @@ namespace A320VAU.Common {
         public const string Amber = "#FD7D22";
         public const string Green = "#3FFF43";
         public const string Blue = "#30FFFF";
+        public const string Carmine = "#FF00FF";
 
         public Color DangerColor { get; private set; }
         public Color AmberColor { get; private set; }
         public Color GreenColor { get; private set; }
         public Color BlueColor { get; private set; }
+        public Color CarmineColor { get; private set; }
 
         void Start() {
             DangerColor = GetColorByHtmlString(Danger);
             AmberColor = GetColorByHtmlString(Amber);
             GreenColor = GetColorByHtmlString(Green);
             BlueColor = GetColorByHtmlString(Blue);
+            CarmineColor = GetColorByHtmlString(Carmine);
         }
 
         public Color GetColorByHtmlString(string hex) {
