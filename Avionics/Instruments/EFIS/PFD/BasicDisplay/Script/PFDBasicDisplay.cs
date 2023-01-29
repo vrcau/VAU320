@@ -51,6 +51,10 @@ namespace A320VAU.PFD
         public Text RadioHeightText;
         public Text MachNumberText;
 
+        [Header("Speed element")]
+        public GameObject[] disableOnGround;
+        public GameObject[] enableOnGround;
+
 
         private float altitude = 0f;
         //animator strings that are sent every frame are converted to int for optimization
@@ -112,6 +116,14 @@ namespace A320VAU.PFD
         }
         private void UpdateAirspeed()
         {
+                foreach (var item in disableOnGround)
+                {
+                    item.SetActive(!FlightData.SAVControl.Taxiing);
+                }
+                foreach (var item in enableOnGround)
+                {
+                    item.SetActive(FlightData.SAVControl.Taxiing);
+                }
             IndicatorAnimator.SetFloat(AIRSPEED_HASH, FlightData.TAS / MAXSPEED);
             // IndicatorAnimator.SetFloat(AIRSPEED_SECLECT_HASH, FCU.TargetSpeed / MAXSPEED);
         }

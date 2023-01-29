@@ -71,12 +71,11 @@ namespace A320VAU.PFD
 
             //文字更新
             var distance = naviData1.distance * 0.00054f;
-            NaviInfo.text = string.Format("{0}\n{1:f0}<size=14>.{2:f0}</size>\n{3:f0}<size=14>.{4:f0}</size>",
+            NaviInfo.text = string.Format("{0}\n{1:f0}<size=14>.{2:f0}</size>\n{3:f1}",
                 naviData1.SelectedBeacon.beaconName,
                 (int)naviData1.frequency,
                 (naviData1.frequency- (int)naviData1.frequency)*10,
-                (int)distance,
-                ((distance - (int)distance) * 10)
+                distance
                 );
 
         }

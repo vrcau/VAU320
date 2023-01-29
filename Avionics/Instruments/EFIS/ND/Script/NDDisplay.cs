@@ -63,7 +63,7 @@ namespace A320VAU.ND
             }
             set
             {
-                _ndMode = value;
+                _ndMode = (NDMode)(((int)value<0) ? 0 : (int)value % 5);
                 NDModeChanged();
             }
         }
@@ -144,9 +144,8 @@ namespace A320VAU.ND
 
 
                         line4Text.text = $"<color={AirbusAvionicsTheme.Carmine}>NaviData1.SelectedBeacon.beaconName</color>";
+                        UpdateILS(navigationReceiver);
                     }
-
-                    UpdateILS(navigationReceiver);
                     break;
                 case NDMode.VOR:
                     if (navigationReceiver.hasBeaconSelected)
@@ -182,7 +181,27 @@ namespace A320VAU.ND
                 case NDMode.ARC:
                     ARCPage.SetActive(true);
                     break;
+                default:
+                    ARCPage.SetActive(true);
+                    break;
             }
+        }
+
+        public void NDPageNextLocal()
+        {
+            NDMode = (NDMode)((int)NDMode + 1);
+        }
+
+        public void NDPagePrevLocal()
+        {
+            NDMode = (NDMode)((int)NDMode - 1);
+        }
+
+        public void NDPageChangeLocal()
+        {
+            Debug.Log("OnNDPageChange");
+            //for one deriction
+            NDMode = (NDMode)(((int)NDMode + 1)%5);
         }
 
         private void UpdateHeading()
@@ -203,16 +222,16 @@ namespace A320VAU.ND
             IndicatorAnimator.SetFloat(LOCHDG_HASH, LOCHDGNormal);
 
             var azimuth = navigationReceiver.VORazimuth;
-            float LOCDeviationNormal = Remap01(azimuth, -5f, 5f);
+            float LOCDeviationNormal = Remap01(azimuth, -1.6f, 1.6f);
             IndicatorAnimator.SetFloat(LOC_HASH, LOCDeviationNormal);
 
             //GS
             GSIndicator.SetActive(navigationReceiver.GSCapture);
             var GSAngle = navigationReceiver.GSAngle;
-            float GSDeviationNormal = Remap01(GSAngle, -5f, 5f);
+            float GSDeviationNormal = Remap01(GSAngle, -0.8f, 0.8f);
             IndicatorAnimator.SetFloat(GlideSlope_HASH, GSDeviationNormal);
 
-            Debug.Log($"{LOCHDGNormal} | {LOCDeviationNormal} | {GSDeviationNormal}");
+            //Debug.Log($"{LOCHDGNormal} | {LOCDeviationNormal} | {GSDeviationNormal}");
         }
 
         private float Remap01(float value, float valueMin, float valueMax)
