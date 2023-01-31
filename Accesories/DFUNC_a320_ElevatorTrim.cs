@@ -2,11 +2,12 @@ using System;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
+using TMPro;
 using SaccFlightAndVehicles;
 
 //note:this code is original from https://github.com/esnya/EsnyaSFAddons
 //to satisfy vau320's demand, add autotrim
-
+//to optimize change vellift in SAV to trim
 namespace A320VAU.DFUNC
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Continuous)]
@@ -21,9 +22,12 @@ namespace A320VAU.DFUNC
         public bool autoTrim = true;
         public KeyCode desktopEnableAuto = KeyCode.F6;
         public GameObject Dial_Funcon;
+        public TextMeshPro DebugOut;
         private string triggerAxis;
         private VRCPlayerApi.TrackingDataType trackingTarget;
-        private SaccAirVehicle airVehicle;
+
+        public SaccEntity entityControl;
+        public SaccAirVehicle SAVControl;
         private Transform controlsRoot;
         private Rigidbody vehicleRigidbody;
         private Animator vehicleAnimator;
@@ -47,29 +51,25 @@ namespace A320VAU.DFUNC
         }
         public void DFUNC_Selected()
         {
+            gameObject.SetActive(true);
             isSelected = true;
             prevTriggered = false;
         }
         public void DFUNC_Deselected()
         {
+            gameObject.SetActive(false);
             isSelected = false;
             triggerTapTime = 1;
         }
 
         public void SFEXT_L_EntityStart()
         {
-            var entity = GetComponentInParent<SaccEntity>();
-
-            airVehicle = entity.GetComponentInChildren<SaccAirVehicle>(true);
-            controlsRoot = airVehicle.ControlsRoot;
-            rotMultiMaxSpeed = airVehicle.RotMultiMaxSpeed;
-            if (!controlsRoot) controlsRoot = entity.transform;
-
-            vehicleRigidbody = entity.GetComponent<Rigidbody>();
-            vehicleAnimator = airVehicle.VehicleAnimator;
-
-            trimStrength = airVehicle.PitchStrength * trimStrengthMultiplier;
-
+            controlsRoot = SAVControl.ControlsRoot;
+            rotMultiMaxSpeed = SAVControl.RotMultiMaxSpeed;
+            if (!controlsRoot) controlsRoot = entityControl.transform;
+            vehicleAnimator = SAVControl.VehicleAnimator;
+            InitialtTrim = (float)SAVControl.GetProgramVariable("VelLiftStart");
+            trimStrength = InitialtTrim * trimStrength;
             ResetStatus();
         }
         public void SFEXT_O_PilotEnter()
@@ -107,8 +107,6 @@ namespace A320VAU.DFUNC
             {
                 PilotUpdate();
             }
-
-            if (isOwner) OwnerUpdate();
             LocalUpdate();
 
             if (!hasPilot && !isDirty) gameObject.SetActive(false);
@@ -149,9 +147,6 @@ namespace A320VAU.DFUNC
                     sliderInput = 0;
                 }
 
-
-
-
                 if (Input.GetKeyDown(desktopUp)) sliderInput = desktopStep;
                 if (Input.GetKeyDown(desktopDown)) sliderInput = -desktopStep;
 
@@ -176,13 +171,14 @@ namespace A320VAU.DFUNC
         }
         #endregion
 
-        public float trimStrengthMultiplier = 1;
-        public float trimStrengthCurve = 1;
+        //public float trimStrengthMultiplier = 1;
+        //public float trimStrengthCurve = 1;
         public string animatorParameterName = "elevtrim";
         public Vector3 vrInputAxis = Vector3.forward;
 
-        public float trimBias = 0;
-        private float trimStrength;
+        //public float trimBias = 0;
+        public float trimStrength;
+        private float InitialtTrim;
 
         [Header("Haptics")]
         [Range(0, 1)] public float hapticDuration = 0.2f;
@@ -194,23 +190,11 @@ namespace A320VAU.DFUNC
 
         private void ResetStatus()
         {
-            autoTrim = true;
+            autoTrim = false;
             Dial_Funcon.SetActive(autoTrim);
             prevTrim = trim = 0;
             if (vehicleAnimator) vehicleAnimator.SetFloat(animatorParameterName, .5f);
-        }
-
-        private void FixedUpdate()
-        {
-            if (!isOwner) return;
-
-            var airspeed = Vector3.Dot(airVehicle.AirVel, transform.forward);
-            if (airspeed < 0.1f) return;
-
-            var rotlift = Mathf.Clamp(airspeed / rotMultiMaxSpeed, -1, 1);
-
-            vehicleRigidbody.AddForceAtPosition(-transform.up * (Mathf.Sign(trim) * Mathf.Pow(Mathf.Abs(trim), trimStrengthCurve) + trimBias) * trimStrength * rotlift * airVehicle.Atmosphere, transform.position, ForceMode.Force);
-
+            SAVControl.SetProgramVariable("VelLiftStart", InitialtTrim + trim * trimStrength);
         }
 
         private void PilotUpdate()
@@ -223,7 +207,7 @@ namespace A320VAU.DFUNC
                 //简单的根据油门配平的逻辑
                 //https://nihe.91maths.com/linear.php
                 //trim = -4f * airVehicle.ThrottleInput + 3.3f;
-                trim = -0.79f * airVehicle.ThrottleInput + 0.09f;
+                trim = 0;
             }
             else
             {
@@ -237,10 +221,6 @@ namespace A320VAU.DFUNC
             }
         }
 
-        private void OwnerUpdate()
-        {
-        }
-
         private void LocalUpdate()
         {
             var trimChanged = !Mathf.Approximately(trim, prevTrim);
@@ -250,6 +230,8 @@ namespace A320VAU.DFUNC
                 SetDirty();
                 if (vehicleAnimator) vehicleAnimator.SetFloat(animatorParameterName, Remap01(trim, -1, 1));
             }
+            SAVControl.SetProgramVariable("VelLiftStart", InitialtTrim + trim * trimStrength);
+            DebugOut.text = "TRIM[T / Y]\n" + (InitialtTrim + trim * trimStrength).ToString("f2");
         }
 
         public void TrimUp()

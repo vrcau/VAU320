@@ -2353,7 +2353,9 @@ MonoBehaviour:
   - {fileID: 8696132191684666215}
   - {fileID: 2076916566377860525}
   - {fileID: 8564825836536236595}
-  enableOnGround: []
+  enableOnGround:
+  - {fileID: 5437888068520422175}
+  - {fileID: 1544908153842870692}
 --- !u!114 &7004343545175485341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3880,7 +3882,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6912816363400927754
 RectTransform:
   m_ObjectHideFlags: 0
