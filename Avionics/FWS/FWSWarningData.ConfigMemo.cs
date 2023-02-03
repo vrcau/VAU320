@@ -29,15 +29,15 @@ namespace A320VAU.FWS
                 // CABIN READY
                 if (!FWS.Canopy.CanopyOpen)
                 {
-                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[5].IsMessageVisable, true);
                     setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[6].IsMessageVisable, false);
                     setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[7].IsMessageVisable, false);
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[8].IsMessageVisable, true);
                 }
                 else
                 {
-                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[5].IsMessageVisable, false);
                     setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[6].IsMessageVisable, true);
                     setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[7].IsMessageVisable, true);
+                    setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[8].IsMessageVisable, false);
                 }
 
                 // SPLRS ARM
