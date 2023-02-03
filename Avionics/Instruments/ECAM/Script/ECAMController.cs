@@ -147,7 +147,14 @@ namespace A320VAU.ECAM
                 }
             }
 
-
+            if (FlapPosition != FlapTargetPosition)
+            {
+                flapText.color = AirbusAvionicsTheme.BlueColor;
+            }
+            else
+            {
+                flapText.color = AirbusAvionicsTheme.GreenColor;
+            }
         }
 
         private void UpdateEngineStatus()
@@ -222,10 +229,10 @@ namespace A320VAU.ECAM
             }
             else
             {
-                if(isEng2RunnningLastFarme) EntityControl.SendEventToExtensions("SFEXT_G_EngineShutDown");
+                if (isEng2RunnningLastFarme) EntityControl.SendEventToExtensions("SFEXT_G_EngineShutDown");
                 eng2AvailFlag.SetActive(false);
             }
-                
+
             isEng2RunnningLastFarme = isEng2Running;
         }
 
