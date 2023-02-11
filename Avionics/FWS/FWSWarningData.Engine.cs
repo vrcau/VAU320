@@ -14,7 +14,7 @@ namespace A320VAU.FWS
 
         public void MonitorEngine()
         {
-            setWarningMessageVisableValue(ref DUAL_ENGINE_FAULT.IsVisable, !FWS.SaccAirVehicle.Taxiing && (FWS.Engine1.n1 < FWS.Engine1.idleN1) && (FWS.Engine1.n1 < FWS.Engine1.idleN1));
+            setWarningMessageVisableValue(ref DUAL_ENGINE_FAULT.IsVisable, !FWS.SaccAirVehicle.Taxiing && (FWS.Engine1.n1 < FWS.Engine1.idleN1) && (FWS.Engine2.n1 < FWS.Engine2.idleN1), true);
             if (DUAL_ENGINE_FAULT.IsVisable) {
                 setWarningMessageVisableValue(ref DUAL_ENGINE_FAULT.MessageLine[0].IsMessageVisable, true);
                 setWarningMessageVisableValue(ref DUAL_ENGINE_FAULT.MessageLine[1].IsMessageVisable, true);
@@ -43,7 +43,7 @@ namespace A320VAU.FWS
                 setWarningMessageVisableValue(ref DUAL_ENGINE_FAULT.MessageLine[24].IsMessageVisable, true);
             }
 
-            setWarningMessageVisableValue(ref ENGINE1_FAIL.IsVisable, !FWS.SaccAirVehicle.Taxiing && (FWS.Engine1.n1 < FWS.Engine1.idleN1));
+            setWarningMessageVisableValue(ref ENGINE1_FAIL.IsVisable, !FWS.SaccAirVehicle.Taxiing && (FWS.Engine1.n1 < FWS.Engine1.idleN1), true);
             if (ENGINE1_FAIL.IsVisable)
             {
                 setWarningMessageVisableValue(ref ENGINE1_FAIL.MessageLine[0].IsMessageVisable, true);
@@ -56,7 +56,7 @@ namespace A320VAU.FWS
                 setWarningMessageVisableValue(ref ENGINE1_FAIL.MessageLine[7].IsMessageVisable, true);
             }
 
-            setWarningMessageVisableValue(ref ENGINE2_FAIL.IsVisable, !FWS.SaccAirVehicle.Taxiing && (FWS.Engine2.n1 < FWS.Engine1.idleN1));
+            setWarningMessageVisableValue(ref ENGINE2_FAIL.IsVisable, !FWS.SaccAirVehicle.Taxiing && (FWS.Engine2.n1 < FWS.Engine1.idleN1), true);
             if (ENGINE2_FAIL.IsVisable)
             {
                 setWarningMessageVisableValue(ref ENGINE2_FAIL.MessageLine[0].IsMessageVisable, true);

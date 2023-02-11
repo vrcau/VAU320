@@ -55,7 +55,8 @@ namespace A320VAU.FWS
         public DFUNC_ElevatorTrim ElevatorTrim;
         #endregion
 
-        private bool _hasWarningVisableChange = false;
+        public bool _hasWarningVisableChange = false;
+        public bool _hasWarningDataVisableChange = false;
         private string[] _activeWarnings = new string[0];
 
         private void Start()
@@ -67,7 +68,7 @@ namespace A320VAU.FWS
 
         private void LateUpdate()
         {
-            _hasWarningVisableChange = FWSWarningData.Monitor(this);
+            FWSWarningData.Monitor(this);
 
             if (!_hasWarningVisableChange) return;
 

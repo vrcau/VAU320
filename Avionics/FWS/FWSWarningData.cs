@@ -10,10 +10,12 @@ namespace A320VAU.FWS
     {
         private FWS FWS;
         private bool _hasWarningVisableChange = false;
+        private bool _hasWarningDataVisableChange = false;
 
-        public bool Monitor(FWS fws)
+        public void Monitor(FWS fws)
         {
             _hasWarningVisableChange = false;
+            _hasWarningDataVisableChange = false;
             FWS = fws;
 
             MonitorEngine();
@@ -21,10 +23,12 @@ namespace A320VAU.FWS
             MonitorGear();
             MonitorMemo();
             MonitorConfig();
-            return _hasWarningVisableChange;
+
+            fws._hasWarningDataVisableChange = _hasWarningDataVisableChange;
+            fws._hasWarningVisableChange = _hasWarningVisableChange;
         }
 
-        private void setWarningMessageVisableValue(ref bool isVisable, bool newValue)
+        private void setWarningMessageVisableValue(ref bool isVisable, bool newValue, bool isWarningData = false)
         {
             if (isVisable == newValue) return;
             isVisable = newValue;
