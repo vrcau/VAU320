@@ -55,6 +55,11 @@ namespace A320VAU.FWS
         public DFUNC_ElevatorTrim ElevatorTrim;
         #endregion
 
+        public GameObject MasterWarningLightCAPT;
+        public GameObject MasterWarningLightFO;
+        public GameObject MasterCautionLightCAPT;
+        public GameObject MasterCautionLightFO;
+
         public bool _hasWarningVisableChange = false;
         public bool _hasWarningDataVisableChange = false;
         private string[] _activeWarnings = new string[0];
@@ -68,13 +73,13 @@ namespace A320VAU.FWS
 
         private void LateUpdate()
         {
+            var _hasMatserWarning = false;
+            var _hasMatserCaution = false;
             FWSWarningData.Monitor(this);
 
             if (!_hasWarningVisableChange) return;
 
             var newActiveWarnings = new string[_activeWarnings.Length];
-            var hasMatserWarning = false;
-            var hasCaution = false;
             foreach (var memo in FWSWarningMessageDatas)
             {
                 if (memo.IsVisable)
@@ -85,34 +90,56 @@ namespace A320VAU.FWS
                         switch (memo.Level)
                         {
                             case WarningLevel.Immediate:
-                                hasMatserWarning = true;
+                                _hasMatserWarning = true;
                                 break;
                             case WarningLevel.None:
                                 // doing nothing
                                 break;
                             default:
-                                hasCaution = true;
+                                _hasMatserCaution = true;
                                 break;
                         }
                     }
                 }
             }
 
-            if (hasMatserWarning)
+            if (_hasMatserWarning)
             {
                 AudioSource.Play();
+                MasterWarningLightCAPT.SetActive(true);
+                MasterWarningLightFO.SetActive(true);
+                MasterCautionLightCAPT.SetActive(true);
+                MasterCautionLightFO.SetActive(true);
             }
             else
             {
                 AudioSource.Stop();
-                if (hasCaution)
+                MasterWarningLightCAPT.SetActive(false);
+                MasterWarningLightFO.SetActive(false);
+                if (_hasMatserCaution)
                 {
+                    MasterCautionLightCAPT.SetActive(true);
+                    MasterCautionLightFO.SetActive(true);
                     AudioSource.PlayOneShot(Caution);
+                }
+                else
+                {
+                    MasterCautionLightCAPT.SetActive(false);
+                    MasterCautionLightFO.SetActive(false);
                 }
             }
 
             _activeWarnings = new string[0];
             ECAMController.SendCustomEvent("UpdateMemo");
+        }
+
+        public void CancleWarning()
+        {
+            AudioSource.Stop();
+            MasterWarningLightCAPT.SetActive(false);
+            MasterWarningLightFO.SetActive(false);
+            MasterCautionLightCAPT.SetActive(false);
+            MasterCautionLightFO.SetActive(false);
         }
 
         private string[] addItem(string[] array, string item)
