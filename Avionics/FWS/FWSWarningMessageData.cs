@@ -6,6 +6,7 @@ using VRC.Udon;
 
 namespace A320VAU.FWS
 {
+    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class FWSWarningMessageData : UdonSharpBehaviour
     {
         public string Id;
