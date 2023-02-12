@@ -17,6 +17,7 @@ using A320VAU.SFEXT;
 
 namespace A320VAU.FWS
 {
+    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class FWS : UdonSharpBehaviour
     {
         [HideInInspector]
