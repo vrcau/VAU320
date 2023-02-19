@@ -11,13 +11,13 @@ namespace A320VAU.FWS
         {
             if (FWS.SaccAirVehicle.ThrottleInput == 1 && FWS.SaccAirVehicle.Taxiing)
             {
-                setWarningMessageVisableValue(ref FLAPS_NOT_IN_TAKEOFF_CONFIG.IsVisable, !(FWS.Flaps.detentIndex == 1 | FWS.Flaps.detentIndex == 2));
-                setWarningMessageVisableValue(ref PARK_BRAKE_ON.IsVisable, FWS.Brake.ParkBreakSet);
+                setWarningMessageVisableValue(ref FLAPS_NOT_IN_TAKEOFF_CONFIG.IsVisable, !(FWS.Flaps.detentIndex == 1 | FWS.Flaps.detentIndex == 2), true);
+                setWarningMessageVisableValue(ref PARK_BRAKE_ON.IsVisable, FWS.Brake.ParkBreakSet, true);
             }
             else
             {
-                setWarningMessageVisableValue(ref FLAPS_NOT_IN_TAKEOFF_CONFIG.IsVisable, false);
-                setWarningMessageVisableValue(ref PARK_BRAKE_ON.IsVisable, false);
+                setWarningMessageVisableValue(ref FLAPS_NOT_IN_TAKEOFF_CONFIG.IsVisable, false, true);
+                setWarningMessageVisableValue(ref PARK_BRAKE_ON.IsVisable, false, true);
             }
         }
     }

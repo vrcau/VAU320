@@ -11,6 +11,12 @@ TextureImporter:
   - first:
       213: -5063104590049656375
     second: BTN_ON
+  - first:
+      213: -4452098067662554536
+    second: MASTER_WARN
+  - first:
+      213: 7205443770961099946
+    second: MASTER_CAUT
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -146,7 +152,7 @@ TextureImporter:
         width: 140
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -154,6 +160,48 @@ TextureImporter:
       bones: []
       spriteID: 9c1c079633d3cb9b0800000000000000
       internalID: -5063104590049656375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MASTER_WARN
+      rect:
+        serializedVersion: 2
+        x: 3608
+        y: 3569
+        width: 111
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85a35cb4568f632c0800000000000000
+      internalID: -4452098067662554536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MASTER_CAUT
+      rect:
+        serializedVersion: 2
+        x: 3464
+        y: 3454
+        width: 116
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aacff210fe0eef360800000000000000
+      internalID: 7205443770961099946
       vertices: []
       indices: 
       edges: []
