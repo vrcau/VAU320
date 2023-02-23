@@ -164,14 +164,14 @@ namespace A320VAU.DFUNC
                 case STATE_ElETRICAL_START:
                     if (isOwner)
                     {
-                        if (stateChanged && !eletricalBus.batteryOn) eletricalBus.ToggleBattery();
+                        if (stateChanged && !eletricalBus.batteryOn) eletricalBus.ToggleBatteryLocal();
                         if (!eletricalBus || eletricalBus.hasPower) SetState(STATE_APU_START);
                     }
                     break;
                 case STATE_ElETRICAL_STOP:
                     if (isOwner)
                     {
-                        if (stateChanged && eletricalBus.batteryOn) eletricalBus.ToggleBattery();
+                        if (stateChanged && eletricalBus.batteryOn) eletricalBus.ToggleBatteryLocal();
                         if (!eletricalBus || !eletricalBus.hasPower) SetState(start ? STATE_ON : STATE_OFF);
                     }
                     break;

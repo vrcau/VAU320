@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: FWSWarningData
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 43b44533e217aa242a8c27ee3a8c1292,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 63246daaaebf4624cb0579c4ec38530b,
     type: 2}
   udonAssembly: 
   assemblyError: 
