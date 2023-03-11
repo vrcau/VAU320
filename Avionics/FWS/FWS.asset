@@ -224,7 +224,7 @@ MonoBehaviour:
       Data: 15|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: ECAM and warning light/audio
+      Data: ECAM and warning Light/Audio
     - Name: 
       Entry: 8
       Data: 
