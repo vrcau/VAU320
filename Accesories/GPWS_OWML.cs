@@ -22,7 +22,8 @@ namespace A320VAU.Avionics
         public float initialClimbThreshold = 1333;
         public float smoothing = 1.0f;
         public float startDelay = 30;
-        public bool PullUpWarning {
+        public bool PullUpWarning
+        {
             private set;
             get;
         }
@@ -64,7 +65,8 @@ namespace A320VAU.Avionics
             flightData = vehicleRigidbody.GetComponentInChildren<YFI_FlightDataInterface>(true);
 
             audioSource = GetComponent<AudioSource>();
-            maxRange = altitudeThresholds[altitudeThresholds.Length - 1] * 2;
+            //maxRange = altitudeThresholds[altitudeThresholds.Length - 1] * 2;
+            maxRange = 2500f;
             seaLevel = airVehicle.SeaLevel;
 
             offset = Vector3.Dot(groundDetector.up, offsetTransorm.position - groundDetector.position);
@@ -115,13 +117,13 @@ namespace A320VAU.Avionics
 
             prevLandingConfiguration = landingConfiguration;
 
-            SetCalloutIndex(GetAltitudeCalloutIndex(radioAltitude));
+            //SetCalloutIndex(GetAltitudeCalloutIndex(radioAltitude));
 
             var state = Mode1(barometricDecendRate, radioAltitude);
             state = Mathf.Min(state, Mode2(barometricDecendRate, radioAltitude, airspeed, barometricDecendRate, landingConfiguration));
             state = Mathf.Min(state, Mode3(barometricAltitudeLoss, radioAltitude, initialClimbing, landingConfiguration));
             if (!initialClimbing) state = Mathf.Min(state, Mode4(airspeed, radioAltitude, gearDown, anyFlapsDown));
-            state = Mathf.Min(state, Mode6(radioAltitude));
+            //state = Mathf.Min(state, Mode6(radioAltitude));
 
             state = (airVehicle.Taxiing || airVehicle.Floating) ? ALERT_NONE : state; //避免地面警报
 
@@ -177,7 +179,7 @@ namespace A320VAU.Avionics
         private const float Mode1LowerLimit = 30;
         private const float Mode1UpperLimit = 2450;
         private const float Mode1SinkRateSlope = (Mode1UpperLimit - Mode1LowerLimit) / (5000 - 998);
-        private const float Mode1SinkRateIntercept =  Mode1LowerLimit - 998 * Mode1SinkRateSlope;
+        private const float Mode1SinkRateIntercept = Mode1LowerLimit - 998 * Mode1SinkRateSlope;
         private const float Mode1PullUpSlope1 = (284 - Mode1LowerLimit) / (1710 - 1482);
         private const float Mode1PullUpIntercept1 = Mode1LowerLimit - 1482 * Mode1PullUpSlope1;
         private const float Mode1PullUpSlope2 = (Mode1UpperLimit - 284) / (7125 - 1710);
