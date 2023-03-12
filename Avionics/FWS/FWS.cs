@@ -113,6 +113,12 @@ namespace A320VAU.FWS
             UpdateFWS();
         }
 
+        private void OnEnable()
+        {
+            _lastAltitdueCalloutIndex = -1;
+            _lastMininmumCalloutIndex = -1;
+        }
+
         #region Mininmum Callout
         private void UpdateMininmumCallout(float radioAltitude)
         {
@@ -183,13 +189,9 @@ namespace A320VAU.FWS
             for (int index = AltitudeCalloutIndexs.Length - 1; index != -1; index--)
             {
                 if (radioAltitude < AltitudeCalloutIndexs[index])
-                {
-                    Debug.Log($"ra: {radioAltitude} index: {AltitudeCalloutIndexs[index]} i: {index} last: {_lastAltitdueCalloutIndex} {radioAltitude > AltitudeCalloutIndexs[index]}");
                     return index;
-                }
             }
 
-            Debug.Log($"ra: {radioAltitude} index: -1 i: -1 last: {_lastAltitdueCalloutIndex}");
             return -1;
         }
         #endregion
