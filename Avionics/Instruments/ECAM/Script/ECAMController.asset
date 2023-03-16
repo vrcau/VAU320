@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: ECAMController
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: d3a6060b99b5f41429b7eed83e3ce0ac,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 9b1bf59d483385a4f97b95f09e3fa00e,
     type: 2}
   udonAssembly: 
   assemblyError: 
