@@ -170,11 +170,17 @@ namespace A320VAU.FWS
 
                 _lastCallout = DateTime.Now;
             }
+            else if (altitudeCalloutIndex != _lastAltitdueCalloutIndex)
+            {
+                _lastCallout = DateTime.Now;
+            }
             else
             {
                 // Repeat when after 11s (>50ft) / 4s (<50ft)
                 var diff = DateTime.Now - _lastCallout;
-                if ((radioAltitude > 50f && diff.TotalSeconds > 11) | (radioAltitude < 50f && diff.TotalMilliseconds < 4))
+                if (altitudeCalloutIndex != -1 &&
+                (radioAltitude > 50f && diff.TotalSeconds > 11) | (radioAltitude < 50f && diff.TotalMilliseconds < 4) &&
+                Mathf.Abs(radioAltitude - AltitudeCalloutIndexs[altitudeCalloutIndex]) < 10)
                 {
                     AudioSource.PlayOneShot(AltitudeCallouts[altitudeCalloutIndex]);
                     _lastCallout = DateTime.Now;
