@@ -51,6 +51,11 @@ namespace A320VAU.PFD
         public Text RadioHeightText;
         public Text MachNumberText;
 
+        public GameObject TargetSpeedTop;
+        public Text TargetSpeedTopText;
+        public GameObject TargetSpeedBottom;
+        public Text TargetSpeedBottomText;
+
         [Header("Speed element")]
         public GameObject[] disableOnGround;
         public GameObject[] enableOnGround;
@@ -116,16 +121,28 @@ namespace A320VAU.PFD
         }
         private void UpdateAirspeed()
         {
-                foreach (var item in disableOnGround)
-                {
-                    item.SetActive(!FlightData.SAVControl.Taxiing);
-                }
-                foreach (var item in enableOnGround)
-                {
-                    item.SetActive(FlightData.SAVControl.Taxiing);
-                }
+            foreach (var item in disableOnGround)
+            {
+                item.SetActive(!FlightData.SAVControl.Taxiing);
+            }
+            foreach (var item in enableOnGround)
+            {
+                item.SetActive(FlightData.SAVControl.Taxiing);
+            }
+
             IndicatorAnimator.SetFloat(AIRSPEED_HASH, FlightData.TAS / MAXSPEED);
-            // IndicatorAnimator.SetFloat(AIRSPEED_SECLECT_HASH, FCU.TargetSpeed / MAXSPEED);
+            IndicatorAnimator.SetFloat(AIRSPEED_SECLECT_HASH, FCU.TargetSpeed / 500f);
+
+            TargetSpeedTopText.text = FCU.TargetSpeed.ToString();
+            TargetSpeedBottomText.text = FCU.TargetSpeed.ToString();
+
+            TargetSpeedBottom.SetActive(false);
+            TargetSpeedTop.SetActive(false);
+            if (FlightData.TAS - FCU.TargetSpeed > 45)
+                TargetSpeedBottom.SetActive(true);
+
+            if (FCU.TargetSpeed - FlightData.TAS > 45)
+                TargetSpeedTop.SetActive(true);
         }
 
         private void UpdateAltitude()
