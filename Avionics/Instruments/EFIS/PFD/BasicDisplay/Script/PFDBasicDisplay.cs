@@ -6,18 +6,24 @@ using VRC.Udon;
 using UnityEngine.UI;
 using YuxiFlightInstruments.BasicFlightData;
 using A320VAU.Avionics;
+using EsnyaSFAddons.DFUNC;
+using A320VAU.SFEXT;
 
 namespace A320VAU.PFD
 {
     public class PFDBasicDisplay : UdonSharpBehaviour
     {
+        [Header("Aircraft Systems")]
         [Tooltip("Flight Data Interface")]
         public YFI_FlightDataInterface FlightData;
         [Tooltip("RadioHeight")]
         public GPWS_OWML GPWSController;
         [Tooltip("FCU")]
         public FCU.FCU FCU;
+        public DFUNC_AdvancedFlaps Flaps;
+        public SFEXT_a320_AdvancedGear Gear;
 
+        [Header("Indicator Settings")]
         [Tooltip("仪表的动画控制器")]
         public Animator IndicatorAnimator;
         [Header("下面的量程都是单侧的")]
@@ -77,6 +83,7 @@ namespace A320VAU.PFD
         private int SLIPANGLE_HASH = Animator.StringToHash("SlipAngleNormalize");
         private int RH_HASH = Animator.StringToHash("RHNormalize");
         private int TRKPCH_HASH = Animator.StringToHash("TRKPCHNormalize");
+        private int VMAX_HASH = Animator.StringToHash("VMAXNormalize");
         //set default ball rotation here
         private Vector3 GyroBallRotationDefault;
         private float[] GyroBallFacotr = { -2f, 0f };
@@ -119,6 +126,11 @@ namespace A320VAU.PFD
             UpdateMachNumber();
 
         }
+
+        [Header("Spped")]
+        public int VMO = 350;
+        public int VLE = 280;
+
         private void UpdateAirspeed()
         {
             foreach (var item in disableOnGround)
@@ -131,6 +143,8 @@ namespace A320VAU.PFD
             }
 
             IndicatorAnimator.SetFloat(AIRSPEED_HASH, FlightData.TAS / MAXSPEED);
+
+            #region Target Speed
             IndicatorAnimator.SetFloat(AIRSPEED_SECLECT_HASH, FCU.TargetSpeed / 500f);
 
             TargetSpeedTopText.text = FCU.TargetSpeed.ToString();
@@ -143,6 +157,21 @@ namespace A320VAU.PFD
 
             if (FCU.TargetSpeed - FlightData.TAS > 45)
                 TargetSpeedTop.SetActive(true);
+            #endregion
+
+            #region VMAX
+            var VMAX = VMO;
+            if (Flaps.targetSpeedLimit < VMAX)
+                VMAX = (int)Flaps.targetSpeedLimit;
+
+            if (Flaps.speedLimit < VMAX)
+                VMAX = (int)Flaps.speedLimit;
+
+            if (Gear.position != 0 && VLE < VMAX)
+                VMAX = VLE;
+
+            IndicatorAnimator.SetFloat(VMAX_HASH, VMAX / 360f);
+            #endregion
         }
 
         private void UpdateAltitude()
