@@ -86,6 +86,7 @@ namespace A320VAU.PFD
         private int VMAX_HASH = Animator.StringToHash("VMAXNormalize");
         private int VSW_HASH = Animator.StringToHash("VSWNormalize");
         private int VFE_NEXT_HASH = Animator.StringToHash("VFENEXTNormalize");
+        private int VLS_HASH = Animator.StringToHash("VLSNormalize");
         //set default ball rotation here
         private Vector3 GyroBallRotationDefault;
         private float[] GyroBallFacotr = { -2f, 0f };
@@ -205,6 +206,14 @@ namespace A320VAU.PFD
             if (Flaps.targetDetentIndex == 3) VFENext = Flaps.speedLimits[4];
 
             IndicatorAnimator.SetFloat(VFE_NEXT_HASH, VFENext / 240f);
+            #endregion
+
+            #region VLS
+            var VLS = 1.28f * VSW;
+            if (Flaps.detentIndex == 2) VLS = 1.13f * VSW;
+            if (Flaps.detentIndex == 1) VLS = 1.28f * VSW;
+
+            IndicatorAnimator.SetFloat(VLS_HASH, VLS / 200f);
             #endregion
         }
 
