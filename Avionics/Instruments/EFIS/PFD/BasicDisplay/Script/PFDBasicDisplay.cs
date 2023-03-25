@@ -140,6 +140,12 @@ namespace A320VAU.PFD
         public int VSWCONF3 = 104;
         public int VSWCONFFULL = 102;
 
+        // F and S
+        // public int SSpeed = 178;
+        // public int FSpeed = 137;
+
+        public int GreenDotSpeed = 195;
+
         private void UpdateAirspeed()
         {
             foreach (var item in disableOnGround)
