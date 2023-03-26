@@ -6,18 +6,24 @@ using VRC.Udon;
 using UnityEngine.UI;
 using YuxiFlightInstruments.BasicFlightData;
 using A320VAU.Avionics;
+using EsnyaSFAddons.DFUNC;
+using A320VAU.SFEXT;
 
 namespace A320VAU.PFD
 {
     public class PFDBasicDisplay : UdonSharpBehaviour
     {
+        [Header("Aircraft Systems")]
         [Tooltip("Flight Data Interface")]
         public YFI_FlightDataInterface FlightData;
         [Tooltip("RadioHeight")]
         public GPWS_OWML GPWSController;
         [Tooltip("FCU")]
         public FCU.FCU FCU;
+        public DFUNC_AdvancedFlaps Flaps;
+        public SFEXT_a320_AdvancedGear Gear;
 
+        [Header("Indicator Settings")]
         [Tooltip("仪表的动画控制器")]
         public Animator IndicatorAnimator;
         [Header("下面的量程都是单侧的")]
@@ -51,6 +57,11 @@ namespace A320VAU.PFD
         public Text RadioHeightText;
         public Text MachNumberText;
 
+        public GameObject TargetSpeedTop;
+        public Text TargetSpeedTopText;
+        public GameObject TargetSpeedBottom;
+        public Text TargetSpeedBottomText;
+
         [Header("Speed element")]
         public GameObject[] disableOnGround;
         public GameObject[] enableOnGround;
@@ -72,6 +83,10 @@ namespace A320VAU.PFD
         private int SLIPANGLE_HASH = Animator.StringToHash("SlipAngleNormalize");
         private int RH_HASH = Animator.StringToHash("RHNormalize");
         private int TRKPCH_HASH = Animator.StringToHash("TRKPCHNormalize");
+        private int VMAX_HASH = Animator.StringToHash("VMAXNormalize");
+        private int VSW_HASH = Animator.StringToHash("VSWNormalize");
+        private int VFE_NEXT_HASH = Animator.StringToHash("VFENEXTNormalize");
+        private int VLS_HASH = Animator.StringToHash("VLSNormalize");
         //set default ball rotation here
         private Vector3 GyroBallRotationDefault;
         private float[] GyroBallFacotr = { -2f, 0f };
@@ -114,18 +129,92 @@ namespace A320VAU.PFD
             UpdateMachNumber();
 
         }
+
+        [Header("Spped")]
+        public int VMO = 350;
+        public int VLE = 280;
+
+        // VSW
+        public int VSWCONF0 = 145;
+        public int VSWCONF1 = 113;
+        public int VSWCONF2 = 107;
+        public int VSWCONF3 = 104;
+        public int VSWCONFFULL = 102;
+
+        // F and S
+        // public int SSpeed = 178;
+        // public int FSpeed = 137;
+
+        public int GreenDotSpeed = 195;
+
         private void UpdateAirspeed()
         {
-                foreach (var item in disableOnGround)
-                {
-                    item.SetActive(!FlightData.SAVControl.Taxiing);
-                }
-                foreach (var item in enableOnGround)
-                {
-                    item.SetActive(FlightData.SAVControl.Taxiing);
-                }
+            foreach (var item in disableOnGround)
+            {
+                item.SetActive(!FlightData.SAVControl.Taxiing);
+            }
+            foreach (var item in enableOnGround)
+            {
+                item.SetActive(FlightData.SAVControl.Taxiing);
+            }
+
             IndicatorAnimator.SetFloat(AIRSPEED_HASH, FlightData.TAS / MAXSPEED);
-            // IndicatorAnimator.SetFloat(AIRSPEED_SECLECT_HASH, FCU.TargetSpeed / MAXSPEED);
+
+            #region Target Speed
+            IndicatorAnimator.SetFloat(AIRSPEED_SECLECT_HASH, FCU.TargetSpeed / 500f);
+
+            TargetSpeedTopText.text = FCU.TargetSpeed.ToString();
+            TargetSpeedBottomText.text = FCU.TargetSpeed.ToString();
+
+            TargetSpeedBottom.SetActive(false);
+            TargetSpeedTop.SetActive(false);
+            if (FlightData.TAS - FCU.TargetSpeed > 45)
+                TargetSpeedBottom.SetActive(true);
+
+            if (FCU.TargetSpeed - FlightData.TAS > 45)
+                TargetSpeedTop.SetActive(true);
+            #endregion
+
+            #region VMAX
+            var VMAX = VMO;
+            if (Flaps.targetSpeedLimit < VMAX)
+                VMAX = (int)Flaps.targetSpeedLimit;
+
+            if (Flaps.speedLimit < VMAX)
+                VMAX = (int)Flaps.speedLimit;
+
+            if (Gear.position != 0 && VLE < VMAX)
+                VMAX = VLE;
+
+            IndicatorAnimator.SetFloat(VMAX_HASH, VMAX / 360f);
+            #endregion
+
+            #region VSW
+            var VSW = VSWCONF0;
+            if (Flaps.detentIndex == 1) VSW = VSWCONF1;
+            if (Flaps.detentIndex == 2) VSW = VSWCONF2;
+            if (Flaps.detentIndex == 3) VSW = VSWCONF3;
+            if (Flaps.detentIndex == 4) VSW = VSWCONFFULL;
+
+            IndicatorAnimator.SetFloat(VSW_HASH, VSW / 300f);
+            #endregion
+
+            #region VFE NEXT
+            var VFENext = Flaps.speedLimits[1];
+            if (Flaps.targetDetentIndex == 1) VFENext = Flaps.speedLimits[2];
+            if (Flaps.targetDetentIndex == 2) VFENext = Flaps.speedLimits[3];
+            if (Flaps.targetDetentIndex == 3) VFENext = Flaps.speedLimits[4];
+
+            IndicatorAnimator.SetFloat(VFE_NEXT_HASH, VFENext / 240f);
+            #endregion
+
+            #region VLS
+            var VLS = 1.28f * VSW;
+            if (Flaps.detentIndex == 2) VLS = 1.13f * VSW;
+            if (Flaps.detentIndex == 1) VLS = 1.28f * VSW;
+
+            IndicatorAnimator.SetFloat(VLS_HASH, VLS / 200f);
+            #endregion
         }
 
         private void UpdateAltitude()
