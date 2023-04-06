@@ -1,0 +1,53 @@
+name: Unity Package
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      Package_Name: vau.v320
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        
+    - name: Set Environment Variables
+      run: |
+            echo "unityPackage=${{ env.Package_Name }}-${{ github.sha }}.unitypackage" >> $GITHUB_ENV
+            echo "zipFile=${{ env.Package_Name }}-${{ github.sha }}.zip" >> $GITHUB_ENV
+            find -name \*.meta >> metaList
+    - name: Create Zip
+      uses: TheDoctor0/zip-release@a24011d8d445e4da5935a7e73c1f98e22a439464
+      with:
+        filename: ${{ env.zipFile }}
+        exclusions: "*.git* ${{ env.unityPackage }}"
+
+    - name: Create .unitypackage
+      uses: pCYSl5EDgo/create-unitypackage@cfcd3cf0391a5ef1306342794866a9897c32af0b
+      with:
+        package-path: ${{ env.unityPackage }}
+        include-files: metaList
+
+    - name: Upload .unitypackage
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.unityPackage }}
+        path: ${{ env.unityPackage }}
+
+    - name: Upload .zip
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.zipFile }}
+        path: ${{ env.zipFile }}
