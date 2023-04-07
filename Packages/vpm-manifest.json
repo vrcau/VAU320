@@ -1,0 +1,101 @@
+{
+  "dependencies": {
+    "com.vrchat.udonsharp": {
+      "version": "1.1.7"
+    },
+    "com.vrchat.clientsim": {
+      "version": "1.2.2"
+    },
+    "com.vrchat.core.vpm-resolver": {
+      "version": "0.1.17"
+    },
+    "com.nekometer.esnya.esnya-sf-addons": {
+      "version": "5.0.0-beta.49"
+    },
+    "com.nekometer.esnya.udon-radio-communications": {
+      "version": "5.0.0-alpha.9"
+    },
+    "sh.orels.udontoolkit": {
+      "version": "1.1.2"
+    },
+    "com.yuxiaviation.yuxiflightinstruments": {
+      "version": "0.0.1"
+    },
+    "com.nekometer.esnya.udon-radio-communications-sf": {
+      "version": "1.0.0-alpha.1"
+    },
+    "com.nekometer.esnya.inari-udon": {
+      "version": "8.1.0-beta.1"
+    },
+    "jp.virtualaviation.virtual-cns": {
+      "version": "3.7.0-alpha.1"
+    },
+    "com.varneon.udonexplorer": {
+      "version": "0.3.4"
+    }
+  },
+  "locked": {
+    "com.vrchat.udonsharp": {
+      "version": "1.1.7",
+      "dependencies": {
+        "com.vrchat.worlds": "3.1.x"
+      }
+    },
+    "com.vrchat.worlds": {
+      "version": "3.1.13",
+      "dependencies": {
+        "com.vrchat.base": "3.1.13"
+      }
+    },
+    "com.vrchat.base": {
+      "version": "3.1.13",
+      "dependencies": {}
+    },
+    "com.vrchat.clientsim": {
+      "version": "1.2.2",
+      "dependencies": {
+        "com.vrchat.worlds": "3.1.x"
+      }
+    },
+    "com.vrchat.core.vpm-resolver": {
+      "version": "0.1.18",
+      "dependencies": {}
+    },
+    "com.nekometer.esnya.esnya-sf-addons": {
+      "version": "5.0.0-beta.49",
+      "dependencies": {}
+    },
+    "com.nekometer.esnya.udon-radio-communications": {
+      "version": "5.0.0-alpha.9",
+      "dependencies": {}
+    },
+    "sh.orels.udontoolkit": {
+      "version": "1.1.2",
+      "dependencies": {}
+    },
+    "com.yuxiaviation.yuxiflightinstruments": {
+      "version": "0.0.1",
+      "dependencies": {
+        "com.vrchat.clientsim": "1.2.2"
+      }
+    },
+    "com.nekometer.esnya.udon-radio-communications-sf": {
+      "version": "1.0.0-alpha.1",
+      "dependencies": {}
+    },
+    "com.nekometer.esnya.inari-udon": {
+      "version": "8.1.0-beta.1",
+      "dependencies": {}
+    },
+    "jp.virtualaviation.virtual-cns": {
+      "version": "3.7.0-alpha.1",
+      "dependencies": {}
+    },
+    "com.varneon.udonexplorer": {
+      "version": "0.3.4",
+      "dependencies": {
+        "com.vrchat.worlds": "3.x.x"
+      }
+    }
+  }
+}

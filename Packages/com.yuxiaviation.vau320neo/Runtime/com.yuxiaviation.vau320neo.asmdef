@@ -1,0 +1,23 @@
+{
+    "name": "com.yuxiaviation.vau320neo",
+    "references": [
+        "VRC.SDK3",
+        "VRC.SDKBase",
+        "UdonSharp.Runtime",
+        "EsnyaSFAddons.Runtime",
+        "com.yuxiaviation.yuxiflightinstruments",
+        "SaccFlightAndVehicles.Runtime",
+        "Unity.TextMeshPro",
+        "UdonRadioCommunication.Runtime",
+        "UdonRadioCommunication.SF.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

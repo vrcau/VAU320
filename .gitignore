@@ -58,21 +58,8 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
-SaccFlightAndVehicles*
-SerializedUdonPrograms*
-TextMesh Pro*
-UdonSharp*
-UdonRadioCommunication*
-Fuselage*
-SFX*
-物理材质*
-AbortenFiles*
-README.md.meta
-Prefab/A320neo_main 1.prefab
-Prefab/A320neo_main 1.prefab.meta
-Prefab/A320neo_main 1126.prefab
-Prefab/A320neo_main 1126.prefab.meta
-Prefab/A320neo_main 1203.prefab
-Prefab/A320neo_main 1203.prefab.meta
-Prefab/A320neo_main 1203_2.prefab
-Prefab/A320neo_main 1203_2.prefab.meta
+.idea/.idea.vpm-package-maker/.idea
+Assets/PackageMakerWindowData.asset*
+.idea
+.vscode
+Assets

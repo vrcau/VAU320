@@ -1,0 +1,13 @@
+{
+  "name": "com.yuxiaviation.vau320neo",
+  "displayName": "VAU v320neo",
+  "version": "0.0.1",
+  "description": "Powerd By SaccFlightAndVehicles, Simple simulation of A320neo.",
+  "gitDependencies": {},
+  "vpmDependencies": {
+    "com.vrchat.udonsharp": "1.1.7"
+  },
+  "legacyFolders": {},
+  "legacyFiles": {},
+  "hideInEditor": false
+}
