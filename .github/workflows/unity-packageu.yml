@@ -3,9 +3,10 @@ name: Unity Package
 on:
   workflow_dispatch:
   push:
-    branches: [ "main" ]
+    branches: main
+    paths: Packages/com.yuxiaviation.vau320neo/**
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 permissions:
   contents: read
@@ -15,39 +16,48 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      Package_Name: vau.v320
+      packageName: com.yuxiaviation.vau320neo
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-        
-    - name: Set Environment Variables
-      run: |
-            echo "unityPackage=${{ env.Package_Name }}-${{ github.sha }}.unitypackage" >> $GITHUB_ENV
-            echo "zipFile=${{ env.Package_Name }}-${{ github.sha }}.zip" >> $GITHUB_ENV
-            find -name \*.meta >> metaList
-    - name: Create Zip
-      uses: TheDoctor0/zip-release@a24011d8d445e4da5935a7e73c1f98e22a439464
-      with:
-        filename: ${{ env.zipFile }}
-        exclusions: "*.git* ${{ env.unityPackage }}"
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-    - name: Create .unitypackage
-      uses: pCYSl5EDgo/create-unitypackage@cfcd3cf0391a5ef1306342794866a9897c32af0b
-      with:
-        package-path: ${{ env.unityPackage }}
-        include-files: metaList
+      - name: Get version
+        id: version
+        uses: notiz-dev/github-action-json-property@7c8cf5cc36eb85d8d287a8086a39dac59628eb31
+        with:
+          path: "Packages/${{env.packageName}}/package.json"
+          prop_path: "version"
 
-    - name: Upload .unitypackage
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ env.unityPackage }}
-        path: ${{ env.unityPackage }}
+      - name: Set Environment Variables
+        run: |
+          echo "unityPackage=${{ env.packageName }}-${{ steps.version.outputs.prop }}-${{ github.sha }}.unitypackage" >> $GITHUB_ENV
+          echo "zipFile=${{ env.packageName }}-${{ steps.version.outputs.prop }}-${{ github.sha }}.zip" >> $GITHUB_ENV
+          find "Packages/${{env.packageName}}/" -name \*.meta >> metaList
 
-    - name: Upload .zip
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ env.zipFile }}
-        path: ${{ env.zipFile }}
+      - name: Create Zip
+        uses: TheDoctor0/zip-release@a24011d8d445e4da5935a7e73c1f98e22a439464
+        with:
+          filename: "$../../${{ env.zipFile }}"
+          directory: "Packages/${{ env.packageName }}/"
+          exclusions: "*.git* ${{ env.unityPackage }}"
+
+      - name: Create .unitypackage
+        uses: pCYSl5EDgo/create-unitypackage@cfcd3cf0391a5ef1306342794866a9897c32af0b
+        with:
+          package-path: ${{ env.unityPackage }}
+          include-files: metaList
+
+      - name: Upload .unitypackage
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.unityPackage }}
+          path: ${{ env.unityPackage }}
+
+      - name: Upload .zip
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.zipFile }}
+          path: ${{ env.zipFile }}
