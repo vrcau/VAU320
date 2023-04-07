@@ -40,7 +40,8 @@ jobs:
       - name: Create Zip
         uses: TheDoctor0/zip-release@a24011d8d445e4da5935a7e73c1f98e22a439464
         with:
-          filename: "$../../${{ env.zipFile }}"
+          type: "zip"
+          filename: "../../${{ env.zipFile }}"
           directory: "Packages/${{ env.packageName }}/"
           exclusions: "*.git* ${{ env.unityPackage }}"
 
