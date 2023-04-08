@@ -1,1 +1,0 @@
-# com.yuxiaviation.vau320neo by lipww
