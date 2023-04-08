@@ -3,7 +3,7 @@
   "displayName": "VAU v320neo",
   "version": "0.0.1",
   "description": "Powerd By SaccFlightAndVehicles, Simple simulation of A320neo.",
-  "dependencies": {
+  "gitDependencies": {
     "jp.virtualaviation.virtual-cns": "https://github.com/VirtualAviationJapan/Virtual-CNS.git?path=/Packages/jp.virtualaviation.virtual-cns",
     "com.yuxiaviation.yuxiflightinstruments": "https://github.com/Heriyadi235/YuxiFlightInstrumentsforSF.git",
     "com.nekometer.esnya.esnya-sf-addons": "https://github.com/esnya/EsnyaSFAddons.git?path=/Packages/com.nekometer.esnya.esnya-sf-addons",
