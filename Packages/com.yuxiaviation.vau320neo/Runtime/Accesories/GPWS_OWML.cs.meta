@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 047207c8e46e03b4e9ee7f43be78032a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - groundDetector: {instanceID: 0}
+  - bankAngleSound: {fileID: 8300000, guid: d1d43c5bdb4db3546aedc05b1bfb5c96, type: 3}
+  - sinkRateSound: {fileID: 8300000, guid: af884a7ed0278d2469b8fbc56b627f8a, type: 3}
+  - pullUpSound: {fileID: 8300000, guid: 9cd57a6b29e103345bf47673d2af310d, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
