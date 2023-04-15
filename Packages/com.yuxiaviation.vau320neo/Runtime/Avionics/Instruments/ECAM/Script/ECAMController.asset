@@ -176,7 +176,7 @@ MonoBehaviour:
       Data: 10|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.Common.AirbusAvionicsTheme, Assembly-CSharp
+      Data: A320VAU.Common.AirbusAvionicsTheme, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -230,7 +230,7 @@ MonoBehaviour:
       Data: 13|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.FWS.FWS, Assembly-CSharp
+      Data: A320VAU.FWS.FWS, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -284,7 +284,7 @@ MonoBehaviour:
       Data: 16|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.SFEXT.SFEXT_a320_AdvancedEngine, Assembly-CSharp
+      Data: A320VAU.SFEXT.SFEXT_a320_AdvancedEngine, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 

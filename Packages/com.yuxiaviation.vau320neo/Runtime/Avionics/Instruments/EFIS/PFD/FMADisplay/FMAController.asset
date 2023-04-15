@@ -1382,7 +1382,7 @@ MonoBehaviour:
       Data: 67|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.PFD.ManThrType, Assembly-CSharp
+      Data: A320VAU.PFD.ManThrType, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -1448,7 +1448,7 @@ MonoBehaviour:
       Data: 72|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.PFD.AutoBrakeMode, Assembly-CSharp
+      Data: A320VAU.PFD.AutoBrakeMode, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -1832,7 +1832,7 @@ MonoBehaviour:
       Data: 94|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.PFD.ApproachAbility, Assembly-CSharp
+      Data: A320VAU.PFD.ApproachAbility, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -1892,7 +1892,7 @@ MonoBehaviour:
       Data: 98|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.PFD.ApproachMinimumType, Assembly-CSharp
+      Data: A320VAU.PFD.ApproachMinimumType, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 

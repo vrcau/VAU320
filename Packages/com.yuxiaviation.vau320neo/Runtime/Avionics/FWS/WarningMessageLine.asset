@@ -62,7 +62,7 @@ MonoBehaviour:
       Data: 3|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.FWS.WarningColor, Assembly-CSharp
+      Data: A320VAU.FWS.WarningColor, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 

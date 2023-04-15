@@ -1343,7 +1343,7 @@ MonoBehaviour:
       Data: 68|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.ND.NDMode, Assembly-CSharp
+      Data: A320VAU.ND.NDMode, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 

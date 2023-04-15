@@ -62,7 +62,7 @@ MonoBehaviour:
       Data: 3|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.FWS.FWSWarningMessageData[], Assembly-CSharp
+      Data: A320VAU.FWS.FWSWarningMessageData[], com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -128,7 +128,7 @@ MonoBehaviour:
       Data: 8|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.FWS.FWSWarningData, Assembly-CSharp
+      Data: A320VAU.FWS.FWSWarningData, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -194,7 +194,7 @@ MonoBehaviour:
       Data: 13|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.ECAM.ECAMController, Assembly-CSharp
+      Data: A320VAU.ECAM.ECAMController, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -740,7 +740,7 @@ MonoBehaviour:
       Data: 43|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.SFEXT.SFEXT_a320_AdvancedEngine, Assembly-CSharp
+      Data: A320VAU.SFEXT.SFEXT_a320_AdvancedEngine, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -950,7 +950,7 @@ MonoBehaviour:
       Data: 54|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.SFEXT.SFEXT_a320_AdvancedGear, Assembly-CSharp
+      Data: A320VAU.SFEXT.SFEXT_a320_AdvancedGear, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -1100,7 +1100,7 @@ MonoBehaviour:
       Data: 61|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.Brake.DFUNC_a320_Brake, Assembly-CSharp
+      Data: A320VAU.Brake.DFUNC_a320_Brake, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -1154,7 +1154,7 @@ MonoBehaviour:
       Data: 64|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.DFUNC.DFUNC_a320_LandingLight, Assembly-CSharp
+      Data: A320VAU.DFUNC.DFUNC_a320_LandingLight, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -1364,7 +1364,7 @@ MonoBehaviour:
       Data: 75|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.Avionics.GPWS_OWML, Assembly-CSharp
+      Data: A320VAU.Avionics.GPWS_OWML, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 

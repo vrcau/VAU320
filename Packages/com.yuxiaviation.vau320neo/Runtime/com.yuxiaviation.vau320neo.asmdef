@@ -9,7 +9,9 @@
         "SaccFlightAndVehicles.Runtime",
         "Unity.TextMeshPro",
         "UdonRadioCommunication.Runtime",
-        "UdonRadioCommunication.SF.Runtime"
+        "UdonRadioCommunication.SF.Runtime",
+        "VirtualAviationJapan.Virtual-CNS",
+        "Varneon.VUdon.ArrayExtensions.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

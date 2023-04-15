@@ -164,7 +164,7 @@ MonoBehaviour:
       Data: 8|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.FWS.WarningStyle, Assembly-CSharp
+      Data: A320VAU.FWS.WarningStyle, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -320,7 +320,7 @@ MonoBehaviour:
       Data: 16|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.FWS.WarningColor, Assembly-CSharp
+      Data: A320VAU.FWS.WarningColor, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -428,7 +428,7 @@ MonoBehaviour:
       Data: 22|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.FWS.DisplayZone, Assembly-CSharp
+      Data: A320VAU.FWS.DisplayZone, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -482,7 +482,7 @@ MonoBehaviour:
       Data: 25|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.FWS.WarningType, Assembly-CSharp
+      Data: A320VAU.FWS.WarningType, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -536,7 +536,7 @@ MonoBehaviour:
       Data: 28|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.FWS.WarningLevel, Assembly-CSharp
+      Data: A320VAU.FWS.WarningLevel, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -590,7 +590,7 @@ MonoBehaviour:
       Data: 31|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.FWS.SystemPage, Assembly-CSharp
+      Data: A320VAU.FWS.SystemPage, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -644,7 +644,7 @@ MonoBehaviour:
       Data: 34|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.FWS.WarningMessageLine[], Assembly-CSharp
+      Data: A320VAU.FWS.WarningMessageLine[], com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 

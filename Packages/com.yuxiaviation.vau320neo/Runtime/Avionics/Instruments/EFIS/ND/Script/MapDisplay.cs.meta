@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: 507a7d663a014804ebfa233d46720a3f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _udonSharpBackingUdonBehaviour: {instanceID: 0}
+  - flightData: {instanceID: 0}
+  - saccEntity: {instanceID: 0}
+  - vorTemplate: {fileID: 1990527563280136731, guid: fd9c7b918cb1f484e829f026f65980d7,
+      type: 3}
+  - vorDmeTemplate: {fileID: 1815276098820799806, guid: 2c5cb1d636996a4428cb190c40ee78cf,
+      type: 3}
+  - ndbTemplate: {fileID: 5333295967592772706, guid: 28dfbb7e32ad23d449aeabc943a74b50,
+      type: 3}
+  - dmeOrTacanTemplate: {fileID: 897949078776620866, guid: 170c998576788fc43a2e9bb02beeaf6e,
+      type: 3}
+  - waypointTemplate: {fileID: 3926781351848039510, guid: afc695ea257df204994fe1646018e50d,
+      type: 3}
+  - airportTemplate: {fileID: 394869649706017527, guid: b190dc2b6b092e345bd0b9bc8defb517,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
