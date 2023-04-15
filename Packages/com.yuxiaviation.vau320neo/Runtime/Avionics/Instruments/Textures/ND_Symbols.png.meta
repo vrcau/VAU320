@@ -14,6 +14,24 @@ TextureImporter:
   - first:
       213: 3118307941977550460
     second: ND_ILS_Pointer
+  - first:
+      213: -6788517159093007439
+    second: DMEorTACAN-MAN
+  - first:
+      213: 7452901266224642937
+    second: VORDME-MAN
+  - first:
+      213: 5838353774145777714
+    second: NDB-MAN
+  - first:
+      213: -7978876528523121948
+    second: AIRPORT_MAN
+  - first:
+      213: -7307542588614035480
+    second: VOR-MAN
+  - first:
+      213: 7998443715067980749
+    second: WAYPOINT-MAN
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -178,6 +196,132 @@ TextureImporter:
       bones: []
       spriteID: c7ee9dd3d84764b20800000000000000
       internalID: 3118307941977550460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMEorTACAN-MAN
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 41
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1bb0e946c975ac1a0800000000000000
+      internalID: -6788517159093007439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VORDME-MAN
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 41
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97bf067e6360e6760800000000000000
+      internalID: 7452901266224642937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NDB-MAN
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 41
+        width: 18
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 230350d13dff50150800000000000000
+      internalID: 5838353774145777714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AIRPORT_MAN
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 41
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ea6daa3216554190800000000000000
+      internalID: -7978876528523121948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VOR-MAN
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 41
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e73f909bb4669a90800000000000000
+      internalID: -7307542588614035480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WAYPOINT-MAN
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 45
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dcb25986e2e200f60800000000000000
+      internalID: 7998443715067980749
       vertices: []
       indices: 
       edges: []

@@ -176,7 +176,7 @@ MonoBehaviour:
       Data: 10|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.FCU.FCUMode, Assembly-CSharp
+      Data: A320VAU.FCU.FCUMode, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
