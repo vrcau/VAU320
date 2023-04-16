@@ -26,15 +26,15 @@ jobs:
 
       - name: Get version
         id: version
-        uses: notiz-dev/github-action-json-property@7c8cf5cc36eb85d8d287a8086a39dac59628eb31
+        uses: zoexx/github-action-json-file-properties@b9f36ce6ee6fe2680cd3c32b2c62e22eade7e590
         with:
-          path: "Packages/${{env.packageName}}/package.json"
+          file_path: "Packages/${{env.packageName}}/package.json"
           prop_path: "version"
 
       - name: Set Environment Variables
         run: |
-          echo "unityPackage=${{ env.packageName }}-${{ steps.version.outputs.prop }}-${{ github.sha }}.unitypackage" >> $GITHUB_ENV
-          echo "zipFile=${{ env.packageName }}-${{ steps.version.outputs.prop }}-${{ github.sha }}.zip" >> $GITHUB_ENV
+          echo "unityPackage=${{ env.packageName }}-${{ steps.version.outputs.value }}-${{ github.sha }}.unitypackage" >> $GITHUB_ENV
+          echo "zipFile=${{ env.packageName }}-${{ steps.version.outputs.value }}-${{ github.sha }}.zip" >> $GITHUB_ENV
           find "Packages/${{env.packageName}}/" -name \*.meta >> metaList
 
       - name: Create Zip
