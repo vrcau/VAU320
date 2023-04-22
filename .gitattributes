@@ -1,2 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+*.prefab merge=unityyamlmerge eol=lf text
+*.asset merge=unityyamlmerge eol=lf text

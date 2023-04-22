@@ -59,7 +59,7 @@ sysinfo.txt
 crashlytics-build.properties
 
 .idea/.idea.vpm-package-maker/.idea
-Assets/PackageMakerWindowData.asset*
 .idea
 .vscode
-Assets
+/Assets/*
+!/Assets/.gitkeep

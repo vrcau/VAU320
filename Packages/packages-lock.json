@@ -1,28 +1,32 @@
 {
   "dependencies": {
     "com.nekometer.esnya.esnya-sf-addons": {
-      "version": "file:com.nekometer.esnya.esnya-sf-addons",
+      "version": "https://github.com/esnya/EsnyaSFAddons.git?path=/Packages/com.nekometer.esnya.esnya-sf-addons",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "13e02c6039e56019dbf8b409b51017e00d8cc1c1"
     },
     "com.nekometer.esnya.inari-udon": {
-      "version": "file:com.nekometer.esnya.inari-udon",
+      "version": "https://github.com/esnya/InariUdon.git?path=/Packages/com.nekometer.esnya.inari-udon",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "6c0ed35c86f5bf4cbc9abd4020bbc1033d87ffd5"
     },
     "com.nekometer.esnya.udon-radio-communications": {
-      "version": "file:com.nekometer.esnya.udon-radio-communications",
+      "version": "https://github.com/esnya/UdonRadioCommunications.git?path=/Packages/com.nekometer.esnya.udon-radio-communications",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "022ffc22f129391b6dc8d48d25a74472df35009c"
     },
     "com.nekometer.esnya.udon-radio-communications-sf": {
-      "version": "file:com.nekometer.esnya.udon-radio-communications-sf",
+      "version": "https://github.com/esnya/UdonRadioCommunications.git?path=/Packages/com.nekometer.esnya.udon-radio-communications-sf",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "022ffc22f129391b6dc8d48d25a74472df35009c"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
@@ -47,7 +51,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "1.6.0",
+      "version": "1.14.18",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -61,16 +65,16 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "1.2.1",
+      "version": "3.0.21",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.test-framework": "1.1.1"
+        "com.unity.ext.nunit": "1.0.6"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.9",
+      "version": "2.0.18",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -79,7 +83,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.vscode": {
-      "version": "1.2.3",
+      "version": "1.2.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -173,10 +177,11 @@
       "url": "https://packages.unity.com"
     },
     "com.varneon.udonexplorer": {
-      "version": "file:com.varneon.udonexplorer",
+      "version": "https://github.com/Varneon/UdonExplorer.git?path=/Packages/com.varneon.udonexplorer",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "08dad62cff05c501304081e404daed55f7710226"
     },
     "com.vrchat.base": {
       "version": "file:com.vrchat.base",
@@ -234,22 +239,25 @@
       }
     },
     "com.yuxiaviation.yuxiflightinstruments": {
-      "version": "file:com.yuxiaviation.yuxiflightinstruments",
+      "version": "https://github.com/Heriyadi235/YuxiFlightInstrumentsforSF.git?path=/Packages/com.yuxiaviation.yuxiflightinstruments",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "e22777de6fcf4ded82db794b609fb92d29c7559a"
     },
     "jp.virtualaviation.virtual-cns": {
-      "version": "file:jp.virtualaviation.virtual-cns",
+      "version": "https://github.com/VirtualAviationJapan/Virtual-CNS.git?path=/Packages/jp.virtualaviation.virtual-cns",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "ac204a9aee8478bc5656c0cce1c1afe2e4ca11bf"
     },
     "sh.orels.udontoolkit": {
-      "version": "file:sh.orels.udontoolkit",
+      "version": "https://github.com/orels1/UdonToolkit.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "b41debb2f0b9f7bd41894eee0faa879cac7d42df"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
