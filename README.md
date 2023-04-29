@@ -22,11 +22,12 @@ You can learn more at [https://yuxiaviation.com/en/v320neo](https://yuxiaviation
     - [EsnyaSFAddons](https://github.com/Esnya/EsnyaSFAddons): Install using git url: `https://github.com/esnya/EsnyaSFAddons.git?path=/Packages/com.nekometer.esnya.esnya-sf-addons`
     - [UdonRadioCommunications & UdonRadioCommunications SaccFlight Integrations](https://github.com/esnya/UdonRadioCommunications): Install using git url: `https://github.com/esnya/UdonRadioCommunications.git?path=/Packages/com.nekometer.esnya.udon-radio-communications` & `https://github.com/esnya/UdonRadioCommunications.git?path=/Packages/com.nekometer.esnya.udon-radio-communications-sf`
     - [UdonToolkit](https://github.com/orels1/UdonToolkit): Install using git url: `https://github.com/orels1/UdonToolkit.git`
+    - [VUdon-ArrayExtensions](https://github.com/Varneon/VUdon-ArrayExtensions): Install using git url: `https://github.com/Varneon/VUdon-ArrayExtensions.git?path=/Packages/com.varneon.vudon.array-extensions`
 3. Install aircraft using git url: `https://github.com/Misaka-L/VAU320.git?path=/Packages/com.yuxiaviation.vau320neo/`
 4. Import Assests from .unitypackage [v320neo-assets.unitypackage](https://drive.misakal.xyz/api/raw/?path=/VAU320/v320neo-assets.unitypackage).
 
 ## Contribution
-See [CONTRIBUTING.md](CONTRIBUTING.md)
+See [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
 
 ## Report a Bug or Feature request
 
