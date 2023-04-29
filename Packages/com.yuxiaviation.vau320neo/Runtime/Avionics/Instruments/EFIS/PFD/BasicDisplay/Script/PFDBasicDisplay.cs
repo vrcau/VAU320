@@ -95,10 +95,6 @@ namespace A320VAU.PFD
         private float BankAngle = 0f;
         private float HeadingAngle = 0f;
         private float RadioHeight = 0f;
-        void Start()
-        {
-
-        }
 
         private void LateUpdate()
         {
@@ -260,7 +256,7 @@ namespace A320VAU.PFD
                 else if (1000 < RadioHeight && RadioHeight < 2000 && Mathf.Abs(verticalSpeed) > 2000) VSText.color = new Color(0.91373f, 0.54901f, 0);
                 else if ((RadioHeight < 1200) && Mathf.Abs(verticalSpeed) > 1200) VSText.color = new Color(0.91373f, 0.54901f, 0);
                 else VSText.color = new Color(0, 1, 0);
-                VSText.text = (verticalSpeed / 100).ToString("f0");
+                VSText.text = Mathf.Abs(verticalSpeed / 100).ToString("f0");
             }
             else
             {
