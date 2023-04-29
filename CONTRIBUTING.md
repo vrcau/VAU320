@@ -1,5 +1,6 @@
 # Contribution
 
+> **INSTALL [GIT](https://git-scm.com/) AND [GIF-LFS](https://git-lfs.com/) FRIST**  
 > We recommend using [VRChat Creator Companion](https://vcc.docs.vrchat.com/guides/getting-started/).
 
 ### You should follow thses rules for contribution.

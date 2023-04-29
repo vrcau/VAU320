@@ -3,13 +3,7 @@
 VAU320neo is a SaccFlightAndVehicles based aircraft developed by VRChat Aerospace University. It aims at simulating the Airbus A320neo in real life.  
 You can learn more at [https://yuxiaviation.com/en/v320neo](https://yuxiaviation.com/en/v320neo/).
 
-> This repository includes scripts for VRChat Aerospace University v320 project.  
-> Due to the file size and some other reasons, it's difficult to share the whole project folders.  
-> But feel free to do whatever you want with these scripts under MIT license.
-
 ## Import Aircraft
-
-> **WANNRING: We will change this process anytime and the unitypackage which provided in the readme was outdated.**  
 
 > **INSTALL [GIT](https://git-scm.com/) AND [GIF-LFS](https://git-lfs.com/) FRIST**  
 > - How to open Package Manager Window: https://docs.unity3d.com/2019.4/Documentation/Manual/upm-ui.html  
@@ -24,7 +18,6 @@ You can learn more at [https://yuxiaviation.com/en/v320neo](https://yuxiaviation
     - [UdonToolkit](https://github.com/orels1/UdonToolkit): Install using git url: `https://github.com/orels1/UdonToolkit.git`
     - [VUdon-ArrayExtensions](https://github.com/Varneon/VUdon-ArrayExtensions): Install using git url: `https://github.com/Varneon/VUdon-ArrayExtensions.git?path=/Packages/com.varneon.vudon.array-extensions`
 3. Install aircraft using git url: `https://github.com/Misaka-L/VAU320.git?path=/Packages/com.yuxiaviation.vau320neo/`
-4. Import Assests from .unitypackage [v320neo-assets.unitypackage](https://drive.misakal.xyz/api/raw/?path=/VAU320/v320neo-assets.unitypackage).
 
 ## Contribution
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
