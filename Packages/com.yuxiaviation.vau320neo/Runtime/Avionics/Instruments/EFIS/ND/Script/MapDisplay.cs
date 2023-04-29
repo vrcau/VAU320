@@ -16,10 +16,15 @@ namespace A320VAU.ND.Pages
     {
         public YFI_FlightDataInterface flightData;
         public SaccEntity saccEntity;
-
+        
         [Tooltip("nm")]
-        public int defaultRange = 10;
+        public int defaultRange = 40;
+
+        public EFISVisibilityType defaultVisibilityType = EFISVisibilityType.NONE;
         public int uiRadius = 180;
+        
+        public EFISVisibilityType VisibilityType { get; private set; }
+        public int Range { get; private set; }
 
         private float scale;
         private float magneticDeclination;
@@ -28,13 +33,8 @@ namespace A320VAU.ND.Pages
         public GameObject vorTemplate, vorDmeTemplate, ndbTemplate, dmeOrTacanTemplate, waypointTemplate, airportTemplate;
 
         private NavaidDatabase _navaidDatabase;
-        private Transform[] _vorMarkersTransform,
-            _vorDmeMarkersTransform,
-            _ndbMarkersTransform,
-            _dmeOrTacanMarkersTransform,
-            _waypointMarkersTransform,
-            _airportMarkersTransform;
-        
+        private GameObject[] _markers = new GameObject[0];
+
         private void Start()
         {
             _navaidDatabase = GetNavaidDatabase();
@@ -46,19 +46,19 @@ namespace A320VAU.ND.Pages
             }
 
             magneticDeclination = _navaidDatabase.magneticDeclination;
-            InstantiateMarkers(defaultRange);
+            InstantiateMarkers(defaultRange, defaultVisibilityType);
         }
 
-        private void InstantiateMarkers(int range)
+        private void InstantiateMarkers(int range, EFISVisibilityType efisVisibilityType)
         {
+            VLogger.Info($"EFISVisibilityType: {efisVisibilityType}");
+            
+            Range = range;
+            VisibilityType = efisVisibilityType;
             scale = uiRadius / (range * 926.0f);
 
-            _vorMarkersTransform = new Transform[0];
-            _vorDmeMarkersTransform = new Transform[0];
-            _ndbMarkersTransform = new Transform[0];
-            _dmeOrTacanMarkersTransform = new Transform[0];
-            _waypointMarkersTransform = new Transform[0];
-            _airportMarkersTransform = new Transform[0];
+            foreach (var marker in _markers) Destroy(marker);
+            _markers = new GameObject[0];
             
             for (int index = 0; index < _navaidDatabase.identities.Length; index++)
             {
@@ -71,32 +71,38 @@ namespace A320VAU.ND.Pages
                 switch (type)
                 {
                     case NavaidCapability.NDB:
-                        _ndbMarkersTransform = _ndbMarkersTransform.Add(InstantiateMarker(ndbTemplate, identity, navaidTransform));
+                        if (efisVisibilityType == EFISVisibilityType.NDB) 
+                            _markers = _markers.Add(InstantiateMarker(ndbTemplate, identity, navaidTransform));
                         break;
                     case NavaidCapability.VOR:
-                        _vorMarkersTransform = _vorMarkersTransform.Add(InstantiateMarker(vorTemplate, identity, navaidTransform));
+                        if (efisVisibilityType == EFISVisibilityType.VORDME)
+                            _markers = _markers.Add(InstantiateMarker(vorTemplate, identity, navaidTransform));
                         break;
                     case NavaidCapability.VORDME:
-                        _vorDmeMarkersTransform = _vorDmeMarkersTransform.Add(InstantiateMarker(vorDmeTemplate, identity, navaidTransform));
+                        if (efisVisibilityType == EFISVisibilityType.VORDME)
+                            _markers = _markers.Add(InstantiateMarker(vorDmeTemplate, identity, navaidTransform));
                         break;
                     default:
-                        _dmeOrTacanMarkersTransform = _dmeOrTacanMarkersTransform.Add(InstantiateMarker(dmeOrTacanTemplate, identity, navaidTransform));
+                        if (efisVisibilityType == EFISVisibilityType.VORDME)
+                            _markers = _markers.Add(InstantiateMarker(dmeOrTacanTemplate, identity, navaidTransform));
                         break;
                 }
             }
 
+            if (efisVisibilityType != EFISVisibilityType.WPT) return;
             for (int index = 0; index < _navaidDatabase.waypointIdentities.Length; index ++)
             {
                 var identity = _navaidDatabase.waypointIdentities[index];
                 var waypointTransform = _navaidDatabase.waypointTransforms[index];
                 
-                _waypointMarkersTransform = _waypointMarkersTransform.Add(InstantiateMarker(waypointTemplate, identity, waypointTransform));
+                _markers = _markers.Add(InstantiateMarker(waypointTemplate, identity, waypointTransform));
             }
         }
 
-        private Transform InstantiateMarker(GameObject template, string identity, Transform navaidTransform)
+        private GameObject InstantiateMarker(GameObject template, string identity, Transform navaidTransform)
         {
-            var markerTransform = Instantiate(template).transform;
+            var marker = Instantiate(template);
+            var markerTransform = marker.transform;
             markerTransform.gameObject.name = $"Marker-{identity}";
             markerTransform.SetParent(transform, false);
             markerTransform.GetComponentInChildren<Text>().text = identity;
@@ -104,7 +110,7 @@ namespace A320VAU.ND.Pages
             var navaidPosition = navaidTransform.position * scale;
             markerTransform.localPosition = Vector3.right * navaidPosition.x + Vector3.up * navaidPosition.z;
 
-            return markerTransform;
+            return marker;
         }
 
         private void Update()
@@ -118,26 +124,34 @@ namespace A320VAU.ND.Pages
             var position = -entityTransform.position * scale;
             transform.localPosition = rotation * (Vector3.right * position.x + Vector3.up * position.z);
 
-            UpdateMarkerRotations(_ndbMarkersTransform, inverseRotation);
-            UpdateMarkerRotations(_vorMarkersTransform, inverseRotation);
-            UpdateMarkerRotations(_vorDmeMarkersTransform, inverseRotation);
-            UpdateMarkerRotations(_waypointMarkersTransform, inverseRotation);
-            UpdateMarkerRotations(_airportMarkersTransform, inverseRotation);
-            UpdateMarkerRotations(_dmeOrTacanMarkersTransform, inverseRotation);
+            UpdateMarkerRotations(_markers, inverseRotation);
         }
         
-        private void UpdateMarkerRotations(Transform[] markers, Quaternion rotation)
+        private void UpdateMarkerRotations(GameObject[] markers, Quaternion rotation)
         {
             for (var i = 0; i < markers.Length; i++)
             {
                 var marker = markers[i];
                 if (marker == null) continue;
-                marker.localRotation = rotation;
+                marker.transform.localRotation = rotation;
             }
 
         }
 
-        public void SetRange(int range) => InstantiateMarkers(range);
+        public void SetRange(int range) => InstantiateMarkers(range, GetVisibilityType());
+        public void SetVisibilityType(EFISVisibilityType visibilityType) => InstantiateMarkers(Range, visibilityType);
+        public void ToggleVisibilityTypeCSTR() => ToggleVisibilityType(EFISVisibilityType.CSTR);
+        public void ToggleVisibilityTypeWPT() => ToggleVisibilityType(EFISVisibilityType.WPT);
+        public void ToggleVisibilityTypeVORD() => ToggleVisibilityType(EFISVisibilityType.VORDME);
+        public void ToggleVisibilityTypeNDB() => ToggleVisibilityType(EFISVisibilityType.NDB);
+        public void ToggleVisibilityTypeAPPT() => ToggleVisibilityType(EFISVisibilityType.APPT);
+
+        private void ToggleVisibilityType(EFISVisibilityType type)
+        {
+            SetVisibilityType(VisibilityType == type ? EFISVisibilityType.NONE : type);
+        }
+        
+        public EFISVisibilityType GetVisibilityType() => (EFISVisibilityType)VisibilityType;
 
         private NavaidDatabase GetNavaidDatabase()
         {
@@ -154,5 +168,15 @@ namespace A320VAU.ND.Pages
                 
             return navaidDatabase;
         }
+    }
+
+    public enum EFISVisibilityType
+    {
+        CSTR,
+        WPT,
+        VORDME,
+        NDB,
+        APPT,
+        NONE
     }
 }
