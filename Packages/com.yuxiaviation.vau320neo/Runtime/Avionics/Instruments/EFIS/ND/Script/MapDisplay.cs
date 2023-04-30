@@ -89,13 +89,24 @@ namespace A320VAU.ND.Pages
                 }
             }
 
-            if (efisVisibilityType != EFISVisibilityType.WPT) return;
+            if (efisVisibilityType != EFISVisibilityType.WPT && efisVisibilityType != EFISVisibilityType.APPT) return;
             for (int index = 0; index < _navaidDatabase.waypointIdentities.Length; index ++)
             {
                 var identity = _navaidDatabase.waypointIdentities[index];
                 var waypointTransform = _navaidDatabase.waypointTransforms[index];
-                
-                _markers = _markers.Add(InstantiateMarker(waypointTemplate, identity, waypointTransform));
+                var type = (WaypointType)_navaidDatabase.waypointTypes[index];
+
+                switch (type)
+                {
+                    case WaypointType.Aerodrome:
+                        if (efisVisibilityType == EFISVisibilityType.APPT)
+                            _markers = _markers.Add(InstantiateMarker(airportTemplate, identity, waypointTransform));
+                        break;
+                    default:
+                        if (efisVisibilityType == EFISVisibilityType.WPT)
+                            _markers = _markers.Add(InstantiateMarker(waypointTemplate, identity, waypointTransform));
+                        break;
+                }
             }
         }
 
