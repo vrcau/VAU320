@@ -30,7 +30,7 @@ namespace A320VAU.DFUNC
         public void SFEXT_O_PilotExit()
         {
             gameObject.SetActive(false);
-            SendCustomNetworkEvent(NetworkEventTarget.All, nameof(TurnOff));
+            //SendCustomNetworkEvent(NetworkEventTarget.All, nameof(TurnOff));
         }
         public void SFEXT_O_PilotEnter() => gameObject.SetActive(true);
         public void SFEXT_G_Explode() => SendCustomNetworkEvent(NetworkEventTarget.All, nameof(TurnOff));
