@@ -6,6 +6,7 @@ using VRC.Udon;
 
 namespace A320VAU.PFD
 {
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class DU : UdonSharpBehaviour
     {
         public GameObject SelfTestPage;
@@ -21,7 +22,7 @@ namespace A320VAU.PFD
 
         void OnEnable()
         {
-            if (inSelftest | isSelftestCompleted) return;
+            if (inSelftest | isSelftestCompleted | BypassSlefTest) return;
             InitDU();
 
             PowerPage.SetActive(!isSelftestCompleted);

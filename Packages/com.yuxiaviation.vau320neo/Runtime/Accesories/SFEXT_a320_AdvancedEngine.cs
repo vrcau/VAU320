@@ -6,8 +6,8 @@ using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon.Common.Interfaces;
 
-//note:this code is original from https://github.com/esnya/EsnyaSFAddons
-//to satisfy vau320's demand, moditied startup charcrastic add force point
+//note:this script is original from https://github.com/esnya/EsnyaSFAddons
+//to satisfy vau320's demand, moditied startup charcrastic and add force point
 
 namespace A320VAU.SFEXT
 {
