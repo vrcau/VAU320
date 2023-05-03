@@ -7,16 +7,19 @@ using YuxiFlightInstruments.BasicFlightData;
 
 namespace A320VAU.Avionics
 {
-    [RequireComponent(typeof(AudioSource))]
-    [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
+    //[RequireComponent(typeof(AudioSource))]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     [DefaultExecutionOrder(1100)] // After SaccAirVehicle/PFDDriver
     public class GPWS_OWML : UdonSharpBehaviour
     {
+
         public YFI_FlightDataInterface flightData;
         public LayerMask groundLayers = -1;
         public QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal;
         public Transform groundDetector, offsetTransorm;
-        public float[] altitudeThresholds = { 5, 10, 20, 30, 40, 50, 100, 200, 400, 500, 1000, 2500 };
+
+        public AudioSource audioSource;
+        //public float[] altitudeThresholds = { 5, 10, 20, 30, 40, 50, 100, 200, 400, 500, 1000, 2500 };
         public AudioClip bankAngleSound, sinkRateSound, pullUpSound, terrainSound, dontSinkSound, tooLowGearSound, tooLowFlapsSound, tooLowTerrainSound;
         public float initialClimbThreshold = 1333;
         public float smoothing = 1.0f;
@@ -29,7 +32,7 @@ namespace A320VAU.Avionics
 
         private float lastAlertTime = 0;
         private Rigidbody vehicleRigidbody;
-        private AudioSource audioSource;
+        
         private float maxRange, seaLevel;
         private SaccAirVehicle airVehicle;
         private DFUNC_Gear gear;
@@ -310,7 +313,7 @@ namespace A320VAU.Avionics
         #endregion
 
         #region Audio Soruce
-        private void PlayOneShot(AudioClip clip)
+        public void PlayOneShot(AudioClip clip)
         {
             if (audioSource == null || clip == null || Time.time < enabledTime + startDelay) return;
 

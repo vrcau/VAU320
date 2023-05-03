@@ -17,7 +17,7 @@ using A320VAU.SFEXT;
 
 namespace A320VAU.FWS
 {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class FWS : UdonSharpBehaviour
     {
         #region FWS Data (OEB) (Checklist and warnings)
@@ -32,7 +32,7 @@ namespace A320VAU.FWS
         public ECAMController ECAMController;
 
         [HideInInspector]
-        public AudioSource AudioSource;
+        //private AudioSource AudioSource;
 
         public AudioClip Caution; // looking for master warning? check out the FWS gameobject
 
@@ -101,7 +101,7 @@ namespace A320VAU.FWS
         {
             FWSWarningMessageDatas = GetComponentsInChildren<FWSWarningMessageData>();
             FWSWarningData = GetComponentInChildren<FWSWarningData>();
-            AudioSource = GetComponent<AudioSource>();
+            //AudioSource = GetComponent<AudioSource>();
         }
 
         private void LateUpdate()
@@ -129,13 +129,13 @@ namespace A320VAU.FWS
                 // HUNDRED ABOVE
                 if (mininmumCalloutIndex == 0)
                 {
-                    AudioSource.PlayOneShot(HundredAboveCallout);
+                    GPWS.PlayOneShot(HundredAboveCallout);
                 }
 
                 // MINIMUM
                 if (mininmumCalloutIndex == 1)
                 {
-                    AudioSource.PlayOneShot(MininmumCallout);
+                    GPWS.PlayOneShot(MininmumCallout);
                 }
             }
 
@@ -161,11 +161,11 @@ namespace A320VAU.FWS
                 // RETARD
                 if (altitudeCalloutIndex == 12)
                 {
-                    AudioSource.PlayOneShot(RetardCallout);
+                    GPWS.PlayOneShot(RetardCallout);
                 }
                 else
                 {
-                    AudioSource.PlayOneShot(AltitudeCallouts[altitudeCalloutIndex]);
+                    GPWS.PlayOneShot(AltitudeCallouts[altitudeCalloutIndex]);
                 }
 
                 _lastCallout = DateTime.Now;
@@ -182,7 +182,7 @@ namespace A320VAU.FWS
                 (radioAltitude > 50f && diff.TotalSeconds > 11) | (radioAltitude < 50f && diff.TotalMilliseconds < 4) &&
                 Mathf.Abs(radioAltitude - AltitudeCalloutIndexs[altitudeCalloutIndex]) < 10)
                 {
-                    AudioSource.PlayOneShot(AltitudeCallouts[altitudeCalloutIndex]);
+                    GPWS.PlayOneShot(AltitudeCallouts[altitudeCalloutIndex]);
                     _lastCallout = DateTime.Now;
                 }
             }
@@ -239,7 +239,8 @@ namespace A320VAU.FWS
             #region Warning Light & Sound
             if (_hasMatserWarning)
             {
-                AudioSource.Play();
+                GPWS.audioSource.Play();
+                
                 MasterWarningLightCAPT.SetActive(true);
                 MasterWarningLightFO.SetActive(true);
                 MasterCautionLightCAPT.SetActive(true);
@@ -247,14 +248,14 @@ namespace A320VAU.FWS
             }
             else
             {
-                AudioSource.Stop();
+                GPWS.audioSource.Stop();
                 MasterWarningLightCAPT.SetActive(false);
                 MasterWarningLightFO.SetActive(false);
                 if (_hasMatserCaution)
                 {
                     MasterCautionLightCAPT.SetActive(true);
                     MasterCautionLightFO.SetActive(true);
-                    AudioSource.PlayOneShot(Caution);
+                    GPWS.PlayOneShot(Caution);
                 }
                 else
                 {
@@ -270,7 +271,7 @@ namespace A320VAU.FWS
 
         public void CancleWarning()
         {
-            AudioSource.Stop();
+            GPWS.audioSource.Stop();
             MasterWarningLightCAPT.SetActive(false);
             MasterWarningLightFO.SetActive(false);
             MasterCautionLightCAPT.SetActive(false);
