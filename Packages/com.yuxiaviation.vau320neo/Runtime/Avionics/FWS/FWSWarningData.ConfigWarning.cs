@@ -9,7 +9,7 @@ namespace A320VAU.FWS
 
         public void MonitorConfig()
         {
-            if (FWS.SaccAirVehicle.ThrottleInput == 1 && FWS.SaccAirVehicle.Taxiing)
+            if (FWS.Engine1.n1== FWS.Engine1.takeOffN1 && FWS.Engine2.n1 == FWS.Engine2.takeOffN1 && FWS.SaccAirVehicle.Taxiing)
             {
                 setWarningMessageVisableValue(ref FLAPS_NOT_IN_TAKEOFF_CONFIG.IsVisable, !(FWS.Flaps.detentIndex == 1 | FWS.Flaps.detentIndex == 2), true);
                 setWarningMessageVisableValue(ref PARK_BRAKE_ON.IsVisable, FWS.Brake.ParkBreakSet, true);
