@@ -8,7 +8,10 @@ using VRC.SDKBase;
 using SaccFlightAndVehicles;
 using YuxiFlightInstruments.ElectricalBus;
 using UnityEditor;
+
+#if !COMPILER_UDONSHARP && UNITY_EDITOR
 using UdonSharpEditor;
+#endif
 
 //note:this code is original from https://github.com/esnya/EsnyaSFAddons
 //to satisfy vau320's demand, add eletrical start
