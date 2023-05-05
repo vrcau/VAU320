@@ -7,6 +7,8 @@ using UnityEngine;
 using VRC.SDKBase;
 using SaccFlightAndVehicles;
 using YuxiFlightInstruments.ElectricalBus;
+using UnityEditor;
+using UdonSharpEditor;
 
 //note:this code is original from https://github.com/esnya/EsnyaSFAddons
 //to satisfy vau320's demand, add eletrical start
@@ -15,13 +17,13 @@ namespace A320VAU.DEBUGGER
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class a320_Debugger : UdonSharpBehaviour
     {
-        public KeyCode startKey = KeyCode.LeftShift;
-        public KeyCode stopKey = KeyCode.RightControl;
+        //public KeyCode startKey = KeyCode.LeftShift;
+        //public KeyCode stopKey = KeyCode.RightControl;
 
-        private byte prevState;
-        private bool initialized, selected, isPilot, isPassenger, isOwner, prevTrigger;
-        private string triggerAxis;
-        private float stateChangedTime;
+        //private byte prevState;
+        //private bool initialized, selected, isPilot, isPassenger, isOwner, prevTrigger;
+        //private string triggerAxis;
+        //private float stateChangedTime;
 
         public SaccAirVehicle airVehicle;
         public SFEXT_AuxiliaryPowerUnit apu;
@@ -104,4 +106,27 @@ namespace A320VAU.DEBUGGER
         }
         #endregion
     }
+
+//#if !COMPILER_UDONSHARP && UNITY_EDITOR
+    //public class DebugUtilities : Editor
+    //{
+    //    public override void OnInspectorGUI()
+    //    {
+    //        a320_Debugger _target = target as a320_Debugger;
+    //        if (UdonSharpGUI.DrawDefaultUdonSharpBehaviourHeader(target)) return;
+    //        DrawDefaultInspector();
+    //        if (GUILayout.Button("InstantStart"))
+    //        {
+    //            _target.InstantStart();
+    //        }
+    //        if (GUILayout.Button("EngineBoom"))
+    //        {
+    //            _target.BoomEngines();
+    //        }
+    //    }
+    //}
+//#endif
+
 }
+
+
