@@ -600,7 +600,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 662.9, y: -3}
+  m_AnchoredPosition: {x: 0, y: -3}
   m_SizeDelta: {x: 30, y: 2048}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3153789670805002316
@@ -849,7 +849,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: c5c2a32eaf5dbf941bf475dc3bbc37e3, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -2423,7 +2423,7 @@ MonoBehaviour:
   MAXALT: 99990
   MAXRHE: 600
   altbybit: 1
-  HDGoffset: 180
+  HDGoffset: 0
   MAXVS: 6000
   MAXSLIPANGLE: 40
   MAXTRACKPITCH: 70
