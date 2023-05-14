@@ -1,0 +1,53 @@
+﻿#root {
+    padding: 8px;
+}
+
+Box {
+    margin: 4px 0;
+    padding: 4px;
+}
+
+.row {
+    flex-direction: row;
+}
+
+.row Button {
+    font-size: 12px;
+    padding: 8px;
+}
+
+.title {
+    font-size: 14px;
+    margin: 4px 0 8px 4px;
+    -unity-font-style: bold;
+}
+
+.todo {
+    -unity-text-align: middle-center;
+    font-size: 24px;
+    margin: 18px;
+}
+
+#unselected-warning {
+    display: none;
+}
+
+.disable #unselected-warning {
+    display: initial;
+}
+
+.disable #controls {
+    visibility: hidden;
+}
+
+.disable-playmode .disable-when-not-in-play-mode {
+    display: none;
+}
+
+.not-in-play-mode-warning {
+    display: none;
+}
+
+.disable-playmode .not-in-play-mode-warning {
+    display: initial;
+}

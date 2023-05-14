@@ -1,0 +1,51 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <VisualElement name="root">
+        <Style src="AircraftDebugger.uss"/>
+        <Label name="unselected-warning" class="title" text="Select a GameObject which part of vehicle."/>
+        <VisualElement name="controls">
+            <Box>
+                <Label text="Config Settings" class="title" />
+                <Label class="title not-in-play-mode-warning" text="Enter Play Mode Frist."/>
+                <VisualElement class="row disable-when-not-in-play-mode">
+                    <Button text="Cold and Dark" name="cold-and-dark" />
+                    <Button text="ADIRU and APU on" name="adiru-apu-on"/>
+                    <Button text="Engine Started" name="engine-started"/>
+                </VisualElement>
+            </Box>
+            <Box>
+                <Label text="Flaps Settings" class="title" />
+                <Label class="title not-in-play-mode-warning" text="Enter Play Mode Frist."/>
+                <VisualElement class="row disable-when-not-in-play-mode">
+                    <Button text="Flaps 0" name="flaps-0" />
+                    <Button text="Flaps 1/1+f" name="flaps-1" />
+                    <Button text="Flaps 2" name="flaps-2" />
+                    <Button text="Flaps 3" name="flaps-3" />
+                    <Button text="Flaps FULL" name="flaps-full" />
+                </VisualElement>
+            </Box>
+            <Box>
+                <Label text="SaccFlight Vehicle" class="title" />
+                <Label class="title not-in-play-mode-warning" text="Enter Play Mode Frist."/>
+                <VisualElement class="row disable-when-not-in-play-mode">
+                    <Button text="Pilot" name="pilot" />
+                    <Button text="Explode" name="explode" />
+                    <Button text="Respawn" name="respawn" />
+                </VisualElement>
+            </Box>
+            <Box>
+                <Label text="Position" class="title" />
+                <Label class="title not-in-play-mode-warning" text="Enter Play Mode Frist."/>
+                <Label text="TODO" class="todo disable-when-not-in-play-mode"/>
+            </Box>
+            <Box>
+                <Label text="Systeam Failure" class="title" />
+                <Label class="title not-in-play-mode-warning" text="Enter Play Mode Frist."/>
+                <Label text="TODO" class="todo disable-when-not-in-play-mode"/>
+            </Box>
+            <Box>
+                <Label text="Components Selection" class="title" />
+                <Label text="TODO" class="todo"/>
+            </Box>
+        </VisualElement>
+    </VisualElement>
+</UXML>
