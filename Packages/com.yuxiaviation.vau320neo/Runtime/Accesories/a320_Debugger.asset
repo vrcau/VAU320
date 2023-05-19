@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: a320_Debugger
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 13e8e35328b470a4c9e7781756722e70,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 79f20c63cfe442e4b896a8d78e92f57e,
     type: 2}
   udonAssembly: 
   assemblyError: 
