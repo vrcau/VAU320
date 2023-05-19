@@ -20,7 +20,7 @@ namespace A320VAU.SFEXT
 
         [Header("Steering")]
         [Tooltip("deg")] public float maxSteerAngle = 0;
-        [Tooltip("×îĞ¡×ªÏò½Ç¶È,80½ÚÊ±´ïµ½ deg")] public float minSteerAngle = 0;
+        [Tooltip("æœ€å°è½¬å‘è§’åº¦,80èŠ‚æ—¶è¾¾åˆ° deg")] public float minSteerAngle = 0;
         public float steerResponse = 1.0f;
 
         [Header("Brake")]
@@ -267,7 +267,7 @@ namespace A320VAU.SFEXT
         private float GetTargetMaxSteerAngle(float groundSpeed)
         {
             groundSpeed = groundSpeed * 1.94401f < 0 ? 0 : groundSpeed;
-            float SteerAngle = -1.23333f * groundSpeed + 98.66667f; //20½Ú-74¶È 80½Ú-0¶È
+            float SteerAngle = -1.23333f * groundSpeed + 98.66667f; //20èŠ‚-74åº¦ 80èŠ‚-0åº¦
             maxSteeringCurrent = Mathf.Clamp(SteerAngle, minSteerAngle, maxSteerAngle);
             return maxSteeringCurrent;
 

@@ -464,8 +464,7 @@ MonoBehaviour:
       Data: 24|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\uFFFD\uFFFD\u0421\u05EA\uFFFD\uFFFD\u01F6\uFFFD,80\uFFFD\uFFFD\u02B1\uFFFD\uFD7D
-        deg"
+      Data: "\u6700\u5C0F\u8F6C\u5411\u89D2\u5EA6,80\u8282\u65F6\u8FBE\u5230 deg"
     - Name: 
       Entry: 8
       Data: 
