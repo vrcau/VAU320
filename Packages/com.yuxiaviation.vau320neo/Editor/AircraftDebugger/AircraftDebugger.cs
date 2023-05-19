@@ -114,14 +114,14 @@ namespace A320VAU.Editor.AircraftDebugger
         {
             var airVehicle = _saccEntity.GetComponentInChildren<SaccAirVehicle>();
             if (airVehicle != null)
-                UdonSharpEditorUtility.GetBackingUdonBehaviour(airVehicle).SendCustomEvent(nameof(SaccAirVehicle.SFEXT_O_RespawnButton));
+                airVehicle.SFEXT_O_RespawnButton();
         }
 
         private void Explode()
         {
             var airVehicle = _saccEntity.GetComponentInChildren<SaccAirVehicle>();
             if (airVehicle != null)
-                UdonSharpEditorUtility.GetBackingUdonBehaviour(airVehicle).SendCustomEvent(nameof(SaccAirVehicle.Explode));
+                airVehicle.Explode();
         }
 
         private void Pilot()
