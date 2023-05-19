@@ -150,9 +150,9 @@ namespace A320VAU.Editor.AircraftDebugger
             {
                 var udonBehaviour = UdonSharpEditorUtility.GetBackingUdonBehaviour(gear);
                 udonBehaviour.SetProgramVariable(nameof(SFEXT_a320_AdvancedGear.position),
-                    isDown ? 0f : 1f);
+                    isDown ? 1f : 0f);
                 udonBehaviour.SetProgramVariable(nameof(SFEXT_a320_AdvancedGear.targetPosition),
-                    isDown ? 0f : 1f);
+                    isDown ? 1f : 0f);
             }
         }
 
