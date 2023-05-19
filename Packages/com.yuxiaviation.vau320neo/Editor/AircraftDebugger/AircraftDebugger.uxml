@@ -29,6 +29,11 @@
                     <Button text="Gear Up" name="gear-up" />
                     <Button text="Gear Down" name="gear-down" />
                 </VisualElement>
+                <Label text="ELEC" class="sub-title disable-when-not-in-play-mode" />
+                <VisualElement class="row disable-when-not-in-play-mode">
+                    <Button text="Battery On" name="battery-on" />
+                    <Button text="Battery Off" name="battery-off" />
+                </VisualElement>
             </Box>
             <Box>
                 <Label text="SaccFlight Vehicle" class="title" />

@@ -8,6 +8,7 @@ using UdonSharpEditor;
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEngine;
+using YuxiFlightInstruments.ElectricalBus;
 
 namespace A320VAU.Editor.AircraftDebugger
 {
@@ -47,6 +48,10 @@ namespace A320VAU.Editor.AircraftDebugger
             rootVisualElement.Query<Button>("gear-up").First().clicked += () => SetGear(false);
             rootVisualElement.Query<Button>("gear-down").First().clicked += () => SetGear(true);
             
+            // ELEC
+            rootVisualElement.Query<Button>("battery-on").First().clicked += () => SetBattery(true);
+            rootVisualElement.Query<Button>("battery-off").First().clicked += () => SetBattery(false);
+            
             // Config
             rootVisualElement.Query<Button>("cold-and-dark").First().clicked +=
                 () => SetConfig(AircraftConfigType.ColdAndDark);
@@ -67,6 +72,15 @@ namespace A320VAU.Editor.AircraftDebugger
             rootVisualElement.Query<Button>("respawn").First().clicked += Respawn;
             
             UpdateDebugger();
+        }
+
+        private void SetBattery(bool isBatteryOn)
+        {
+            var electricalBus = _saccEntity.GetComponentInChildren<YFI_ElectricalBus>();
+            if (electricalBus == null) return;
+
+            if (isBatteryOn != electricalBus.batteryOn)
+                electricalBus.ToggleBatteryLocal();
         }
 
         private void OnFocus() => UpdateDebugger();
@@ -148,30 +162,36 @@ namespace A320VAU.Editor.AircraftDebugger
             {
                 case AircraftConfigType.ColdAndDark:
                     ReinitDUs();
+                    SetBattery(false);
                     SetFlaps(0);
                     SetGear(true);
                     break;
                 case AircraftConfigType.AdiruApuOn:
+                    SetBattery(true);
                     BypassDUsSelfTest();
                     SetFlaps(0);
                     SetGear(true);
                     break;
                 case AircraftConfigType.EngineStarted:
+                    SetBattery(true);
                     BypassDUsSelfTest();
                     SetFlaps(0);
                     SetGear(true);
                     break;
                 case AircraftConfigType.Takeoff:
+                    SetBattery(true);
                     BypassDUsSelfTest();
                     SetFlaps(2);
                     SetGear(true);
                     break;
                 case AircraftConfigType.Landing:
+                    SetBattery(true);
                     BypassDUsSelfTest();
                     SetFlaps(4);
                     SetGear(true);
                     break;
                 case AircraftConfigType.Cruise:
+                    SetBattery(true);
                     BypassDUsSelfTest();
                     SetFlaps(0);
                     SetGear(false);
