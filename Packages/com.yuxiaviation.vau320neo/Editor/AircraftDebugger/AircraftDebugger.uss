@@ -4,7 +4,7 @@
 
 Box {
     margin: 4px 0;
-    padding: 4px;
+    padding: 8px;
 }
 
 .row {
@@ -17,8 +17,16 @@ Box {
 }
 
 .title {
+    font-size: 18px;
+    -unity-font-style: bold;
+    margin: 0 0 4px 0;
+    border-bottom-width: 3px;
+    border-bottom-color: darkgrey;
+}
+
+.sub-title {
     font-size: 14px;
-    margin: 4px 0 8px 4px;
+    margin: 4px 0;
     -unity-font-style: bold;
 }
 
