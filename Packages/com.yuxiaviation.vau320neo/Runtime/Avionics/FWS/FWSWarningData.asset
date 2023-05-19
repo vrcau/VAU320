@@ -50,27 +50,19 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: APU_BLEED
-=======
-      Data: TAKEOFF_MEMO
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: FWS
     - Name: $v
       Entry: 7
       Data: 2|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: APU_BLEED
-=======
-      Data: TAKEOFF_MEMO
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: FWS
     - Name: <UserType>k__BackingField
       Entry: 7
       Data: 3|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.FWS.FWSWarningMessageData, com.yuxiaviation.vau320neo
+      Data: A320VAU.FWS.FWS, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -94,7 +86,7 @@ MonoBehaviour:
       Data: 
     - Name: <IsSerialized>k__BackingField
       Entry: 5
-      Data: true
+      Data: false
     - Name: _fieldAttributes
       Entry: 7
       Data: 5|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
@@ -118,27 +110,25 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: PARK_BRK
-=======
-      Data: LANDING_MEMO
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: _hasWarningVisableChange
     - Name: $v
       Entry: 7
       Data: 6|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: PARK_BRK
-=======
-      Data: LANDING_MEMO
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: _hasWarningVisableChange
     - Name: <UserType>k__BackingField
-      Entry: 9
-      Data: 3
+      Entry: 7
+      Data: 7|System.RuntimeType, mscorlib
+    - Name: 
+      Entry: 1
+      Data: System.Boolean, mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: <SystemType>k__BackingField
       Entry: 9
-      Data: 4
+      Data: 7
     - Name: <SyncMode>k__BackingField
       Entry: 7
       Data: System.Nullable`1[[UdonSharp.UdonSyncMode, UdonSharp.Runtime]], mscorlib
@@ -150,10 +140,10 @@ MonoBehaviour:
       Data: 
     - Name: <IsSerialized>k__BackingField
       Entry: 5
-      Data: true
+      Data: false
     - Name: _fieldAttributes
       Entry: 7
-      Data: 7|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
+      Data: 8|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 0
@@ -174,27 +164,19 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: APU_AVAIL
-=======
-      Data: FLAPS_NOT_IN_TAKEOFF_CONFIG
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: _hasWarningDataVisableChange
     - Name: $v
       Entry: 7
-      Data: 8|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
+      Data: 9|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: APU_AVAIL
-=======
-      Data: FLAPS_NOT_IN_TAKEOFF_CONFIG
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: _hasWarningDataVisableChange
     - Name: <UserType>k__BackingField
       Entry: 9
-      Data: 3
+      Data: 7
     - Name: <SystemType>k__BackingField
       Entry: 9
-      Data: 4
+      Data: 7
     - Name: <SyncMode>k__BackingField
       Entry: 7
       Data: System.Nullable`1[[UdonSharp.UdonSyncMode, UdonSharp.Runtime]], mscorlib
@@ -206,10 +188,10 @@ MonoBehaviour:
       Data: 
     - Name: <IsSerialized>k__BackingField
       Entry: 5
-      Data: true
+      Data: false
     - Name: _fieldAttributes
       Entry: 7
-      Data: 9|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
+      Data: 10|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 0
@@ -230,80 +212,22 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
       Data: BRAKES_HOT
-=======
-      Data: PARK_BRAKE_ON
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
     - Name: $v
       Entry: 7
-      Data: 10|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
+      Data: 11|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
       Data: BRAKES_HOT
-=======
-      Data: PARK_BRAKE_ON
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
     - Name: <UserType>k__BackingField
-      Entry: 9
-      Data: 3
-    - Name: <SystemType>k__BackingField
-      Entry: 9
-      Data: 4
-    - Name: <SyncMode>k__BackingField
       Entry: 7
-      Data: System.Nullable`1[[UdonSharp.UdonSyncMode, UdonSharp.Runtime]], mscorlib
+      Data: 12|System.RuntimeType, mscorlib
     - Name: 
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: <IsSerialized>k__BackingField
-      Entry: 5
-      Data: true
-    - Name: _fieldAttributes
-      Entry: 7
-      Data: 11|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE1_FIRE
-=======
-      Data: APU_BLEED
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
-    - Name: $v
-      Entry: 7
-      Data: 12|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
-    - Name: <Name>k__BackingField
-      Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE1_FIRE
-=======
-      Data: APU_BLEED
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
-    - Name: <UserType>k__BackingField
-      Entry: 9
-      Data: 3
+      Data: A320VAU.FWS.FWSWarningMessageData, com.yuxiaviation.vau320neo
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: <SystemType>k__BackingField
       Entry: 9
       Data: 4
@@ -342,24 +266,16 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE2_FIRE
-=======
-      Data: PARK_BRK
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: APU_BLEED
     - Name: $v
       Entry: 7
       Data: 14|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE2_FIRE
-=======
-      Data: PARK_BRK
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: APU_BLEED
     - Name: <UserType>k__BackingField
       Entry: 9
-      Data: 3
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
       Data: 4
@@ -398,24 +314,16 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: DUAL_ENGINE_FAULT
-=======
-      Data: APU_AVAIL
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: PARK_BRK
     - Name: $v
       Entry: 7
       Data: 16|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: DUAL_ENGINE_FAULT
-=======
-      Data: APU_AVAIL
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: PARK_BRK
     - Name: <UserType>k__BackingField
       Entry: 9
-      Data: 3
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
       Data: 4
@@ -454,30 +362,16 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE1_SHUT_DOWN
-=======
-      Data: FWS
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: APU_AVAIL
     - Name: $v
       Entry: 7
       Data: 18|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE1_SHUT_DOWN
-=======
-      Data: FWS
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: APU_AVAIL
     - Name: <UserType>k__BackingField
-      Entry: 7
-      Data: 19|System.RuntimeType, mscorlib
-    - Name: 
-      Entry: 1
-      Data: A320VAU.FWS.FWS, com.yuxiaviation.vau320neo
-    - Name: 
-      Entry: 8
-      Data: 
+      Entry: 9
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
       Data: 4
@@ -492,10 +386,10 @@ MonoBehaviour:
       Data: 
     - Name: <IsSerialized>k__BackingField
       Entry: 5
-      Data: false
+      Data: true
     - Name: _fieldAttributes
       Entry: 7
-      Data: 20|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
+      Data: 19|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 0
@@ -516,33 +410,19 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE1_FAIL
-=======
-      Data: _hasWarningVisableChange
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: TAKEOFF_MEMO
     - Name: $v
       Entry: 7
-      Data: 21|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
+      Data: 20|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE1_FAIL
-=======
-      Data: _hasWarningVisableChange
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: TAKEOFF_MEMO
     - Name: <UserType>k__BackingField
-      Entry: 7
-      Data: 22|System.RuntimeType, mscorlib
-    - Name: 
-      Entry: 1
-      Data: System.Boolean, mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
+      Entry: 9
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
-      Data: 22
+      Data: 4
     - Name: <SyncMode>k__BackingField
       Entry: 7
       Data: System.Nullable`1[[UdonSharp.UdonSyncMode, UdonSharp.Runtime]], mscorlib
@@ -554,7 +434,6 @@ MonoBehaviour:
       Data: 
     - Name: <IsSerialized>k__BackingField
       Entry: 5
-<<<<<<< HEAD
       Data: true
     - Name: _fieldAttributes
       Entry: 7
@@ -579,16 +458,16 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: ENGINE2_FAIL
+      Data: LANDING_MEMO
     - Name: $v
       Entry: 7
       Data: 22|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: ENGINE2_FAIL
+      Data: LANDING_MEMO
     - Name: <UserType>k__BackingField
       Entry: 9
-      Data: 3
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
       Data: 4
@@ -604,9 +483,6 @@ MonoBehaviour:
     - Name: <IsSerialized>k__BackingField
       Entry: 5
       Data: true
-=======
-      Data: false
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
     - Name: _fieldAttributes
       Entry: 7
       Data: 23|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
@@ -630,27 +506,19 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE1_EGT_OVERLIMIT
-=======
-      Data: _hasWarningDataVisableChange
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE1_FIRE
     - Name: $v
       Entry: 7
       Data: 24|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE1_EGT_OVERLIMIT
-=======
-      Data: _hasWarningDataVisableChange
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE1_FIRE
     - Name: <UserType>k__BackingField
       Entry: 9
-      Data: 22
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
-      Data: 22
+      Data: 4
     - Name: <SyncMode>k__BackingField
       Entry: 7
       Data: System.Nullable`1[[UdonSharp.UdonSyncMode, UdonSharp.Runtime]], mscorlib
@@ -662,7 +530,7 @@ MonoBehaviour:
       Data: 
     - Name: <IsSerialized>k__BackingField
       Entry: 5
-      Data: false
+      Data: true
     - Name: _fieldAttributes
       Entry: 7
       Data: 25|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
@@ -686,24 +554,16 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE2_EGT_OVERLIMIT
-=======
-      Data: BRAKES_HOT
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE2_FIRE
     - Name: $v
       Entry: 7
       Data: 26|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE2_EGT_OVERLIMIT
-=======
-      Data: BRAKES_HOT
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE2_FIRE
     - Name: <UserType>k__BackingField
       Entry: 9
-      Data: 3
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
       Data: 4
@@ -742,24 +602,16 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE1_N1_OVERLIMIT
-=======
-      Data: ENGINE1_FIRE
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: DUAL_ENGINE_FAULT
     - Name: $v
       Entry: 7
       Data: 28|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE1_N1_OVERLIMIT
-=======
-      Data: ENGINE1_FIRE
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: DUAL_ENGINE_FAULT
     - Name: <UserType>k__BackingField
       Entry: 9
-      Data: 3
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
       Data: 4
@@ -798,24 +650,16 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE2_N1_OVERLIMIT
-=======
-      Data: ENGINE2_FIRE
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE1_SHUT_DOWN
     - Name: $v
       Entry: 7
       Data: 30|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE2_N1_OVERLIMIT
-=======
-      Data: ENGINE2_FIRE
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE1_SHUT_DOWN
     - Name: <UserType>k__BackingField
       Entry: 9
-      Data: 3
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
       Data: 4
@@ -854,24 +698,16 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE1_N2_OVERLIMIT
-=======
-      Data: DUAL_ENGINE_FAULT
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE1_FAIL
     - Name: $v
       Entry: 7
       Data: 32|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE1_N2_OVERLIMIT
-=======
-      Data: DUAL_ENGINE_FAULT
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE1_FAIL
     - Name: <UserType>k__BackingField
       Entry: 9
-      Data: 3
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
       Data: 4
@@ -910,24 +746,16 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE2_N2_OVERLIMIT
-=======
-      Data: ENGINE1_SHUT_DOWN
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE2_FAIL
     - Name: $v
       Entry: 7
       Data: 34|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: ENGINE2_N2_OVERLIMIT
-=======
-      Data: ENGINE1_SHUT_DOWN
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE2_FAIL
     - Name: <UserType>k__BackingField
       Entry: 9
-      Data: 3
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
       Data: 4
@@ -966,24 +794,16 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: FLAPS_NOT_IN_TAKEOFF_CONFIG
-=======
-      Data: ENGINE1_FAIL
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE1_EGT_OVERLIMIT
     - Name: $v
       Entry: 7
       Data: 36|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: FLAPS_NOT_IN_TAKEOFF_CONFIG
-=======
-      Data: ENGINE1_FAIL
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE1_EGT_OVERLIMIT
     - Name: <UserType>k__BackingField
       Entry: 9
-      Data: 3
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
       Data: 4
@@ -1022,24 +842,16 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: PARK_BRAKE_ON
-=======
-      Data: ENGINE2_FAIL
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE2_EGT_OVERLIMIT
     - Name: $v
       Entry: 7
       Data: 38|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: PARK_BRAKE_ON
-=======
-      Data: ENGINE2_FAIL
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE2_EGT_OVERLIMIT
     - Name: <UserType>k__BackingField
       Entry: 9
-      Data: 3
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
       Data: 4
@@ -1078,24 +890,16 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: TAKEOFF_MEMO
-=======
-      Data: ENGINE1_EGT_OVERLIMIT
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE1_N1_OVERLIMIT
     - Name: $v
       Entry: 7
       Data: 40|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: TAKEOFF_MEMO
-=======
-      Data: ENGINE1_EGT_OVERLIMIT
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE1_N1_OVERLIMIT
     - Name: <UserType>k__BackingField
       Entry: 9
-      Data: 3
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
       Data: 4
@@ -1134,24 +938,16 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: LANDING_MEMO
-=======
-      Data: ENGINE2_EGT_OVERLIMIT
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE2_N1_OVERLIMIT
     - Name: $v
       Entry: 7
       Data: 42|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: LANDING_MEMO
-=======
-      Data: ENGINE2_EGT_OVERLIMIT
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE2_N1_OVERLIMIT
     - Name: <UserType>k__BackingField
       Entry: 9
-      Data: 3
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
       Data: 4
@@ -1190,30 +986,16 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: FWS
-=======
-      Data: ENGINE1_N1_OVERLIMIT
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE1_N2_OVERLIMIT
     - Name: $v
       Entry: 7
       Data: 44|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: FWS
-=======
-      Data: ENGINE1_N1_OVERLIMIT
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE1_N2_OVERLIMIT
     - Name: <UserType>k__BackingField
-      Entry: 7
-      Data: 45|System.RuntimeType, mscorlib
-    - Name: 
-      Entry: 1
-      Data: A320VAU.FWS.FWS, com.yuxiaviation.vau320neo
-    - Name: 
-      Entry: 8
-      Data: 
+      Entry: 9
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
       Data: 4
@@ -1228,10 +1010,10 @@ MonoBehaviour:
       Data: 
     - Name: <IsSerialized>k__BackingField
       Entry: 5
-      Data: false
+      Data: true
     - Name: _fieldAttributes
       Entry: 7
-      Data: 46|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
+      Data: 45|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 0
@@ -1252,33 +1034,19 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: _hasWarningVisableChange
-=======
-      Data: ENGINE2_N1_OVERLIMIT
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE2_N2_OVERLIMIT
     - Name: $v
       Entry: 7
-      Data: 47|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
+      Data: 46|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: _hasWarningVisableChange
-=======
-      Data: ENGINE2_N1_OVERLIMIT
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: ENGINE2_N2_OVERLIMIT
     - Name: <UserType>k__BackingField
-      Entry: 7
-      Data: 48|System.RuntimeType, mscorlib
-    - Name: 
-      Entry: 1
-      Data: System.Boolean, mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
+      Entry: 9
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
-      Data: 48
+      Data: 4
     - Name: <SyncMode>k__BackingField
       Entry: 7
       Data: System.Nullable`1[[UdonSharp.UdonSyncMode, UdonSharp.Runtime]], mscorlib
@@ -1290,9 +1058,6 @@ MonoBehaviour:
       Data: 
     - Name: <IsSerialized>k__BackingField
       Entry: 5
-<<<<<<< HEAD
-      Data: false
-=======
       Data: true
     - Name: _fieldAttributes
       Entry: 7
@@ -1317,16 +1082,16 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: ENGINE1_N2_OVERLIMIT
+      Data: FLAPS_NOT_IN_TAKEOFF_CONFIG
     - Name: $v
       Entry: 7
       Data: 48|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: ENGINE1_N2_OVERLIMIT
+      Data: FLAPS_NOT_IN_TAKEOFF_CONFIG
     - Name: <UserType>k__BackingField
       Entry: 9
-      Data: 3
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
       Data: 4
@@ -1342,7 +1107,6 @@ MonoBehaviour:
     - Name: <IsSerialized>k__BackingField
       Entry: 5
       Data: true
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
     - Name: _fieldAttributes
       Entry: 7
       Data: 49|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
@@ -1366,27 +1130,19 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-<<<<<<< HEAD
-      Data: _hasWarningDataVisableChange
-=======
-      Data: ENGINE2_N2_OVERLIMIT
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: PARK_BRAKE_ON
     - Name: $v
       Entry: 7
       Data: 50|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-<<<<<<< HEAD
-      Data: _hasWarningDataVisableChange
-=======
-      Data: ENGINE2_N2_OVERLIMIT
->>>>>>> 6597d56a172aa6c5cc3a4336166d5a4b208f101a
+      Data: PARK_BRAKE_ON
     - Name: <UserType>k__BackingField
       Entry: 9
-      Data: 48
+      Data: 12
     - Name: <SystemType>k__BackingField
       Entry: 9
-      Data: 48
+      Data: 4
     - Name: <SyncMode>k__BackingField
       Entry: 7
       Data: System.Nullable`1[[UdonSharp.UdonSyncMode, UdonSharp.Runtime]], mscorlib
@@ -1398,7 +1154,7 @@ MonoBehaviour:
       Data: 
     - Name: <IsSerialized>k__BackingField
       Entry: 5
-      Data: false
+      Data: true
     - Name: _fieldAttributes
       Entry: 7
       Data: 51|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
