@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using A320VAU.PFD;
 using EsnyaSFAddons.DFUNC;
 using SaccFlightAndVehicles;
 using UdonSharpEditor;
@@ -51,9 +52,12 @@ namespace A320VAU.Editor.AircraftDebugger
             rootVisualElement.Query<Button>("pilot").First().clicked += Pilot;
             rootVisualElement.Query<Button>("explode").First().clicked += Explode;
             rootVisualElement.Query<Button>("respawn").First().clicked += Respawn;
+
+            // Update only when selection changed
+            Selection.selectionChanged += UpdateDebugger;
         }
 
-        private void OnGUI()
+        private void UpdateDebugger()
         {
             if (Selection.activeGameObject == null)
             {
@@ -76,6 +80,11 @@ namespace A320VAU.Editor.AircraftDebugger
                 rootVisualElement.RemoveFromClassList("disable-playmode");
             else
                 rootVisualElement.AddToClassList("disable-playmode");
+        }
+
+        private void OnDestroy()
+        {
+            Selection.selectionChanged -= UpdateDebugger;
         }
 
         private void Respawn()
@@ -113,7 +122,30 @@ namespace A320VAU.Editor.AircraftDebugger
 
         private void SetConfig(AircraftConfigType type)
         {
-            Debug.Log(type);
+            switch (type)
+            {
+                case AircraftConfigType.ColdAndDark:
+                    ReinitDUs();
+                    break;
+                case AircraftConfigType.AdiruApuOn:
+                    BypassDUsSelfTest();
+                    break;
+                case AircraftConfigType.EngineStarted:
+                    BypassDUsSelfTest();
+                    break;
+            }
+        }
+
+        private void ReinitDUs()
+        {
+            foreach (var du in _saccEntity.GetComponentsInChildren<DU>())
+                du.InitDU();
+        }
+
+        private void BypassDUsSelfTest()
+        {
+            foreach (var du in _saccEntity.GetComponentsInChildren<DU>())
+                du.EndSelftest();
         }
     }
 
