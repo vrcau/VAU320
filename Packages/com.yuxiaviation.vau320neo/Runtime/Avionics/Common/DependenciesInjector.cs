@@ -1,10 +1,13 @@
-﻿using A320VAU.Avionics;
+﻿using System.Linq;
+using System.Reflection;
+using A320VAU.Avionics;
 using A320VAU.Brake;
 using A320VAU.DFUNC;
 using A320VAU.SFEXT;
 using EsnyaSFAddons.DFUNC;
 using EsnyaSFAddons.SFEXT;
 using SaccFlightAndVehicles;
+using UdonSharp;
 using UnityEditor;
 using UnityEngine;
 using VirtualAviationJapan;
@@ -83,6 +86,28 @@ namespace A320VAU.Common
 
             if (GUILayout.Button("Inject"))
             {
+                var behaviours = injector.GetComponentsInChildren<UdonSharpBehaviour>(true);
+                var fields = typeof(DependenciesInjector).GetFields()
+                    .Where(field => field.DeclaringType == typeof(DependenciesInjector) & !field.Name.StartsWith("_"))
+                    .ToArray();
+
+                foreach (var behaviour in behaviours)
+                {
+                    if (behaviour.GetProgramVariable("EntityControl") == null)
+                        behaviour.SetProgramVariable("EntityControl", injector.saccEntity);
+                    
+                    var behaviourFields = behaviour.GetType().GetFields();
+
+                    foreach (var field in fields)
+                    {
+                        var behaviourField = behaviourFields.FirstOrDefault(f => f.Name == field.Name);
+                        
+                        if (behaviourField != null &&
+                            behaviourField.Name == field.Name & behaviourField.FieldType == field.FieldType &&
+                            behaviourField.GetValue(behaviour) == null)
+                            behaviour.SetProgramVariable(field.Name, field.GetValue(injector));  
+                    }
+                }
             }
         }
 
