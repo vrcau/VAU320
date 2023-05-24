@@ -32,7 +32,7 @@ namespace A320VAU.FWS
                     BRAKES_HOT.MessageLine[2].IsMessageVisable = false;
                     // Air
                     BRAKES_HOT.MessageLine[3].IsMessageVisable = true;
-                    BRAKES_HOT.MessageLine[4].IsMessageVisable = FWS.LeftLadingGear.targetPosition != 1;
+                    BRAKES_HOT.MessageLine[4].IsMessageVisable = FWS.EquipmentData.GearNose.targetPosition != 1;
                     BRAKES_HOT.MessageLine[5].IsMessageVisable = true;
                 }
             }
