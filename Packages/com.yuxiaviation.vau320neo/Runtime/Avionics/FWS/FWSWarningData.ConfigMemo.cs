@@ -12,8 +12,8 @@ namespace A320VAU.FWS
 
         public void MonitorConfigMemo()
         {
-            var isEngine1Running = FWS.Engine1.fuel && FWS.Engine1.n1 > 0.63f * FWS.Engine1.idleN1 && !FWS.Engine1.stall;
-            var isEngine2Running = FWS.Engine2.fuel && FWS.Engine2.n1 > 0.63f * FWS.Engine2.idleN1 && !FWS.Engine2.stall;
+            var isEngine1Running = FWS.EquipmentData.IsEngineLRunning;
+            var isEngine2Running = FWS.EquipmentData.IsEngineRRunning;
 
             #region Takeoff Memo
             TAKEOFF_MEMO.IsVisable = FWS.SaccAirVehicle.Taxiing & FWS.SaccAirVehicle.ThrottleInput != 1 & (isEngine1Running | isEngine2Running);
@@ -27,7 +27,7 @@ namespace A320VAU.FWS
                 TAKEOFF_MEMO.MessageLine[3].IsMessageVisable = false;
                 TAKEOFF_MEMO.MessageLine[4].IsMessageVisable = false;
                 // CABIN READY
-                if (!FWS.Canopy.CanopyOpen)
+                if (!FWS.EquipmentData.Canopy.CanopyOpen)
                 {
                     setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[6].IsMessageVisable, false);
                     setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[7].IsMessageVisable, false);
@@ -44,7 +44,7 @@ namespace A320VAU.FWS
                 TAKEOFF_MEMO.MessageLine[9].IsMessageVisable = false;
                 TAKEOFF_MEMO.MessageLine[10].IsMessageVisable = false;
                 // FLAP T.O & T.O CONFIG TEST
-                if ((FWS.Flaps.detentIndex == 1 && FWS.Flaps.targetDetentIndex == 1) | (FWS.Flaps.detentIndex == 2 && FWS.Flaps.targetDetentIndex == 2))
+                if ((FWS.EquipmentData.Flap.detentIndex == 1 && FWS.EquipmentData.Flap.targetDetentIndex == 1) | (FWS.EquipmentData.Flap.detentIndex == 2 && FWS.EquipmentData.Flap.targetDetentIndex == 2))
                 {
                     // FLAP T.O
                     setWarningMessageVisableValue(ref TAKEOFF_MEMO.MessageLine[12].IsMessageVisable, false);
@@ -73,7 +73,7 @@ namespace A320VAU.FWS
             setWarningMessageVisableValue(ref LANDING_MEMO.IsVisable, !FWS.SaccAirVehicle.Taxiing & FWS.FlightData.TAS > 80f & (isEngine1Running | isEngine2Running) & (float)FWS.GPWS.GetProgramVariable("radioAltitude") < 2000f);
 
             // GEAR DN
-            if (FWS.LeftLadingGear.targetPosition == 1)
+            if (FWS.EquipmentData.GearLeft.targetPosition == 1)
             {
                 setWarningMessageVisableValue(ref LANDING_MEMO.MessageLine[0].IsMessageVisable, false);
                 setWarningMessageVisableValue(ref LANDING_MEMO.MessageLine[1].IsMessageVisable, false);
@@ -102,7 +102,7 @@ namespace A320VAU.FWS
             LANDING_MEMO.MessageLine[11].IsMessageVisable = true;
 
             // FLAPS FULL
-            if (FWS.Flaps.targetDetentIndex == 4)
+            if (FWS.EquipmentData.Flap.targetDetentIndex == 4)
             {
                 setWarningMessageVisableValue(ref LANDING_MEMO.MessageLine[12].IsMessageVisable, false);
                 setWarningMessageVisableValue(ref LANDING_MEMO.MessageLine[13].IsMessageVisable, false);

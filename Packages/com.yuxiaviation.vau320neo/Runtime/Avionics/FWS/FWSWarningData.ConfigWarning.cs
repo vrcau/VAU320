@@ -1,4 +1,5 @@
 using UdonSharp;
+using UnityEngine;
 
 namespace A320VAU.FWS
 {
@@ -9,10 +10,12 @@ namespace A320VAU.FWS
 
         public void MonitorConfig()
         {
-            if (FWS.Engine1.n1== FWS.Engine1.takeOffN1 && FWS.Engine2.n1 == FWS.Engine2.takeOffN1 && FWS.SaccAirVehicle.Taxiing)
+            if (Mathf.Approximately(FWS.EquipmentData.ThrottleLevelerL, 1) &&
+                Mathf.Approximately(FWS.EquipmentData.ThrottleLevelerR, 1)&& 
+                FWS.SaccAirVehicle.Taxiing)
             {
-                setWarningMessageVisableValue(ref FLAPS_NOT_IN_TAKEOFF_CONFIG.IsVisable, !(FWS.Flaps.detentIndex == 1 | FWS.Flaps.detentIndex == 2), true);
-                setWarningMessageVisableValue(ref PARK_BRAKE_ON.IsVisable, FWS.Brake.ParkBreakSet, true);
+                setWarningMessageVisableValue(ref FLAPS_NOT_IN_TAKEOFF_CONFIG.IsVisable, !(FWS.EquipmentData.Flap.detentIndex == 1 | FWS.EquipmentData.Flap.detentIndex == 2), true);
+                setWarningMessageVisableValue(ref PARK_BRAKE_ON.IsVisable, FWS.EquipmentData.Brake.ParkBreakSet, true);
             }
             else
             {

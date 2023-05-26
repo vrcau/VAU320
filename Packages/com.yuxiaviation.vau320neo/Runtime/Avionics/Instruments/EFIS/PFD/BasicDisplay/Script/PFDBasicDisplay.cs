@@ -11,6 +11,7 @@ using A320VAU.SFEXT;
 
 namespace A320VAU.PFD
 {
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class PFDBasicDisplay : UdonSharpBehaviour
     {
         [Header("Aircraft Systems")]

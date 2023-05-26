@@ -29,7 +29,7 @@ namespace A320VAU.FWS
 
         #region ECAM and Warning Light/Audio
         [Header("ECAM and warning Light/Audio")]
-        public ECAMController ECAMController;
+        public ECAMDisplay ECAMController;
 
         [HideInInspector]
         //private AudioSource AudioSource;
@@ -46,26 +46,11 @@ namespace A320VAU.FWS
         [Header("Aircraft Systems")]
         public SaccAirVehicle SaccAirVehicle;
         public SaccEntity SaccEntity;
-
         public YFI_FlightDataInterface FlightData;
-        public SFEXT_a320_AdvancedEngine Engine1;
-        public SFEXT_a320_AdvancedEngine Engine2;
-        public SFEXT_AuxiliaryPowerUnit APU;
-        public DFUNC_AdvancedFlaps Flaps;
+        public ECAMDataInterface EquipmentData;
+        public GPWS_OWML GPWS; //as sound source
 
-        public SFEXT_a320_AdvancedGear LeftLadingGear;
-        public SFEXT_a320_AdvancedGear RightLadingGear;
-        public SFEXT_a320_AdvancedGear FrontLadingGear;
-        public DFUNC_a320_Brake Brake;
-
-        public DFUNC_a320_LandingLight LandingLight;
-        public DFUNC_Canopy Canopy;
-
-        public YFI_NavigationReceiver NavigationReceiver1;
-        public YFI_NavigationReceiver NavigationReceiver2;
-        public GPWS_OWML GPWS;
-
-        public DFUNC_ElevatorTrim ElevatorTrim;
+        
         #endregion
 
         #region FWS Warning
@@ -266,7 +251,8 @@ namespace A320VAU.FWS
             #endregion
 
             _activeWarnings = new string[0];
-            ECAMController.SendCustomEvent("UpdateMemo");
+            ECAMController.UpdateMemo();
+            //ECAMController.SendCustomEvent("UpdateMemo");
         }
 
         public void CancleWarning()
