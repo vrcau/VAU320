@@ -12,7 +12,8 @@
         "UdonRadioCommunication.SF.Runtime",
         "VirtualAviationJapan.Virtual-CNS",
         "Varneon.VUdon.ArrayExtensions.Runtime",
-        "UdonSharp.Editor"
+        "UdonSharp.Editor",
+        "VRC.Udon.Editor"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

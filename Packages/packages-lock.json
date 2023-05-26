@@ -251,7 +251,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "e22777de6fcf4ded82db794b609fb92d29c7559a"
+      "hash": "61a01f2fea254a33cb3ccff30561d3a956208ed9"
     },
     "jp.virtualaviation.virtual-cns": {
       "version": "https://github.com/VirtualAviationJapan/Virtual-CNS.git?path=/Packages/jp.virtualaviation.virtual-cns",
