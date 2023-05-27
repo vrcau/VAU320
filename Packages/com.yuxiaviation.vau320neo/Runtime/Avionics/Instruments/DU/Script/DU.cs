@@ -22,7 +22,7 @@ namespace A320VAU.PFD
 
         private void OnEnable()
         {
-            if (inSelftest | isSelftestCompleted | BypassSlefTest) return;
+            if (isSelftestCompleted | inSelftest | BypassSlefTest) return;
             InitDU();
 
             PowerPage.SetActive(!isSelftestCompleted);
@@ -35,7 +35,7 @@ namespace A320VAU.PFD
 
         public void StartFlash()
         {
-            if (!inSelftest | isSelftestCompleted | BypassSlefTest) return;
+            if (isSelftestCompleted | !inSelftest | BypassSlefTest) return;
             
             Debug.Log("DU Start Flash");
             PowerFlashCover.SetActive(true);
@@ -44,7 +44,7 @@ namespace A320VAU.PFD
 
         public void EndFlash()
         {
-            if (!inSelftest | isSelftestCompleted | BypassSlefTest) return;
+            if (isSelftestCompleted | !inSelftest | BypassSlefTest) return;
             
             PowerFlashCover.SetActive(false);
             var selfTestStartDelay = UnityEngine.Random.Range(1f, 2f);
@@ -53,7 +53,7 @@ namespace A320VAU.PFD
 
         public void StartSelftest()
         {
-            if (!inSelftest | isSelftestCompleted | BypassSlefTest) return;
+            if (isSelftestCompleted | !inSelftest | BypassSlefTest) return;
             
             Debug.Log("DU Start Selftest");
             PowerPage.SetActive(false);
@@ -74,7 +74,11 @@ namespace A320VAU.PFD
         public void BypassSelftest()
         {
             InitDU();
-            EndSelftest();
+            Debug.Log("DU Bypass selftest");
+            
+            inSelftest = false;
+            isSelftestCompleted = true;
+            PowerPage.SetActive(false);
         }
 
         public void InitDU()

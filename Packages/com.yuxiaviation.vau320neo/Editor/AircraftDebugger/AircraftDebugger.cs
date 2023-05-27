@@ -210,7 +210,9 @@ namespace A320VAU.Editor.AircraftDebugger
         private void BypassDUsSelfTest()
         {
             foreach (var du in _saccEntity.GetComponentsInChildren<DU>(true))
-                du.EndSelftest();
+            {
+                du.BypassSelftest();
+            }
         }
     }
 
