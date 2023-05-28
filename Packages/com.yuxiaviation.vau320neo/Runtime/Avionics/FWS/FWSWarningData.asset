@@ -212,13 +212,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: TAKEOFF_MEMO
+      Data: APU_BLEED
     - Name: $v
       Entry: 7
       Data: 11|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: TAKEOFF_MEMO
+      Data: APU_BLEED
     - Name: <UserType>k__BackingField
       Entry: 7
       Data: 12|System.RuntimeType, mscorlib
@@ -266,13 +266,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: LANDING_MEMO
+      Data: PARK_BRK
     - Name: $v
       Entry: 7
       Data: 14|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: LANDING_MEMO
+      Data: PARK_BRK
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -314,13 +314,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: APU_BLEED
+      Data: APU_AVAIL
     - Name: $v
       Entry: 7
       Data: 16|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: APU_BLEED
+      Data: APU_AVAIL
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -362,13 +362,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: PARK_BRK
+      Data: BRAKES_HOT
     - Name: $v
       Entry: 7
       Data: 18|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: PARK_BRK
+      Data: BRAKES_HOT
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -410,13 +410,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: APU_AVAIL
+      Data: TAKEOFF_MEMO
     - Name: $v
       Entry: 7
       Data: 20|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: APU_AVAIL
+      Data: TAKEOFF_MEMO
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -458,13 +458,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: BRAKES_HOT
+      Data: LANDING_MEMO
     - Name: $v
       Entry: 7
       Data: 22|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: BRAKES_HOT
+      Data: LANDING_MEMO
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12

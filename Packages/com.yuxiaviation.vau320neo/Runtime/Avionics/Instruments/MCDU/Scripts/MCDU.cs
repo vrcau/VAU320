@@ -1,8 +1,5 @@
 ﻿using UdonSharp;
-using UnityEngine;
 using UnityEngine.UI;
-using VRC.SDKBase;
-using VRC.Udon;
 
 namespace A320VAU.MCDU
 {
@@ -62,19 +59,19 @@ namespace A320VAU.MCDU
 
         #region KeyFunctions
         #region LineSelectKeys
-        public void L1() => ((MCDUPage)CurrentPage).L1();
-        public void L2() => ((MCDUPage)CurrentPage).L2();
-        public void L3() => ((MCDUPage)CurrentPage).L3();
-        public void L4() => ((MCDUPage)CurrentPage).L4();
-        public void L5() => ((MCDUPage)CurrentPage).L5();
-        public void L6() => ((MCDUPage)CurrentPage).L6();
+        public void L1() => CurrentPage.L1();
+        public void L2() => CurrentPage.L2();
+        public void L3() => CurrentPage.L3();
+        public void L4() => CurrentPage.L4();
+        public void L5() => CurrentPage.L5();
+        public void L6() => CurrentPage.L6();
 
-        public void R1() => ((MCDUPage)CurrentPage).R1();
-        public void R2() => ((MCDUPage)CurrentPage).R2();
-        public void R3() => ((MCDUPage)CurrentPage).R3();
-        public void R4() => ((MCDUPage)CurrentPage).R4();
-        public void R5() => ((MCDUPage)CurrentPage).R5();
-        public void R6() => ((MCDUPage)CurrentPage).R6();
+        public void R1() => CurrentPage.R1();
+        public void R2() => CurrentPage.R2();
+        public void R3() => CurrentPage.R3();
+        public void R4() => CurrentPage.R4();
+        public void R5() => CurrentPage.R5();
+        public void R6() => CurrentPage.R6();
         #endregion
         
         #region PageKeys
@@ -94,10 +91,10 @@ namespace A320VAU.MCDU
         #endregion
         
         #region SlewKeys
-        public void Up() => ((MCDUPage)CurrentPage).Up();
-        public void Down() => ((MCDUPage)CurrentPage).Down();
-        public void PrevPage() => ((MCDUPage)CurrentPage).PrevPage();
-        public void NextPage() => ((MCDUPage)CurrentPage).NextPage();
+        public void Up() => CurrentPage.Up();
+        public void Down() => CurrentPage.Down();
+        public void PrevPage() => CurrentPage.PrevPage();
+        public void NextPage() => CurrentPage.NextPage();
         #endregion
 
         #region AlphaNumberKeys
