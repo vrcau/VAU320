@@ -2,6 +2,7 @@
 
 namespace A320VAU.MCDU
 {
+    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class MCDUPage : UdonSharpBehaviour
     {
         public virtual void L1() { }

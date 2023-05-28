@@ -1,4 +1,5 @@
-﻿using UdonSharp;
+﻿using System;
+using UdonSharp;
 using UnityEngine.UI;
 
 namespace A320VAU.MCDU
@@ -19,9 +20,11 @@ namespace A320VAU.MCDU
         public MCDUPage SecFPlnPage;
         public MCDUPage AtcCommPage;
         
-        public readonly MCDUPage McduMenuPage;
+        public MCDUPage McduMenuPage;
 
         #region UI
+
+        public Text titleLineText;
         public Text scratchpadText;
         
         #region Text
@@ -81,6 +84,7 @@ namespace A320VAU.MCDU
         public void Init() => ToPage(InitPage);
         public void Data() => ToPage(DataPage);
         public void FPLN() => ToPage(FPlnPage);
+        public void SecFPLN() => ToPage(SecFPlnPage);
         public void RadNav() => ToPage(RadNavPage);
         public void FuelPred() => ToPage(FuelPredPage);
         public void AtcComm() => ToPage(AtcCommPage);
@@ -159,12 +163,50 @@ namespace A320VAU.MCDU
         }
         #endregion
 
+        private void Start()
+        {
+            ToPage(McduMenuPage);
+        }
+
         public void ToPage(UdonSharpBehaviour page)
         {
             if (page == null) return;
             
+            ClearDisplay();
             CurrentPage = (MCDUPage)page;
             CurrentPage.OnPageInit(this);
+        }
+
+        public void ClearDisplay()
+        {
+            titleLineText.text = "";
+            l1Text.text = "";
+            l2Text.text = "";
+            l3Text.text = "";
+            l4Text.text = "";
+            l5Text.text = "";
+            l6Text.text = "";
+            
+            r1Text.text = "";
+            r2Text.text = "";
+            r3Text.text = "";
+            r4Text.text = "";
+            r5Text.text = "";
+            r6Text.text = "";
+
+            l1Label.text = "";
+            l2Label.text = "";
+            l3Label.text = "";
+            l4Label.text = "";
+            l5Label.text = "";
+            l6Label.text = "";
+            
+            r1Label.text = "";
+            r2Label.text = "";
+            r3Label.text = "";
+            r4Label.text = "";
+            r5Label.text = "";
+            r6Label.text = "";
         }
 
         public void Input(string content)
