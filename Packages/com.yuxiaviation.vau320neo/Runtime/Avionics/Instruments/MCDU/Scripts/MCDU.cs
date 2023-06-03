@@ -1,5 +1,4 @@
-﻿using System;
-using UdonSharp;
+﻿using UdonSharp;
 using UnityEngine.UI;
 
 namespace A320VAU.MCDU
@@ -21,6 +20,8 @@ namespace A320VAU.MCDU
         public MCDUPage AtcCommPage;
         
         public MCDUPage McduMenuPage;
+
+        public string scratchpad;
 
         #region UI
 
@@ -102,7 +103,7 @@ namespace A320VAU.MCDU
         #endregion
 
         #region AlphaNumberKeys
-        public void Number0() => Input("1");
+        public void Number0() => Input("0");
         public void Number1() => Input("1");
         public void Number2() => Input("2");
         public void Number3() => Input("3");
@@ -116,7 +117,20 @@ namespace A320VAU.MCDU
 
         public void PlusOrNeg()
         {
-            // TODO
+            switch (scratchpad[scratchpad.Length - 1])
+            {
+                case '+':
+                    scratchpad = scratchpad.Substring(scratchpad.Length - 1, 1) + "-";
+                    break;
+                case '-':
+                    scratchpad = scratchpad.Substring(scratchpad.Length - 1, 1) + "+";
+                    break;
+                default:
+                    scratchpad += "+";
+                    break;
+            }
+
+            scratchpadText.text = scratchpad;
         }
         #endregion
 
@@ -159,7 +173,20 @@ namespace A320VAU.MCDU
 
         public void CLR()
         {
-            // TODO
+            switch (scratchpad)
+            {
+                case "":
+                    scratchpad = "CLR";
+                    break;
+                case "CLR":
+                    scratchpad = "";
+                    break;
+                default:
+                    scratchpad = scratchpad.Substring(scratchpad.Length - 1, 1);
+                    break;
+            }
+            
+            scratchpadText.text = scratchpad;
         }
         #endregion
 
@@ -211,7 +238,8 @@ namespace A320VAU.MCDU
 
         public void Input(string content)
         {
-            // TODO
+            scratchpad += content;
+            scratchpadText.text = scratchpad;
         }
     }
 }
