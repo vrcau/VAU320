@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: DFUNC_a320_AutoStarter
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: b22b588974baec945b6259192b5389de,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 8f17b6b33ce9b9644a5a7436e2c03e1a,
     type: 2}
   udonAssembly: 
   assemblyError: 
