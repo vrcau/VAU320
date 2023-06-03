@@ -3,7 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - DialFuncOn
+  - MFD
+  - DFUNC
+  - RStickDisplayHighlighter
+  - SFEXT
+  - EnableInVehicle
+  - LStickDisplayHighlighter
+  - DFUNCP
   layers:
   - Default
   - TransparentFX
@@ -28,15 +36,15 @@ TagManager:
   - reserved3
   - reserved4
   - 
+  - Hook
+  - Catapult
+  - AAMTargets
+  - AGMTargets
+  - ReSupply
+  - Racing
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - OnBoardVehicleLayer
   m_SortingLayers:
   - name: Default
     uniqueID: 0
