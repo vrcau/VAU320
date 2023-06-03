@@ -8,6 +8,7 @@
                 <Label class="sub-title not-in-play-mode-warning" text="Enter Play Mode Frist."/>
                 <Label text="Proile" class="sub-title disable-when-not-in-play-mode" />
                 <Label text="WARNING: Profile won't adjust speed and altitude" class="sub-title disable-when-not-in-play-mode" />
+                <Label text="WARNING: You need to click twice to bypass DU selftest" class="sub-title disable-when-not-in-play-mode" />
                 <VisualElement class="row disable-when-not-in-play-mode disable-when-not-in-play-mode">
                     <Button text="Cold and Dark" name="cold-and-dark" />
                     <Button text="ADIRU and APU on" name="adiru-apu-on"/>

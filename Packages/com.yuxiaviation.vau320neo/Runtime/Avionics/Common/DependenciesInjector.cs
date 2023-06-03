@@ -11,6 +11,7 @@ using UdonSharp;
 using UnityEditor;
 using UnityEngine;
 using VirtualAviationJapan;
+using VRC.Udon.Editor;
 using YuxiFlightInstruments.BasicFlightData;
 using YuxiFlightInstruments.Navigation;
 
