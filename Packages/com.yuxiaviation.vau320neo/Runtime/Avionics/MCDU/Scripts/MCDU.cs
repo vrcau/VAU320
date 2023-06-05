@@ -23,6 +23,9 @@ namespace A320VAU.MCDU
 
         public string scratchpad;
 
+        private bool _hasMessage = false;
+        private string _mcduMessage = "";
+
         #region UI
 
         public Text titleLineText;
@@ -117,19 +120,25 @@ namespace A320VAU.MCDU
 
         public void PlusOrNeg()
         {
-            switch (scratchpad[scratchpad.Length - 1])
+            if (scratchpad.Length != 0)
             {
-                case '+':
-                    scratchpad = scratchpad.Substring(scratchpad.Length - 1, 1) + "-";
-                    break;
-                case '-':
-                    scratchpad = scratchpad.Substring(scratchpad.Length - 1, 1) + "+";
-                    break;
-                default:
-                    scratchpad += "+";
-                    break;
+                switch (scratchpad[scratchpad.Length - 1])
+                {
+                    case '+':
+                        scratchpad = scratchpad.Remove(scratchpad.Length - 1) + "-";
+                        break;
+                    case '-':
+                        scratchpad = scratchpad.Remove(scratchpad.Length - 1) + "+";
+                        break;
+                    default:
+                        scratchpad += "+";
+                        break;
+                }
+            } else
+            {
+                scratchpad += "+";
             }
-
+            
             scratchpadText.text = scratchpad;
         }
         #endregion
@@ -173,6 +182,13 @@ namespace A320VAU.MCDU
 
         public void CLR()
         {
+            if (_hasMessage)
+            {
+                scratchpadText.text = scratchpad;
+                _hasMessage = false;
+                return;
+            }
+            
             switch (scratchpad)
             {
                 case "":
@@ -182,7 +198,7 @@ namespace A320VAU.MCDU
                     scratchpad = "";
                     break;
                 default:
-                    scratchpad = scratchpad.Substring(scratchpad.Length - 1, 1);
+                    scratchpad = scratchpad.Remove(scratchpad.Length - 1);
                     break;
             }
             
@@ -234,6 +250,14 @@ namespace A320VAU.MCDU
             r4Label.text = "";
             r5Label.text = "";
             r6Label.text = "";
+        }
+
+        public void SendMCDUMessage(string content)
+        {
+            _hasMessage = true;
+            _mcduMessage = content;
+
+            scratchpadText.text = content;
         }
 
         public void Input(string content)
