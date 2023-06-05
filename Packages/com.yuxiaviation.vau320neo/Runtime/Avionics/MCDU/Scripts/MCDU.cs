@@ -23,6 +23,9 @@ namespace A320VAU.MCDU
 
         public string scratchpad;
 
+        private bool _hasMessage = false;
+        private string _mcduMessage = "";
+
         #region UI
 
         public Text titleLineText;
@@ -179,6 +182,13 @@ namespace A320VAU.MCDU
 
         public void CLR()
         {
+            if (_hasMessage)
+            {
+                scratchpadText.text = scratchpad;
+                _hasMessage = false;
+                return;
+            }
+            
             switch (scratchpad)
             {
                 case "":
@@ -240,6 +250,14 @@ namespace A320VAU.MCDU
             r4Label.text = "";
             r5Label.text = "";
             r6Label.text = "";
+        }
+
+        public void SendMCDUMessage(string content)
+        {
+            _hasMessage = true;
+            _mcduMessage = content;
+
+            scratchpadText.text = content;
         }
 
         public void Input(string content)

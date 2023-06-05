@@ -27,5 +27,25 @@ namespace A320VAU.MCDU
         {
             _mcdu.ToPage(aircraftStatusPage);
         }
+
+        public override void L2()
+        {
+            _mcdu.SendMCDUMessage("INOP");
+        }
+
+        public override void L3()
+        {
+            _mcdu.SendMCDUMessage("INOP");
+        }
+
+        public override void L4()
+        {
+            _mcdu.SendMCDUMessage("INOP");
+        }
+
+        public override void R1()
+        {
+            _mcdu.SendMCDUMessage("INOP");
+        }
     }
 }
