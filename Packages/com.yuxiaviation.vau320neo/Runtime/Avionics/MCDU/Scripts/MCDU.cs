@@ -117,19 +117,25 @@ namespace A320VAU.MCDU
 
         public void PlusOrNeg()
         {
-            switch (scratchpad[scratchpad.Length - 1])
+            if (scratchpad.Length != 0)
             {
-                case '+':
-                    scratchpad = scratchpad.Substring(scratchpad.Length - 1, 1) + "-";
-                    break;
-                case '-':
-                    scratchpad = scratchpad.Substring(scratchpad.Length - 1, 1) + "+";
-                    break;
-                default:
-                    scratchpad += "+";
-                    break;
+                switch (scratchpad[scratchpad.Length - 1])
+                {
+                    case '+':
+                        scratchpad = scratchpad.Remove(scratchpad.Length - 1) + "-";
+                        break;
+                    case '-':
+                        scratchpad = scratchpad.Remove(scratchpad.Length - 1) + "+";
+                        break;
+                    default:
+                        scratchpad += "+";
+                        break;
+                }
+            } else
+            {
+                scratchpad += "+";
             }
-
+            
             scratchpadText.text = scratchpad;
         }
         #endregion
@@ -182,7 +188,7 @@ namespace A320VAU.MCDU
                     scratchpad = "";
                     break;
                 default:
-                    scratchpad = scratchpad.Substring(scratchpad.Length - 1, 1);
+                    scratchpad = scratchpad.Remove(scratchpad.Length - 1);
                     break;
             }
             
