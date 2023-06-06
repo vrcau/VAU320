@@ -362,13 +362,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: BRAKES_HOT
+      Data: TAKEOFF_MEMO
     - Name: $v
       Entry: 7
       Data: 18|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: BRAKES_HOT
+      Data: TAKEOFF_MEMO
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -410,13 +410,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: ENGINE1_FIRE
+      Data: LANDING_MEMO
     - Name: $v
       Entry: 7
       Data: 20|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: ENGINE1_FIRE
+      Data: LANDING_MEMO
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -458,13 +458,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: ENGINE2_FIRE
+      Data: FLAPS_NOT_IN_TAKEOFF_CONFIG
     - Name: $v
       Entry: 7
       Data: 22|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: ENGINE2_FIRE
+      Data: FLAPS_NOT_IN_TAKEOFF_CONFIG
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -506,13 +506,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: DUAL_ENGINE_FAULT
+      Data: PARK_BRAKE_ON
     - Name: $v
       Entry: 7
       Data: 24|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: DUAL_ENGINE_FAULT
+      Data: PARK_BRAKE_ON
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -554,13 +554,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: ENGINE1_SHUT_DOWN
+      Data: BRAKES_HOT
     - Name: $v
       Entry: 7
       Data: 26|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: ENGINE1_SHUT_DOWN
+      Data: BRAKES_HOT
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -602,13 +602,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: ENGINE1_FAIL
+      Data: ENGINE1_FIRE
     - Name: $v
       Entry: 7
       Data: 28|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: ENGINE1_FAIL
+      Data: ENGINE1_FIRE
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -650,13 +650,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: ENGINE2_FAIL
+      Data: ENGINE2_FIRE
     - Name: $v
       Entry: 7
       Data: 30|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: ENGINE2_FAIL
+      Data: ENGINE2_FIRE
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -698,13 +698,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: ENGINE1_EGT_OVERLIMIT
+      Data: DUAL_ENGINE_FAULT
     - Name: $v
       Entry: 7
       Data: 32|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: ENGINE1_EGT_OVERLIMIT
+      Data: DUAL_ENGINE_FAULT
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -746,13 +746,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: ENGINE2_EGT_OVERLIMIT
+      Data: ENGINE1_SHUT_DOWN
     - Name: $v
       Entry: 7
       Data: 34|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: ENGINE2_EGT_OVERLIMIT
+      Data: ENGINE1_SHUT_DOWN
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -794,13 +794,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: ENGINE1_N1_OVERLIMIT
+      Data: ENGINE1_FAIL
     - Name: $v
       Entry: 7
       Data: 36|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: ENGINE1_N1_OVERLIMIT
+      Data: ENGINE1_FAIL
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -842,13 +842,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: ENGINE2_N1_OVERLIMIT
+      Data: ENGINE2_FAIL
     - Name: $v
       Entry: 7
       Data: 38|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: ENGINE2_N1_OVERLIMIT
+      Data: ENGINE2_FAIL
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -890,13 +890,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: ENGINE1_N2_OVERLIMIT
+      Data: ENGINE1_EGT_OVERLIMIT
     - Name: $v
       Entry: 7
       Data: 40|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: ENGINE1_N2_OVERLIMIT
+      Data: ENGINE1_EGT_OVERLIMIT
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -938,13 +938,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: ENGINE2_N2_OVERLIMIT
+      Data: ENGINE2_EGT_OVERLIMIT
     - Name: $v
       Entry: 7
       Data: 42|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: ENGINE2_N2_OVERLIMIT
+      Data: ENGINE2_EGT_OVERLIMIT
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -986,13 +986,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: FLAPS_NOT_IN_TAKEOFF_CONFIG
+      Data: ENGINE1_N1_OVERLIMIT
     - Name: $v
       Entry: 7
       Data: 44|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: FLAPS_NOT_IN_TAKEOFF_CONFIG
+      Data: ENGINE1_N1_OVERLIMIT
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -1034,13 +1034,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: PARK_BRAKE_ON
+      Data: ENGINE2_N1_OVERLIMIT
     - Name: $v
       Entry: 7
       Data: 46|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: PARK_BRAKE_ON
+      Data: ENGINE2_N1_OVERLIMIT
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -1082,13 +1082,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: TAKEOFF_MEMO
+      Data: ENGINE1_N2_OVERLIMIT
     - Name: $v
       Entry: 7
       Data: 48|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: TAKEOFF_MEMO
+      Data: ENGINE1_N2_OVERLIMIT
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12
@@ -1130,13 +1130,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: LANDING_MEMO
+      Data: ENGINE2_N2_OVERLIMIT
     - Name: $v
       Entry: 7
       Data: 50|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: LANDING_MEMO
+      Data: ENGINE2_N2_OVERLIMIT
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 12

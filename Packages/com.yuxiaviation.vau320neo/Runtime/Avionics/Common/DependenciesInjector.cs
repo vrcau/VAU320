@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using A320VAU.Avionics;
 using A320VAU.Brake;
@@ -18,8 +17,7 @@ using YuxiFlightInstruments.Navigation;
 
 namespace A320VAU.Common
 {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
-    public class DependenciesInjector : UdonSharpBehaviour
+    public class DependenciesInjector : MonoBehaviour
     {
         [Header("Aircraft Systems")] public SaccAirVehicle saccAirVehicle;
         public SaccEntity saccEntity;
@@ -45,8 +43,6 @@ namespace A320VAU.Common
         public YFI_NavigationReceiver navigationReceiver2;
         public GPWS_OWML gpws;
 
-        public FMGC.FMGC fmgc;
-
         public AirbusAvionicsTheme airbusAvionicsTheme;
 
         [Header("World")]
@@ -64,18 +60,9 @@ namespace A320VAU.Common
 
         [Header("Engines Dependencies Search Settings")]
         public string leftLadingGearName = "AdvancedGear_L";
+
         public string rightLadingGearName = "AdvancedGear_R";
         public string frontLadingGearName = "AdvancedGear_C";
-
-        private void Start()
-        {
-            navaidDatabase = GameObject.Find(nameof(NavaidDatabase)).GetComponent<NavaidDatabase>();
-        }
-
-        public static DependenciesInjector GetInstance(UdonSharpBehaviour behaviour)
-        {
-            return behaviour.GetComponentInParent<DependenciesInjector>();
-        }
     }
 
 #if !COMPILER_UDONSHARP && UNITY_EDITOR
@@ -92,6 +79,42 @@ namespace A320VAU.Common
             {
                 Setup(injector);
             }
+
+            if (GUILayout.Button("Setup World"))
+            {
+                SetupWorld(injector);
+            }
+
+            if (GUILayout.Button("Inject"))
+            {
+                var behaviours = injector.GetComponentsInChildren<UdonSharpBehaviour>(true);
+                var fields = typeof(DependenciesInjector).GetFields()
+                    .Where(field => field.DeclaringType == typeof(DependenciesInjector) & !field.Name.StartsWith("_"))
+                    .ToArray();
+
+                foreach (var behaviour in behaviours)
+                {
+                    if (behaviour.GetProgramVariable("EntityControl") == null)
+                        behaviour.SetProgramVariable("EntityControl", injector.saccEntity);
+                    
+                    var behaviourFields = behaviour.GetType().GetFields();
+
+                    foreach (var field in fields)
+                    {
+                        var behaviourField = behaviourFields.FirstOrDefault(f => f.Name == field.Name);
+                        
+                        if (behaviourField != null &&
+                            behaviourField.Name == field.Name & behaviourField.FieldType == field.FieldType &&
+                            behaviourField.GetValue(behaviour) == null)
+                            behaviour.SetProgramVariable(field.Name, field.GetValue(injector));  
+                    }
+                }
+            }
+        }
+
+        private static void SetupWorld(DependenciesInjector injector)
+        {
+            injector.navaidDatabase = GameObject.Find(nameof(NavaidDatabase)).GetComponent<NavaidDatabase>();
         }
 
         private static void Setup(DependenciesInjector injector)
@@ -109,9 +132,7 @@ namespace A320VAU.Common
 
             injector.gpws = injector.GetComponentInChildren<GPWS_OWML>(true);
 
-            injector.fmgc = injector.GetComponentInChildren<FMGC.FMGC>(true);
-
-            injector.airbusAvionicsTheme = injector.GetComponentInChildren<AirbusAvionicsTheme>(true);
+            injector.airbusAvionicsTheme = injector.GetComponentInChildren<AirbusAvionicsTheme>();
 
             // Engines
             var engines = injector.GetComponentsInChildren<SFEXT_a320_AdvancedEngine>(true);
