@@ -265,6 +265,7 @@ namespace A320VAU.MCDU
         public void ClearInput()
         {
             scratchpad = "";
+            scratchpadText.text = scratchpad;
         }
 
         public void Input(string content)
