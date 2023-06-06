@@ -1,34 +1,45 @@
-﻿using UdonSharp;
+﻿using System;
+using A320VAU.Common;
+using UdonSharp;
 
 namespace A320VAU.MCDU
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class RadNavPage : MCDUPage
     {
-        public FMGC.FMGC fmgc;
+        private FMGC.FMGC _fmgc;
         private MCDU _mcdu;
-        
+
+        private void Start()
+        {
+            _fmgc = DependenciesInjector.GetInstance(this).fmgc;
+        }
+
         public override void OnPageInit(MCDU mcdu)
         {
             _mcdu = mcdu;
             
             mcdu.titleLineText.text = "RADIO NAV";
-            
-            mcdu.l1Label.text = "VOR1/FREQ";
-            mcdu.l1Text.text = "<color=#30FFFF>[  ]/[  . ]</color>";
-            mcdu.l2Label.text = "CRS";
-            mcdu.l2Text.text = "<color=#30FFFF>[ ]</color>";
-            mcdu.l3Label.text = " LS /FREQ";
-            mcdu.l3Text.text = "<color=#30FFFF>[  ]/[  . ]</color>";
-            mcdu.l4Label.text = "CRS";
-            mcdu.l4Text.text = "<color=#30FFFF>[ ]</color>";
-            mcdu.l5Label.text = "ADF1/FREQ";
-            mcdu.l5Text.text = "<color=#30FFFF>[  ]/[  . ]</color>";
+            UpdateUI();
+        }
 
-            mcdu.r1Label.text = "VOR2/FREQ";
-            mcdu.r1Text.text = "<color=#30FFFF>[  . ]/[  ]</color>";
-            mcdu.r2Label.text = "CRS";
-            mcdu.r2Text.text = "<color=#30FFFF>[ ]</color>";
+        private void UpdateUI()
+        {
+            _mcdu.l1Label.text = "VOR1/FREQ";
+            _mcdu.l1Text.text = "<color=#30FFFF>[  ]/[  . ]</color>";
+            _mcdu.l2Label.text = "CRS";
+            _mcdu.l2Text.text = "<color=#30FFFF>[ ]</color>";
+            _mcdu.l3Label.text = " LS /FREQ";
+            _mcdu.l3Text.text = "<color=#30FFFF>[  ]/[  . ]</color>";
+            _mcdu.l4Label.text = "CRS";
+            _mcdu.l4Text.text = "<color=#30FFFF>[ ]</color>";
+            _mcdu.l5Label.text = "ADF1/FREQ";
+            _mcdu.l5Text.text = "<color=#30FFFF>[  ]/[  . ]</color>";
+
+            _mcdu.r1Label.text = "VOR2/FREQ";
+            _mcdu.r1Text.text = "<color=#30FFFF>[  . ]/[  ]</color>";
+            _mcdu.r2Label.text = "CRS";
+            _mcdu.r2Text.text = "<color=#30FFFF>[ ]</color>";
         }
 
         #region VOR
@@ -51,7 +62,7 @@ namespace A320VAU.MCDU
             
             if (MCDUInputValidationUtils.TryGetFrequency(input, out var frequency))
             {
-                if (fmgc.radNav.SetILSByFrequency(frequency))
+                if (_fmgc.radNav.SetILSByFrequency(frequency))
                 {
                     _mcdu.ClearInput();
                     return;
@@ -63,7 +74,7 @@ namespace A320VAU.MCDU
 
             if (MCDUInputValidationUtils.ValidateNavaid(input))
             {
-                if (fmgc.radNav.SetILSByName(input))
+                if (_fmgc.radNav.SetILSByName(input))
                 {
                     _mcdu.ClearInput();
                     return;
@@ -81,7 +92,7 @@ namespace A320VAU.MCDU
         {
             if (MCDUInputValidationUtils.TryGetCourse(_mcdu.scratchpad, out var course))
             {
-                fmgc.radNav.SetILSCourse(course);
+                _fmgc.radNav.SetILSCourse(course);
                 _mcdu.ClearInput();
                 return;
             }
@@ -97,7 +108,7 @@ namespace A320VAU.MCDU
             
             if (MCDUInputValidationUtils.TryGetFrequency(input, out var frequency))
             {
-                if (fmgc.radNav.SetADFByFrequency(frequency))
+                if (_fmgc.radNav.SetADFByFrequency(frequency))
                 {
                     _mcdu.ClearInput();
                     return;
@@ -109,7 +120,7 @@ namespace A320VAU.MCDU
 
             if (MCDUInputValidationUtils.ValidateNavaid(input))
             {
-                if (fmgc.radNav.SetADFByName(input))
+                if (_fmgc.radNav.SetADFByName(input))
                 {
                     _mcdu.ClearInput();
                     return;
@@ -127,7 +138,7 @@ namespace A320VAU.MCDU
             var input = _mcdu.scratchpad;
             if (MCDUInputValidationUtils.TryGetFrequency(input, out var frequency))
             {
-                if (fmgc.radNav.SetVORByFrequency(index, frequency))
+                if (_fmgc.radNav.SetVORByFrequency(index, frequency))
                 {
                     _mcdu.ClearInput();
                     return;
@@ -139,7 +150,7 @@ namespace A320VAU.MCDU
 
             if (MCDUInputValidationUtils.ValidateNavaid(input))
             {
-                if (fmgc.radNav.SetVORByName(index, input))
+                if (_fmgc.radNav.SetVORByName(index, input))
                 {
                     _mcdu.ClearInput();
                     return;
@@ -156,7 +167,7 @@ namespace A320VAU.MCDU
         {
             if (MCDUInputValidationUtils.TryGetCourse(_mcdu.scratchpad, out var course))
             {
-                fmgc.radNav.SetVORCourse(index, course);
+                _fmgc.radNav.SetVORCourse(index, course);
                 _mcdu.ClearInput();
                 return;
             }
