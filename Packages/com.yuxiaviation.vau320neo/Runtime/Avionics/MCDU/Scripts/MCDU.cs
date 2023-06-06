@@ -1,5 +1,4 @@
 ﻿using UdonSharp;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace A320VAU.MCDU
@@ -22,7 +21,6 @@ namespace A320VAU.MCDU
         
         public MCDUPage McduMenuPage;
 
-        [HideInInspector]
         public string scratchpad;
 
         private bool _hasMessage = false;
@@ -260,11 +258,6 @@ namespace A320VAU.MCDU
             _mcduMessage = content;
 
             scratchpadText.text = content;
-        }
-
-        public void ClearInput()
-        {
-            scratchpad = "";
         }
 
         public void Input(string content)
