@@ -1,4 +1,5 @@
 ﻿
+using A320VAU.Common;
 using EsnyaSFAddons.DFUNC;
 using UdonSharp;
 using UnityEngine;
@@ -13,10 +14,8 @@ namespace A320VAU.Avionics
     public class GPWS_OWML : UdonSharpBehaviour
     {
 
-        public YFI_FlightDataInterface flightData;
-        public LayerMask groundLayers = -1;
-        public QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal;
-        public Transform groundDetector, offsetTransorm;
+        private YFI_FlightDataInterface _flightData;
+        private RadioAltimeter.RadioAltimeter _radioAltimeter;
 
         public AudioSource audioSource;
         public AudioClip bankAngleSound, sinkRateSound, pullUpSound, terrainSound, dontSinkSound, tooLowGearSound, tooLowFlapsSound, tooLowTerrainSound;
@@ -31,34 +30,22 @@ namespace A320VAU.Avionics
         private float lastAlertTime = 0;
         private Rigidbody vehicleRigidbody;
         
-        private float maxRange, seaLevel;
         private SaccAirVehicle airVehicle;
         private DFUNC_Gear gear;
-        private DFUNC_Flaps flaps;
         private DFUNC_AdvancedFlaps advancedFlaps;
 
-        private float enabledTime;
-        private void OnEnable()
-        {
-            enabledTime = Time.time;
-        }
-
-        private float offset;
         private void Start()
         {
+            var injector = DependenciesInjector.GetInstance(this);
+            
             vehicleRigidbody = GetComponentInParent<Rigidbody>();
-            airVehicle = vehicleRigidbody.GetComponentInChildren<SaccAirVehicle>();
-            gear = vehicleRigidbody.GetComponentInChildren<DFUNC_Gear>(true);
-            flaps = vehicleRigidbody.GetComponentInChildren<DFUNC_Flaps>(true);
-            advancedFlaps = vehicleRigidbody.GetComponentInChildren<DFUNC_AdvancedFlaps>(true);
-            flightData = vehicleRigidbody.GetComponentInChildren<YFI_FlightDataInterface>(true);
+            gear = injector.gear;
+            airVehicle = injector.saccAirVehicle;
+            advancedFlaps = injector.flaps;
+            _flightData = injector.flightData;
+            _radioAltimeter = injector.radioAltimeter;
 
             audioSource = GetComponent<AudioSource>();
-            maxRange = 5000f;
-            seaLevel = airVehicle.SeaLevel;
-
-            offset = Vector3.Dot(groundDetector.up, offsetTransorm.position - groundDetector.position);
-
         }
 
         private float radioAltitude, barometlicAltitude, prevBarometlicAltitude;
@@ -73,7 +60,7 @@ namespace A320VAU.Avionics
             var smoothingT = deltaTime / smoothing;
 
             radioAltitude = Mathf.Lerp(radioAltitude, GetRadioAltitude(), smoothingT);
-            barometlicAltitude = Mathf.Lerp(barometlicAltitude, flightData.altitude, smoothingT);
+            barometlicAltitude = Mathf.Lerp(barometlicAltitude, _flightData.altitude, smoothingT);
             var barometricDecendRate = -(barometlicAltitude - prevBarometlicAltitude) / Time.deltaTime * 60;
             prevBarometlicAltitude = barometlicAltitude;
 
@@ -83,9 +70,8 @@ namespace A320VAU.Avionics
 
             var airspeed = velocity.magnitude * 1.94384f;
 
-            var flapsDown = flaps ? flaps.Flaps : false;
             var advancedFlapsDown = advancedFlaps ? advancedFlaps.targetAngle > 0 : false;
-            var anyFlapsDown = !flaps && !advancedFlaps || flapsDown || advancedFlapsDown;
+            var anyFlapsDown = !advancedFlaps || advancedFlapsDown;
             var gearDown = gear ? !gear.GearUp : true;
 
             var landingConfiguration = gearDown && anyFlapsDown;
@@ -124,20 +110,7 @@ namespace A320VAU.Avionics
             PullUpWarning = state == ALERT_PULL_UP || state == ALERT_TERRAIN || state == ALERT_TOO_LOW_TERRAIN || state == ALERT_TOO_LOW_GEAR || state == ALERT_TOO_LOW_FLAPS || state == ALERT_SINK_RATE || state == ALERT_DONT_SINK;
         }
 
-        private float GetRadioAltitude()
-        {
-            var position = groundDetector.position;
-            RaycastHit hit;
-            if (Physics.Raycast(position, Vector3.down, out hit, maxRange * 0.3048f, groundLayers, queryTriggerInteraction))
-            {
-                return (hit.distance + offset) * 3.28084f;
-            }
-            else
-            {
-                // return (position.y - seaLevel + offset) * 3.28084f;
-                return maxRange * 0.3048f;
-            }
-        }
+        private float GetRadioAltitude() => _radioAltimeter.radioAltitude;
 
         private const int ALERT_WINDSHEAR = 1;
         private const int ALERT_PULL_UP = 2;
@@ -306,9 +279,6 @@ namespace A320VAU.Avionics
             PlayOneShot(clip);
             lastAlertTime = time;
         }
-
-        #region Math
-        #endregion
 
         #region Audio Soruce
         public void PlayOneShot(AudioClip clip)

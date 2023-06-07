@@ -185,7 +185,7 @@ namespace A320VAU.ECAM
             var rightMemoText = "";
             var leftMemoText = "";
             var hasWarning = false;
-            foreach (var memo in FWS.FWSWarningMessageDatas)
+            foreach (var memo in FWS.fwsWarningMessageDatas)
             {
                 if (memo.IsVisable)
                 {

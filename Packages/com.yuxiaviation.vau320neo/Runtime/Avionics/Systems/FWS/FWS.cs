@@ -1,5 +1,6 @@
 ﻿using A320VAU.ECAM;
 using A320VAU.Avionics;
+using A320VAU.Common;
 using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
@@ -12,10 +13,8 @@ namespace A320VAU.FWS
     public class FWS : UdonSharpBehaviour
     {
         #region FWS Data (OEB) (Checklist and warnings)
-        [HideInInspector]
-        public FWSWarningMessageData[] FWSWarningMessageDatas;
-        [HideInInspector]
-        public FWSWarningData FWSWarningData;
+        [HideInInspector] public FWSWarningMessageData[] fwsWarningMessageDatas;
+        private FWSWarningData _fwsWarningData;
         #endregion
 
         #region ECAM and Warning Light/Audio
@@ -23,8 +22,6 @@ namespace A320VAU.FWS
         public ECAMDisplay ECAMController;
 
         [HideInInspector]
-        //private AudioSource AudioSource;
-
         public AudioClip Caution; // looking for master warning? check out the FWS gameobject
 
         public GameObject MasterWarningLightCAPT;
@@ -35,11 +32,12 @@ namespace A320VAU.FWS
 
         #region Aircraft Systems
         [Header("Aircraft Systems")]
-        public SaccAirVehicle saccAirVehicle;
-        public SaccEntity saccEntity;
-        public YFI_FlightDataInterface flightData;
+        [HideInInspector] public SaccAirVehicle saccAirVehicle;
+        [HideInInspector] public SaccEntity saccEntity;
+        [HideInInspector] public YFI_FlightDataInterface flightData;
         public ECAMDataInterface equipmentData;
-        public GPWS_OWML gpws; //as sound source
+        [HideInInspector] public GPWS_OWML gpws; //as sound source
+        [HideInInspector] public RadioAltimeter.RadioAltimeter radioAltimeter;
         #endregion
 
         #region FWS Warning
@@ -47,7 +45,6 @@ namespace A320VAU.FWS
         public bool _hasWarningVisableChange = false;
         [HideInInspector]
         public bool _hasWarningDataVisableChange = false;
-        [HideInInspector]
         private string[] _activeWarnings = new string[0];
         #endregion
 
@@ -72,13 +69,20 @@ namespace A320VAU.FWS
 
         private void Start()
         {
-            FWSWarningMessageDatas = GetComponentsInChildren<FWSWarningMessageData>();
-            FWSWarningData = GetComponentInChildren<FWSWarningData>();
+            var injector = DependenciesInjector.GetInstance(this);
+            saccAirVehicle = injector.saccAirVehicle;
+            saccEntity = injector.saccEntity;
+            flightData = injector.flightData;
+            gpws = injector.gpws;
+            radioAltimeter = injector.radioAltimeter;
+            
+            fwsWarningMessageDatas = GetComponentsInChildren<FWSWarningMessageData>();
+            _fwsWarningData = GetComponentInChildren<FWSWarningData>();
         }
 
         private void LateUpdate()
         {
-            var radioAltitude = (float)gpws.GetProgramVariable("radioAltitude");
+            var radioAltitude = radioAltimeter.radioAltitude;
 
             UpdateMinimumCallout(radioAltitude);
             UpdateAltitudeCallout(radioAltitude);
@@ -98,16 +102,16 @@ namespace A320VAU.FWS
 
             if (_lastMinimumCalloutIndex != -1 && minimumCalloutIndex > _lastMinimumCalloutIndex)
             {
-                // HUNDRED ABOVE
-                if (minimumCalloutIndex == 0)
+                switch (minimumCalloutIndex)
                 {
-                    SendCustomEventDelayedSeconds(nameof(CalloutHundredAbove), 1);
-                }
-
-                // MINIMUM
-                if (minimumCalloutIndex == 1)
-                {
-                    SendCustomEventDelayedSeconds(nameof(CalloutMinimum), 1);
+                    // HUNDRED ABOVE
+                    case 0:
+                        SendCustomEventDelayedSeconds(nameof(CalloutHundredAbove), 1);
+                        break;
+                    // MINIMUM
+                    case 1:
+                        SendCustomEventDelayedSeconds(nameof(CalloutMinimum), 1);
+                        break;
                 }
             }
 
@@ -184,27 +188,27 @@ namespace A320VAU.FWS
 
         private void UpdateFWS()
         {
-            var _hasMatserWarning = false;
-            var _hasMatserCaution = false;
-            FWSWarningData.Monitor(this); // the core of the FWS
+            var hasMatserWarning = false;
+            var hasMatserCaution = false;
+            _fwsWarningData.Monitor(this); // the core of the FWS
 
             if (!_hasWarningVisableChange) return; // return if there is nothing need to update
 
             #region Get Updated Warnings and Wanring Level (e.g Master Caution/Warning)
-            foreach (var memo in FWSWarningMessageDatas)
+            foreach (var memo in fwsWarningMessageDatas)
             {
-                if (memo.IsVisable && memo.Type == WarningType.Primary && !contains(_activeWarnings, memo.Id))
+                if (memo.IsVisable && memo.Type == WarningType.Primary && !Contains(_activeWarnings, memo.Id))
                 {
                     switch (memo.Level)
                     {
                         case WarningLevel.Immediate:
-                            _hasMatserWarning = true;
+                            hasMatserWarning = true;
                             break;
                         case WarningLevel.None:
                             // doing nothing
                             break;
                         default:
-                            _hasMatserCaution = true;
+                            hasMatserCaution = true;
                             break;
                     }
                 }
@@ -212,7 +216,7 @@ namespace A320VAU.FWS
             #endregion
 
             #region Warning Light & Sound
-            if (_hasMatserWarning)
+            if (hasMatserWarning)
             {
                 gpws.audioSource.Play();
                 
@@ -226,7 +230,7 @@ namespace A320VAU.FWS
                 gpws.audioSource.Stop();
                 MasterWarningLightCAPT.SetActive(false);
                 MasterWarningLightFO.SetActive(false);
-                if (_hasMatserCaution)
+                if (hasMatserCaution)
                 {
                     MasterCautionLightCAPT.SetActive(true);
                     MasterCautionLightFO.SetActive(true);
@@ -253,7 +257,7 @@ namespace A320VAU.FWS
             MasterCautionLightFO.SetActive(false);
         }
 
-        private bool contains(string[] array, string item)
+        private static bool Contains(string[] array, string item)
         {
             foreach (var temp in array)
             {

@@ -9,6 +9,7 @@ using EsnyaSFAddons.DFUNC;
 using EsnyaSFAddons.SFEXT;
 using SaccFlightAndVehicles;
 using UdonSharp;
+using UdonSharpEditor;
 using UnityEditor;
 using UnityEngine;
 using VirtualAviationJapan;
@@ -33,6 +34,7 @@ namespace A320VAU.Common
 
         public DFUNC_AdvancedFlaps flaps;
 
+        public DFUNC_Gear gear;
         public SFEXT_a320_AdvancedGear leftLadingGear;
         public SFEXT_a320_AdvancedGear rightLadingGear;
         public SFEXT_a320_AdvancedGear frontLadingGear;
@@ -41,9 +43,8 @@ namespace A320VAU.Common
         public DFUNC_a320_LandingLight landingLight;
         public DFUNC_Canopy canopy;
 
-        public YFI_NavigationReceiver navigationReceiver1;
-        public YFI_NavigationReceiver navigationReceiver2;
         public GPWS_OWML gpws;
+        public RadioAltimeter.RadioAltimeter radioAltimeter;
 
         public FMGC.FMGC fmgc;
 
@@ -51,11 +52,6 @@ namespace A320VAU.Common
 
         [Header("World")]
         public NavaidDatabase navaidDatabase;
-
-        [Header("Navigation Receivers Dependencies Search Settings")]
-        public string navigationReceiver1Name = "NaviReciver1";
-
-        public string navigationReceiver2Name = "NaviReciver2";
 
         [Header("Engines Dependencies Search Settings")]
         public string engine1Name = "AdvancedEngineL";
@@ -84,6 +80,8 @@ namespace A320VAU.Common
     {
         public override void OnInspectorGUI()
         {
+            if (UdonSharpGUI.DrawDefaultUdonSharpBehaviourHeader(target)) return;
+            
             var injector = target as DependenciesInjector;
             if (injector == null) return;
 
@@ -108,6 +106,7 @@ namespace A320VAU.Common
             injector.canopy = injector.GetComponentInChildren<DFUNC_Canopy>(true);
 
             injector.gpws = injector.GetComponentInChildren<GPWS_OWML>(true);
+            injector.radioAltimeter = injector.GetComponentInChildren<RadioAltimeter.RadioAltimeter>(true);
 
             injector.fmgc = injector.GetComponentInChildren<FMGC.FMGC>(true);
 
@@ -126,22 +125,9 @@ namespace A320VAU.Common
                     injector.engine2 = engine;
                 }
             }
-
-            // NavigationReceiver
-            var receivers = injector.GetComponentsInChildren<YFI_NavigationReceiver>(true);
-            foreach (var receiver in receivers)
-            {
-                if (receiver.gameObject.name == injector.navigationReceiver1Name)
-                {
-                    injector.navigationReceiver1 = receiver;
-                }
-                else if (receiver.gameObject.name == injector.navigationReceiver2Name)
-                {
-                    injector.navigationReceiver2 = receiver;
-                }
-            }
-
+            
             // Gears
+            injector.gear = injector.GetComponentInChildren<DFUNC_Gear>(true);
             var gears = injector.GetComponentsInChildren<SFEXT_a320_AdvancedGear>(true);
             foreach (var gear in gears)
             {
