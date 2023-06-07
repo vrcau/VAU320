@@ -39,10 +39,8 @@ namespace A320VAU.RadioAltimeter
             {
                 return (hit.distance + _offset) * 3.28084f;
             }
-            else
-            {
-                return _maxRange * 0.3048f;
-            }
+
+            return _maxRange * 0.3048f;
         }
     }
 }
