@@ -1,19 +1,10 @@
-﻿
-using System;
-using A320VAU.Brake;
-using A320VAU.ECAM;
+﻿using A320VAU.ECAM;
 using A320VAU.Avionics;
-using EsnyaSFAddons.DFUNC;
-using EsnyaSFAddons.SFEXT;
 using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
-using A320VAU.DFUNC;
-using VRC.SDKBase;
-using VRC.Udon;
+using UnityEngine.Serialization;
 using YuxiFlightInstruments.BasicFlightData;
-using YuxiFlightInstruments.Navigation;
-using A320VAU.SFEXT;
 
 namespace A320VAU.FWS
 {
@@ -44,13 +35,11 @@ namespace A320VAU.FWS
 
         #region Aircraft Systems
         [Header("Aircraft Systems")]
-        public SaccAirVehicle SaccAirVehicle;
-        public SaccEntity SaccEntity;
-        public YFI_FlightDataInterface FlightData;
-        public ECAMDataInterface EquipmentData;
-        public GPWS_OWML GPWS; //as sound source
-
-        
+        public SaccAirVehicle saccAirVehicle;
+        public SaccEntity saccEntity;
+        public YFI_FlightDataInterface flightData;
+        public ECAMDataInterface equipmentData;
+        public GPWS_OWML gpws; //as sound source
         #endregion
 
         #region FWS Warning
@@ -64,122 +53,128 @@ namespace A320VAU.FWS
 
         #region AltitudeCallout
         [Header("Altitude Callout")]
-        public float[] AltitudeCalloutIndexs = new float[] {
+        public float[] altitudeCalloutIndexs = new float[] {
             2500f, 2000f, 1000f, 500f, 400f, 300f, 200f, 100f, 50f, 40f, 30f, 20f, 10f, 5f
         };
 
-        public AudioClip[] AltitudeCallouts = new AudioClip[14];
+        public AudioClip[] altitudeCallouts = new AudioClip[14];
 
-        public AudioClip RetardCallout;
-        public AudioClip HundredAboveCallout;
-        public AudioClip MininmumCallout;
+        public AudioClip retardCallout;
+        public AudioClip hundredAboveCallout;
+        public AudioClip mininmumCallout;
 
-        public float DecisionHeight = 200f;
+        public float decisionHeight = 200f;
         // public float MinimumDescentAltitude = 200f;
 
-        private int _lastAltitdueCalloutIndex = -1;
-        private int _lastMininmumCalloutIndex = -1;
-        private DateTime _lastCallout = DateTime.Now;
+        private int _lastAltitudeCalloutIndex = -1;
+        private int _lastMinimumCalloutIndex = -1;
         #endregion
 
         private void Start()
         {
             FWSWarningMessageDatas = GetComponentsInChildren<FWSWarningMessageData>();
             FWSWarningData = GetComponentInChildren<FWSWarningData>();
-            //AudioSource = GetComponent<AudioSource>();
         }
 
         private void LateUpdate()
         {
-            var radioAltitude = (float)GPWS.GetProgramVariable("radioAltitude");
+            var radioAltitude = (float)gpws.GetProgramVariable("radioAltitude");
 
-            UpdateMininmumCallout(radioAltitude);
+            UpdateMinimumCallout(radioAltitude);
             UpdateAltitudeCallout(radioAltitude);
             UpdateFWS();
         }
 
         private void OnEnable()
         {
-            _lastAltitdueCalloutIndex = -1;
-            _lastMininmumCalloutIndex = -1;
+            _lastAltitudeCalloutIndex = -1;
+            _lastMinimumCalloutIndex = -1;
         }
 
         #region Mininmum Callout
-        private void UpdateMininmumCallout(float radioAltitude)
+        private void UpdateMinimumCallout(float radioAltitude)
         {
-            var mininmumCalloutIndex = GetMinunmumCalloutIndex(radioAltitude);
+            var minimumCalloutIndex = GetMinimumCalloutIndex(radioAltitude);
 
-            if (_lastMininmumCalloutIndex != -1 && mininmumCalloutIndex > _lastMininmumCalloutIndex)
+            if (_lastMinimumCalloutIndex != -1 && minimumCalloutIndex > _lastMinimumCalloutIndex)
             {
                 // HUNDRED ABOVE
-                if (mininmumCalloutIndex == 0)
+                if (minimumCalloutIndex == 0)
                 {
-                    GPWS.PlayOneShot(HundredAboveCallout);
+                    SendCustomEventDelayedSeconds(nameof(CalloutHundredAbove), 1);
                 }
 
                 // MINIMUM
-                if (mininmumCalloutIndex == 1)
+                if (minimumCalloutIndex == 1)
                 {
-                    GPWS.PlayOneShot(MininmumCallout);
+                    SendCustomEventDelayedSeconds(nameof(CalloutMinimum), 1);
                 }
             }
 
-            _lastMininmumCalloutIndex = mininmumCalloutIndex;
+            _lastMinimumCalloutIndex = minimumCalloutIndex;
         }
 
-        private int GetMinunmumCalloutIndex(float radioAltitude)
+        private void CalloutHundredAbove() => gpws.PlayOneShot(hundredAboveCallout);
+        private void CalloutMinimum() => gpws.PlayOneShot(mininmumCallout);
+
+        private int GetMinimumCalloutIndex(float radioAltitude)
         {
-            if (radioAltitude < DecisionHeight) return 1;
-            if (radioAltitude < (DecisionHeight + 100f)) return 0;
+            if (radioAltitude < decisionHeight) return 1;
+            if (radioAltitude < (decisionHeight + 100f)) return 0;
 
             return -1;
         }
         #endregion
 
         #region Altitude Callout
+        
+        private void CalloutRetard() => gpws.PlayOneShot(retardCallout);
+
+        private float _lastCallout;
         private void UpdateAltitudeCallout(float radioAltitude)
         {
             var altitudeCalloutIndex = GetAltitudeCalloutIndex(radioAltitude);
 
-            if (_lastAltitdueCalloutIndex != -1 && altitudeCalloutIndex > _lastAltitdueCalloutIndex)
+            if (_lastAltitudeCalloutIndex != -1 && altitudeCalloutIndex > _lastAltitudeCalloutIndex)
             {
+                gpws.PlayOneShot(altitudeCallouts[altitudeCalloutIndex]);
+                
                 // RETARD
-                if (altitudeCalloutIndex == 12)
+                if (altitudeCalloutIndex == 10 && saccAirVehicle.ThrottleInput != 0)
                 {
-                    GPWS.PlayOneShot(RetardCallout);
-                }
-                else
-                {
-                    GPWS.PlayOneShot(AltitudeCallouts[altitudeCalloutIndex]);
+                    SendCustomEventDelayedSeconds(nameof(CalloutRetard), 1);
                 }
 
-                _lastCallout = DateTime.Now;
+                _lastCallout = Time.time;
             }
-            else if (altitudeCalloutIndex != _lastAltitdueCalloutIndex)
+            else if (altitudeCalloutIndex != _lastAltitudeCalloutIndex)
             {
-                _lastCallout = DateTime.Now;
+                _lastCallout = Time.time;
             }
             else
             {
                 // Repeat when after 11s (>50ft) / 4s (<50ft)
-                var diff = DateTime.Now - _lastCallout;
-                if (altitudeCalloutIndex != -1 &&
-                (radioAltitude > 50f && diff.TotalSeconds > 11) | (radioAltitude < 50f && diff.TotalMilliseconds < 4) &&
-                Mathf.Abs(radioAltitude - AltitudeCalloutIndexs[altitudeCalloutIndex]) < 10)
+                var diff = Time.time - _lastCallout;
+                var lastCalloutLength = altitudeCallouts[_lastAltitudeCalloutIndex].length;
+                if (!saccAirVehicle.Taxiing && altitudeCalloutIndex != -1 && (
+                        (radioAltitude > 50f && diff > 11f + lastCalloutLength)
+                        ||
+                        (radioAltitude < 50f && diff > 4f + lastCalloutLength)
+                        ) && Mathf.Abs(radioAltitude - altitudeCalloutIndexs[altitudeCalloutIndex]) < 10)
                 {
-                    GPWS.PlayOneShot(AltitudeCallouts[altitudeCalloutIndex]);
-                    _lastCallout = DateTime.Now;
+                    gpws.PlayOneShot(altitudeCallouts[altitudeCalloutIndex]);
+                    _lastCallout = Time.time;
                 }
             }
 
-            _lastAltitdueCalloutIndex = altitudeCalloutIndex;
+            _lastAltitudeCalloutIndex = altitudeCalloutIndex;
         }
 
         private int GetAltitudeCalloutIndex(float radioAltitude)
         {
-            for (int index = AltitudeCalloutIndexs.Length - 1; index != -1; index--)
+            for (int index = altitudeCalloutIndexs.Length - 1; index != -1; index--)
             {
-                if (radioAltitude < AltitudeCalloutIndexs[index])
+                if (radioAltitude < altitudeCalloutIndexs[index])
                     return index;
             }
 
@@ -196,26 +191,21 @@ namespace A320VAU.FWS
             if (!_hasWarningVisableChange) return; // return if there is nothing need to update
 
             #region Get Updated Warnings and Wanring Level (e.g Master Caution/Warning)
-            var newActiveWarnings = new string[_activeWarnings.Length];
             foreach (var memo in FWSWarningMessageDatas)
             {
-                if (memo.IsVisable)
+                if (memo.IsVisable && memo.Type == WarningType.Primary && !contains(_activeWarnings, memo.Id))
                 {
-                    addItem(newActiveWarnings, memo.Id);
-                    if (memo.Type == WarningType.Primary && !contains(_activeWarnings, memo.Id))
+                    switch (memo.Level)
                     {
-                        switch (memo.Level)
-                        {
-                            case WarningLevel.Immediate:
-                                _hasMatserWarning = true;
-                                break;
-                            case WarningLevel.None:
-                                // doing nothing
-                                break;
-                            default:
-                                _hasMatserCaution = true;
-                                break;
-                        }
+                        case WarningLevel.Immediate:
+                            _hasMatserWarning = true;
+                            break;
+                        case WarningLevel.None:
+                            // doing nothing
+                            break;
+                        default:
+                            _hasMatserCaution = true;
+                            break;
                     }
                 }
             }
@@ -224,7 +214,7 @@ namespace A320VAU.FWS
             #region Warning Light & Sound
             if (_hasMatserWarning)
             {
-                GPWS.audioSource.Play();
+                gpws.audioSource.Play();
                 
                 MasterWarningLightCAPT.SetActive(true);
                 MasterWarningLightFO.SetActive(true);
@@ -233,14 +223,14 @@ namespace A320VAU.FWS
             }
             else
             {
-                GPWS.audioSource.Stop();
+                gpws.audioSource.Stop();
                 MasterWarningLightCAPT.SetActive(false);
                 MasterWarningLightFO.SetActive(false);
                 if (_hasMatserCaution)
                 {
                     MasterCautionLightCAPT.SetActive(true);
                     MasterCautionLightFO.SetActive(true);
-                    GPWS.PlayOneShot(Caution);
+                    gpws.PlayOneShot(Caution);
                 }
                 else
                 {
@@ -252,23 +242,15 @@ namespace A320VAU.FWS
 
             _activeWarnings = new string[0];
             ECAMController.UpdateMemo();
-            //ECAMController.SendCustomEvent("UpdateMemo");
         }
 
         public void CancleWarning()
         {
-            GPWS.audioSource.Stop();
+            gpws.audioSource.Stop();
             MasterWarningLightCAPT.SetActive(false);
             MasterWarningLightFO.SetActive(false);
             MasterCautionLightCAPT.SetActive(false);
             MasterCautionLightFO.SetActive(false);
-        }
-
-        private string[] addItem(string[] array, string item)
-        {
-            var newArray = new string[array.Length + 1];
-            newArray[array.Length] = item;
-            return newArray;
         }
 
         private bool contains(string[] array, string item)

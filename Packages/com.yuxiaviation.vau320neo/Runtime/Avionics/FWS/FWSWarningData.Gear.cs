@@ -13,7 +13,7 @@ namespace A320VAU.FWS
         {
             if (BRAKES_HOT.IsVisable)
             {
-                if (FWS.SaccAirVehicle.Taxiing)
+                if (FWS.saccAirVehicle.Taxiing)
                 {
                     // Ground
                     BRAKES_HOT.MessageLine[0].IsMessageVisable = true;
@@ -32,7 +32,7 @@ namespace A320VAU.FWS
                     BRAKES_HOT.MessageLine[2].IsMessageVisable = false;
                     // Air
                     BRAKES_HOT.MessageLine[3].IsMessageVisable = true;
-                    BRAKES_HOT.MessageLine[4].IsMessageVisable = FWS.EquipmentData.GearNose.targetPosition != 1;
+                    BRAKES_HOT.MessageLine[4].IsMessageVisable = FWS.equipmentData.GearNose.targetPosition != 1;
                     BRAKES_HOT.MessageLine[5].IsMessageVisable = true;
                 }
             }

@@ -67,7 +67,7 @@ namespace A320VAU.FMGC
         public bool SetILSByName(string identity)
         {
             var navaidIndex = fmgc.navaidDatabase._FindIndexByIdentity(identity);
-            if (navaidIndex != -1 || !fmgc.navaidDatabase._IsILS(navaidIndex)) return false;
+            if (navaidIndex == -1 || !fmgc.navaidDatabase._IsILS(navaidIndex)) return false;
             
             ILS._SetIndex(navaidIndex);
             return true;

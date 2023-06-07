@@ -46,12 +46,6 @@ namespace A320VAU.ECAM
         public SFEXT_AuxiliaryPowerUnit APUControllor;
         private bool IsAPUStart;
 
-        //1+f的操作交给ecam完成
-
-        [Header("Clock")]
-        public Text HHMMText;
-        public Text SSText;
-
         public Text LeftMemoText;
         public Text RightMemoText;
 
@@ -76,22 +70,21 @@ namespace A320VAU.ECAM
 
         public void LateUpdate()
         {
-            UpdateClock();
             UpdateEngineStatus();
             UpdateFlapStatus();
         }
 
-        private void UpdateClock()
+        private void OnEnable()
         {
-            HHMMText.text = DateTime.UtcNow.ToShortTimeString();
-            SSText.text = DateTime.UtcNow.Second.ToString("D2");
+            UpdateEngineStatus();
+            UpdateFlapStatus(true);
         }
 
-        private void UpdateFlapStatus()
+        private void UpdateFlapStatus(bool forceUpdate = false)
         {
-            if (!AdvancedData.FlapInPosition)//Only Upadte when moving
+            if (forceUpdate || !AdvancedData.FlapInPosition) // Only Upadte when moving
             {
-                flapText.color = AirbusAvionicsTheme.GreenColor;
+                flapText.color = AirbusAvionicsTheme.BlueColor;
                 ECAMAnimator.SetFloat(FLAP_HASH, AdvancedData.FlapRefAngle);
                 switch (AdvancedData.FlapTargetPosition)
                 {
@@ -116,18 +109,11 @@ namespace A320VAU.ECAM
                 }
             }
             else
-                flapText.color = AirbusAvionicsTheme.BlueColor;
+                flapText.color = AirbusAvionicsTheme.GreenColor;
         }
 
         private void UpdateEngineStatus()
         {
-            /*
-            if(AdvancedData.EngineL.gameObject.activeInHierarchy)
-            {
-                Debug.Log("[ECAM Display] EngineDisabled");
-                return;
-            }
-            */
             N1L.text = (AdvancedData.N1LRef * 100).ToString("F1");
             N2L.text = (AdvancedData.N2LRef * 100).ToString("F1");
             EGTL.text = AdvancedData.EGTL.ToString("F0");
@@ -159,7 +145,7 @@ namespace A320VAU.ECAM
             }
             isEng1RunnningLastFarme = AdvancedData.IsEngineLRunning;
 
-            //2发
+            // 2发
             N1R.text = (AdvancedData.N1RRef * 100).ToString("F1");
             N2R.text = (AdvancedData.N2RRef * 100).ToString("F1");
             EGTR.text = AdvancedData.EGTR.ToString("F0");
@@ -174,7 +160,7 @@ namespace A320VAU.ECAM
             ECAMAnimator.SetFloat(ENG2EGT_HASH, AdvancedData.EGTR / EgtMax);
             ECAMAnimator.SetFloat(ENG2N1CMD_HASH, AdvancedData.TargetRefN1R);
 
-            //AVAIL FLAG
+            // AVAIL FLAG
             if (AdvancedData.IsEngineRRunning)
             {
                 if (!isEng2RunnningLastFarme)

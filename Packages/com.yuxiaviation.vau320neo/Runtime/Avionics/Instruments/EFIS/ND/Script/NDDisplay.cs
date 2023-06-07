@@ -1,12 +1,7 @@
-﻿
-using UdonSharp;
+﻿using UdonSharp;
 using UnityEngine;
-using VRC.SDKBase;
-using VRC.Udon;
 using UnityEngine.UI;
 using YuxiFlightInstruments.BasicFlightData;
-using YuxiFlightInstruments.Navigation;
-using System;
 using A320VAU.Common;
 using VirtualAviationJapan;
 
@@ -18,10 +13,8 @@ namespace A320VAU.ND
         [Tooltip("Flight Data Interface")]
         public YFI_FlightDataInterface FlightData;
         [Tooltip("Navi Data1")]
-        //public YFI_NavigationReceiver NaviData1;
         public NavSelector NaviData1;
         [Tooltip("Navi Data2")]
-        //public YFI_NavigationReceiver NaviData2;
         public NavSelector NaviData2;
         public int MainDataSource = 1;
         [Tooltip("仪表的动画控制器")]
@@ -73,9 +66,6 @@ namespace A320VAU.ND
 
         private readonly int HEADING_HASH = Animator.StringToHash("HeadingNormalize");
         private readonly int SLIPANGLE_HASH = Animator.StringToHash("SlipAngleNormalize");
-        private readonly int LOC_HASH = Animator.StringToHash("LOCDeviation");
-        private readonly int GlideSlope_HASH = Animator.StringToHash("GSDeviation");
-        private readonly int LOCHDG_HASH = Animator.StringToHash("LOCHDGNormalize");
 
         void Start()
         {
@@ -96,13 +86,10 @@ namespace A320VAU.ND
 
         private void UpdateNavigation()
         {
-            //VOR1SelectOnly.SetActive(NaviData1.hasBeaconSelected);
-            //VOR2SelectOnly.SetActive(NaviData2.hasBeaconSelected);
-            //NavInfoIndicatior.SetActive(NaviData2.hasBeaconSelected);
-
             VOR1SelectOnly.SetActive(NaviData1.Index >= 0);
             VOR2SelectOnly.SetActive(NaviData2.Index >= 0);
             NavInfoIndicatior.SetActive(NaviData2.Index >= 0);
+            
             //功能：waypoint 更新 右下角距离更新 向台背台（TODO）
             //Waypoint & Navaid indication 先只实现一下Navaid indication模式
             //种类
@@ -129,7 +116,7 @@ namespace A320VAU.ND
                     VOR1Dist.text = NaviData1.HasDME ? (Vector3.Distance(transform.position, GetNavaidPosition(NaviData1)) / 1852.0f).ToString("f2") : "--.-";
                 }
 
-                if (NaviData1.Index >= 0)
+                if (NaviData2.Index >= 0)
                 {
                     VOR2Name.text = NaviData2.Identity;
                     VOR2Dist.text = NaviData2.HasDME ? (Vector3.Distance(transform.position, GetNavaidPosition(NaviData2)) / 1852.0f).ToString("f2") : "--.-";
@@ -150,7 +137,6 @@ namespace A320VAU.ND
 
 
                         line4Text.text = $"<color={AirbusAvionicsTheme.Carmine}>NaviData1.SelectedBeacon.beaconName</color>";
-                        //UpdateILS(navigationReceiver); 由CDI Driver 完成
                     }
                     break;
                 case NDMode.VOR:
@@ -164,62 +150,8 @@ namespace A320VAU.ND
                         line4Text.text = NaviData1.Identity;
                     }
                     break;
-                default:
-                    // Navpoint
-                    break;
             }
         }
-        /*private void UpdateNavigationInfo(YFI_NavigationReceiver navigationReceiver)
-        {
-            if (NDMode != NDMode.PLAN)
-            {
-                if (NaviData1.hasBeaconSelected)
-                {
-                    VOR1Name.text = NaviData1.SelectedBeacon.beaconName;
-                    VOR1Dist.text = (NaviData1.distance * 0.00054f).ToString("f1");
-                }
-
-                if (NaviData2.hasBeaconSelected)
-                {
-                    VOR2Name.text = NaviData2.SelectedBeacon.beaconName;
-                    VOR2Dist.text = (NaviData2.distance * 0.00054f).ToString("f1");
-                }
-            }
-
-            switch (NDMode)
-            {
-                case NDMode.LS:
-                    line1Text.text = $"ILS{MainDataSource}";
-                    if (navigationReceiver.hasBeaconSelected)
-                    {
-                        //频率
-                        line2Text.text =
-                            $"<color={AirbusAvionicsTheme.Carmine}>{navigationReceiver.SelectedBeacon.beaconFrequency.ToString("f2")}</color>";
-                        line3Text.text =
-                            $"CRS <color={AirbusAvionicsTheme.Carmine}>{navigationReceiver.SelectedBeacon.runwayHeading}</color> <color={AirbusAvionicsTheme.Blue}>°</color>";
-
-
-                        line4Text.text = $"<color={AirbusAvionicsTheme.Carmine}>NaviData1.SelectedBeacon.beaconName</color>";
-                        UpdateILS(navigationReceiver);
-                    }
-                    break;
-                case NDMode.VOR:
-                    if (navigationReceiver.hasBeaconSelected)
-                    {
-                        line1Text.text = $"VOR{MainDataSource}";
-                        //频率
-                        line2Text.text = NaviData1.SelectedBeacon.beaconFrequency.ToString("f2");
-                        line3Text.text = "CRS";
-
-                        line4Text.text = NaviData1.SelectedBeacon.beaconName;
-                    }
-                    break;
-                default:
-                    // Navpoint
-                    break;
-            }
-        }
-        */
 
         private void NDModeChanged()
         {
@@ -272,33 +204,10 @@ namespace A320VAU.ND
             IndicatorAnimator.SetFloat(SLIPANGLE_HASH, Mathf.Clamp01((FlightData.SlipAngle + MAXSLIPANGLE) / (MAXSLIPANGLE + MAXSLIPANGLE)));
         }
 
-        private void UpdateILS(YFI_NavigationReceiver navigationReceiver)
-        {
-            var hdg = navigationReceiver.SelectedBeacon.runwayHeading;
-            var LOCHDGNormal = hdg / 360f;
-            IndicatorAnimator.SetFloat(LOCHDG_HASH, LOCHDGNormal);
-
-            var azimuth = navigationReceiver.VORazimuth;
-            float LOCDeviationNormal = Remap01(azimuth, -1.6f, 1.6f);
-            IndicatorAnimator.SetFloat(LOC_HASH, LOCDeviationNormal);
-
-            //GS
-            GSIndicator.SetActive(navigationReceiver.GSCapture);
-            var GSAngle = navigationReceiver.GSAngle;
-            float GSDeviationNormal = Remap01(GSAngle, -0.8f, 0.8f);
-            IndicatorAnimator.SetFloat(GlideSlope_HASH, GSDeviationNormal);
-
-            //Debug.Log($"{LOCHDGNormal} | {LOCDeviationNormal} | {GSDeviationNormal}");
-        }
         private Vector3 GetNavaidPosition(NavSelector navSelector)
         {
             var t = navSelector.NavaidTransform;
             return (t ? t : transform).position;
-        }
-        private float Remap01(float value, float valueMin, float valueMax)
-        {
-            value = Mathf.Clamp01((value - valueMin) / (valueMax - valueMin));
-            return value;
         }
     }
 
