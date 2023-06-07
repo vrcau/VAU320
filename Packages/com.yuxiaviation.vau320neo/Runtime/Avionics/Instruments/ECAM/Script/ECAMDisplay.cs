@@ -46,12 +46,6 @@ namespace A320VAU.ECAM
         public SFEXT_AuxiliaryPowerUnit APUControllor;
         private bool IsAPUStart;
 
-        //1+f的操作交给ecam完成
-
-        [Header("Clock")]
-        public Text HHMMText;
-        public Text SSText;
-
         public Text LeftMemoText;
         public Text RightMemoText;
 
@@ -76,22 +70,14 @@ namespace A320VAU.ECAM
 
         public void LateUpdate()
         {
-            UpdateClock();
             UpdateEngineStatus();
             UpdateFlapStatus();
         }
 
         private void OnEnable()
         {
-            UpdateClock();
             UpdateEngineStatus();
             UpdateFlapStatus(true);
-        }
-
-        private void UpdateClock()
-        {
-            HHMMText.text = DateTime.UtcNow.ToShortTimeString();
-            SSText.text = DateTime.UtcNow.Second.ToString("D2");
         }
 
         private void UpdateFlapStatus(bool forceUpdate = false)
