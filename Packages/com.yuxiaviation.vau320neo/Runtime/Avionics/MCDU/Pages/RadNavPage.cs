@@ -44,11 +44,11 @@ namespace A320VAU.MCDU
             _mcdu.l2Label.text = "CRS";
             _mcdu.l2Text.text = $"<color=#30FFFF>{(_vor1.Index != -1 ? _vor1.Course.ToString("000") : "[ ]")}</color>";
             _mcdu.l3Label.text = " LS /FREQ";
-            _mcdu.l3Text.text = "<color=#30FFFF>[  ]/[  . ]</color>";
+            _mcdu.l3Text.text = $"<color=#30FFFF>{_ils.Identity ?? "[  ]"}/{(_ils.Index != -1 ? _navaidDatabase.frequencies[_ils.Index].ToString("F") : "[  . ]")}</color>";
             _mcdu.l4Label.text = "CRS";
-            _mcdu.l4Text.text = "<color=#30FFFF>[ ]</color>";
+            _mcdu.l4Text.text = $"<color=#30FFFF>{(_ils.Index != -1 ? _ils.Course.ToString("000") : "[ ]")}</color>";
             _mcdu.l5Label.text = "ADF1/FREQ";
-            _mcdu.l5Text.text = "<color=#30FFFF>[  ]/[  . ]</color>";
+            _mcdu.l5Text.text = $"<color=#30FFFF>{_adf.Identity ?? "[  ]"}/{(_adf.Index != -1 ? _navaidDatabase.frequencies[_adf.Index].ToString("F") : "[  . ]")}</color>";
 
             _mcdu.r1Label.text = "VOR2/FREQ";
             _mcdu.r1Text.text = 
