@@ -19,11 +19,9 @@ namespace A320VAU.Avionics
         public Transform groundDetector, offsetTransorm;
 
         public AudioSource audioSource;
-        //public float[] altitudeThresholds = { 5, 10, 20, 30, 40, 50, 100, 200, 400, 500, 1000, 2500 };
         public AudioClip bankAngleSound, sinkRateSound, pullUpSound, terrainSound, dontSinkSound, tooLowGearSound, tooLowFlapsSound, tooLowTerrainSound;
         public float initialClimbThreshold = 1333;
         public float smoothing = 1.0f;
-        public float startDelay = 30;
         public bool PullUpWarning
         {
             private set;
@@ -136,7 +134,7 @@ namespace A320VAU.Avionics
             }
             else
             {
-                //return (position.y - seaLevel + offset) * 3.28084f;
+                // return (position.y - seaLevel + offset) * 3.28084f;
                 return maxRange * 0.3048f;
             }
         }
@@ -315,7 +313,7 @@ namespace A320VAU.Avionics
         #region Audio Soruce
         public void PlayOneShot(AudioClip clip)
         {
-            if (audioSource == null || clip == null || Time.time < enabledTime + startDelay) return;
+            if (audioSource == null || clip == null) return;
 
             audioSource.PlayOneShot(clip);
         }
