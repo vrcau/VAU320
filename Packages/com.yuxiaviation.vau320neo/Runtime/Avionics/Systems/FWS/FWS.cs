@@ -4,7 +4,6 @@ using A320VAU.Common;
 using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
-using UnityEngine.Serialization;
 using YuxiFlightInstruments.BasicFlightData;
 
 namespace A320VAU.FWS
@@ -13,44 +12,51 @@ namespace A320VAU.FWS
     public class FWS : UdonSharpBehaviour
     {
         #region FWS Data (OEB) (Checklist and warnings)
+
         [HideInInspector] public FWSWarningMessageData[] fwsWarningMessageDatas;
         private FWSWarningData _fwsWarningData;
+
         #endregion
 
         #region ECAM and Warning Light/Audio
+
         [Header("ECAM and warning Light/Audio")]
         public ECAMDisplay ECAMController;
 
-        [HideInInspector]
-        public AudioClip Caution; // looking for master warning? check out the FWS gameobject
+        [HideInInspector] public AudioClip Caution; // looking for master warning? check out the FWS gameobject
 
         public GameObject MasterWarningLightCAPT;
         public GameObject MasterWarningLightFO;
         public GameObject MasterCautionLightCAPT;
         public GameObject MasterCautionLightFO;
+
         #endregion
 
         #region Aircraft Systems
-        [Header("Aircraft Systems")]
-        [HideInInspector] public SaccAirVehicle saccAirVehicle;
+
+        [Header("Aircraft Systems")] [HideInInspector]
+        public SaccAirVehicle saccAirVehicle;
+
         [HideInInspector] public SaccEntity saccEntity;
         [HideInInspector] public YFI_FlightDataInterface flightData;
         public ECAMDataInterface equipmentData;
         [HideInInspector] public GPWS_OWML gpws; //as sound source
         [HideInInspector] public RadioAltimeter.RadioAltimeter radioAltimeter;
+
         #endregion
 
         #region FWS Warning
-        [HideInInspector]
-        public bool _hasWarningVisableChange = false;
-        [HideInInspector]
-        public bool _hasWarningDataVisableChange = false;
+
+        [HideInInspector] public bool _hasWarningVisableChange = false;
+        [HideInInspector] public bool _hasWarningDataVisableChange = false;
         private string[] _activeWarnings = new string[0];
+
         #endregion
 
         #region AltitudeCallout
-        [Header("Altitude Callout")]
-        public float[] altitudeCalloutIndexs = new float[] {
+
+        [Header("Altitude Callout")] public float[] altitudeCalloutIndexs = new float[]
+        {
             2500f, 2000f, 1000f, 500f, 400f, 300f, 200f, 100f, 50f, 40f, 30f, 20f, 10f, 5f
         };
 
@@ -65,6 +71,7 @@ namespace A320VAU.FWS
 
         private int _lastAltitudeCalloutIndex = -1;
         private int _lastMinimumCalloutIndex = -1;
+
         #endregion
 
         private void Start()
@@ -75,7 +82,7 @@ namespace A320VAU.FWS
             flightData = injector.flightData;
             gpws = injector.gpws;
             radioAltimeter = injector.radioAltimeter;
-            
+
             fwsWarningMessageDatas = GetComponentsInChildren<FWSWarningMessageData>();
             _fwsWarningData = GetComponentInChildren<FWSWarningData>();
         }
@@ -96,6 +103,7 @@ namespace A320VAU.FWS
         }
 
         #region Mininmum Callout
+
         private void UpdateMinimumCallout(float radioAltitude)
         {
             var minimumCalloutIndex = GetMinimumCalloutIndex(radioAltitude);
@@ -128,13 +136,15 @@ namespace A320VAU.FWS
 
             return -1;
         }
+
         #endregion
 
         #region Altitude Callout
-        
+
         private void CalloutRetard() => gpws.PlayOneShot(retardCallout);
 
         private float _lastCallout;
+
         private void UpdateAltitudeCallout(float radioAltitude)
         {
             var altitudeCalloutIndex = GetAltitudeCalloutIndex(radioAltitude);
@@ -142,7 +152,7 @@ namespace A320VAU.FWS
             if (_lastAltitudeCalloutIndex != -1 && altitudeCalloutIndex > _lastAltitudeCalloutIndex)
             {
                 gpws.PlayOneShot(altitudeCallouts[altitudeCalloutIndex]);
-                
+
                 // RETARD
                 if (altitudeCalloutIndex == 12 && saccAirVehicle.ThrottleInput != 0)
                 {
@@ -164,7 +174,7 @@ namespace A320VAU.FWS
                         (radioAltitude > 50f && diff > 11f + lastCalloutLength)
                         ||
                         (radioAltitude < 50f && diff > 4f + lastCalloutLength)
-                        ) && Mathf.Abs(radioAltitude - altitudeCalloutIndexs[altitudeCalloutIndex]) < 10)
+                    ) && Mathf.Abs(radioAltitude - altitudeCalloutIndexs[altitudeCalloutIndex]) < 10)
                 {
                     gpws.PlayOneShot(altitudeCallouts[altitudeCalloutIndex]);
                     _lastCallout = Time.time;
@@ -184,64 +194,61 @@ namespace A320VAU.FWS
 
             return -1;
         }
+
         #endregion
 
         private void UpdateFWS()
         {
-            var hasMatserWarning = false;
-            var hasMatserCaution = false;
+            var hasMasterWarning = false;
+            var hasMasterCaution = false;
             _fwsWarningData.Monitor(this); // the core of the FWS
 
             if (!_hasWarningVisableChange) return; // return if there is nothing need to update
 
             #region Get Updated Warnings and Wanring Level (e.g Master Caution/Warning)
-            foreach (var memo in fwsWarningMessageDatas)
+
+            if (_hasWarningDataVisableChange)
             {
-                if (memo.IsVisable && memo.Type == WarningType.Primary && !Contains(_activeWarnings, memo.Id))
+                foreach (var memo in fwsWarningMessageDatas)
                 {
-                    switch (memo.Level)
+                    if (memo.IsVisable && memo.Type == WarningType.Primary && !Contains(_activeWarnings, memo.Id))
                     {
-                        case WarningLevel.Immediate:
-                            hasMatserWarning = true;
-                            break;
-                        case WarningLevel.None:
-                            // doing nothing
-                            break;
-                        default:
-                            hasMatserCaution = true;
-                            break;
+                        switch (memo.Level)
+                        {
+                            case WarningLevel.Immediate:
+                                hasMasterWarning = true;
+                                break;
+                            case WarningLevel.None:
+                                // doing nothing
+                                break;
+                            default:
+                                hasMasterCaution = true;
+                                break;
+                        }
                     }
                 }
             }
+
             #endregion
 
             #region Warning Light & Sound
-            if (hasMatserWarning)
+
+            if (hasMasterWarning)
             {
                 gpws.audioSource.Play();
-                
+
                 MasterWarningLightCAPT.SetActive(true);
                 MasterWarningLightFO.SetActive(true);
                 MasterCautionLightCAPT.SetActive(true);
                 MasterCautionLightFO.SetActive(true);
             }
-            else
+            else if (hasMasterCaution)
             {
-                gpws.audioSource.Stop();
-                MasterWarningLightCAPT.SetActive(false);
-                MasterWarningLightFO.SetActive(false);
-                if (hasMatserCaution)
-                {
-                    MasterCautionLightCAPT.SetActive(true);
-                    MasterCautionLightFO.SetActive(true);
-                    gpws.PlayOneShot(Caution);
-                }
-                else
-                {
-                    MasterCautionLightCAPT.SetActive(false);
-                    MasterCautionLightFO.SetActive(false);
-                }
+                MasterCautionLightCAPT.SetActive(true);
+                MasterCautionLightFO.SetActive(true);
+                gpws.PlayOneShot(Caution);
             }
+
             #endregion
 
             _activeWarnings = new string[0];

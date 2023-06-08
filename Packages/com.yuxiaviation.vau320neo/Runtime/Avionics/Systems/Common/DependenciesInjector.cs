@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using A320VAU.Avionics;
+﻿using A320VAU.Avionics;
 using A320VAU.Brake;
 using A320VAU.DFUNC;
+using A320VAU.ECAM;
 using A320VAU.SFEXT;
 using EsnyaSFAddons.DFUNC;
 using EsnyaSFAddons.SFEXT;
@@ -13,9 +11,7 @@ using UdonSharpEditor;
 using UnityEditor;
 using UnityEngine;
 using VirtualAviationJapan;
-using VRC.Udon.Editor;
 using YuxiFlightInstruments.BasicFlightData;
-using YuxiFlightInstruments.Navigation;
 
 namespace A320VAU.Common
 {
@@ -45,6 +41,8 @@ namespace A320VAU.Common
 
         public GPWS_OWML gpws;
         public RadioAltimeter.RadioAltimeter radioAltimeter;
+
+        public ECAMDataInterface equipmentData;
 
         public FMGC.FMGC fmgc;
 
@@ -108,6 +106,8 @@ namespace A320VAU.Common
             injector.gpws = injector.GetComponentInChildren<GPWS_OWML>(true);
             injector.radioAltimeter = injector.GetComponentInChildren<RadioAltimeter.RadioAltimeter>(true);
 
+            injector.equipmentData = injector.GetComponentInChildren<ECAMDataInterface>(true);
+            
             injector.fmgc = injector.GetComponentInChildren<FMGC.FMGC>(true);
 
             injector.airbusAvionicsTheme = injector.GetComponentInChildren<AirbusAvionicsTheme>(true);
