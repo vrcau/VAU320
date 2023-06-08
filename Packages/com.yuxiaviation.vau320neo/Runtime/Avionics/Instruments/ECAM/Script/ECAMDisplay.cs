@@ -66,6 +66,8 @@ namespace A320VAU.ECAM
             eng1AvailFlag.SetActive(false);
             eng2AvailFlag.SetActive(false);
             flapText.text = "0";
+
+            UpdateMemo();
         }
 
         public void LateUpdate()
