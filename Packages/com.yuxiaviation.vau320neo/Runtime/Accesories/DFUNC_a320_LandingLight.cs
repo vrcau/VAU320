@@ -9,7 +9,7 @@ namespace A320VAU.DFUNC
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class DFUNC_a320_LandingLight : UdonSharpBehaviour
     {
-        public new GameObject light;
+        public GameObject lightObj;
         public GameObject Dial_Funcon;
         //public KeyCode desktopKey = KeyCode.F5;
 
@@ -22,7 +22,7 @@ namespace A320VAU.DFUNC
         public void SFEXT_L_EntityStart()
         {
             var entity = GetComponentInParent<SaccEntity>();
-            light.transform.parent = entity.transform;
+            lightObj.transform.parent = entity.transform;
             TurnOff();
         }
 
@@ -83,7 +83,7 @@ namespace A320VAU.DFUNC
         private void SetState(bool value)
         {
 
-            light.SetActive(value);
+            lightObj.SetActive(value);
             if (Dial_Funcon) Dial_Funcon.SetActive(value);
             state = value;
         }

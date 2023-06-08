@@ -7,7 +7,9 @@ using EsnyaSFAddons.DFUNC;
 using EsnyaSFAddons.SFEXT;
 using SaccFlightAndVehicles;
 using UdonSharp;
+#if !COMPILER_UDONSHARP && UNITY_EDITOR
 using UdonSharpEditor;
+#endif
 using UnityEditor;
 using UnityEngine;
 using VirtualAviationJapan;
