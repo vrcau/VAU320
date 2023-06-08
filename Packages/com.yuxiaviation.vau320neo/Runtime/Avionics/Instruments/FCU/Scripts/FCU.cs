@@ -161,6 +161,11 @@ namespace A320VAU.FCU
         public GameObject VerticalSpeedManagedIndicate;
         public GameObject VerticalSpeedModeIndicate;
         public GameObject FPAModeIndicate;
+
+        public GameObject autoPilot1Switch;
+        public GameObject autoPilot2Switch;
+        
+        public GameObject autoThrustSwitch;
         #endregion
 
         public void OnEnable()
@@ -170,6 +175,8 @@ namespace A320VAU.FCU
 
         private void LateUpdate()
         {
+            autoPilot1Switch.SetActive(DFUNC_AltHold.AltHold);
+            autoThrustSwitch.SetActive(DFUNC_Cruise.Cruise);
             TargetSpeed = Convert.ToInt32(DFUNC_Cruise.SetSpeed * 1.9438445f);
         }
 
