@@ -2,11 +2,6 @@ name: Unity Package
 
 on:
   workflow_dispatch:
-  push:
-    branches: main
-    paths: Packages/com.yuxiaviation.vau320neo/package.json
-  pull_request:
-    branches: ["main"]
 
 permissions:
   contents: read
@@ -20,10 +15,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          lfs: true
+        uses: nschloe/action-cached-lfs-checkout@354ab66d93f164e0bb45c8dea38a47f5e5540023
 
       - name: Get version
         id: version
