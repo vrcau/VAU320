@@ -37,6 +37,9 @@ namespace A320VAU.ND.Pages
 
         private void Start()
         {
+            if (flightData == null)  flightData = GetComponentInParent<YFI_FlightDataInterface>();
+            if (saccEntity == null)  saccEntity = GetComponentInParent<SaccEntity>();
+
             _navaidDatabase = GetNavaidDatabase();
             if (_navaidDatabase == null)
             {

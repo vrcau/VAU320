@@ -69,17 +69,13 @@ namespace A320VAU.ND
 
         void Start()
         {
-            
             NDModeChanged();
         }
 
         private void OnEnable()
         {
-            //上电之后首先全部激活一下,避免不在arc页面时切换显示信息而map未被正确初始化导致脚本崩溃
-            ARCPage.SetActive(true);
-            VORPage.SetActive(true);
-            ILSPage.SetActive(true);
-            SendCustomEventDelayedSeconds(nameof(NDModeChanged), 0.5f);
+            NDModeChanged();
+            //SendCustomEventDelayedSeconds(nameof(NDModeChanged), 0.5f);
         }
         private void LateUpdate()
         {
