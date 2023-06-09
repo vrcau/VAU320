@@ -1,5 +1,7 @@
 # What is V320?
 
+**English** | [简体中文](README_ZH.md)
+
 VAU320neo is a SaccFlightAndVehicles based aircraft developed by VRChat Aerospace University. It aims at simulating the Airbus A320neo in real life.  
 You can learn more at [https://yuxiaviation.com/en/v320neo](https://yuxiaviation.com/en/v320neo/).
 
