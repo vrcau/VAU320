@@ -248,7 +248,14 @@ namespace A320VAU.FWS
                 MasterCautionLightFO.SetActive(true);
                 gpws.PlayOneShot(Caution);
             }
-
+            else
+            {
+                gpws.audioSource.Stop();
+                MasterWarningLightCAPT.SetActive(false);
+                MasterWarningLightFO.SetActive(false);
+                MasterCautionLightCAPT.SetActive(false);
+                MasterCautionLightFO.SetActive(false);
+            }
             #endregion
 
             _activeWarnings = new string[0];
