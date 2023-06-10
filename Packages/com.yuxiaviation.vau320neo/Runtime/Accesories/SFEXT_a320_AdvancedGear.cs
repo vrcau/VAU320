@@ -140,8 +140,24 @@ namespace A320VAU.SFEXT
         public void SFEXT_G_Explode() => ResetStatus();
         public void SFEXT_G_RespawnButton() => ResetStatus();
 
-        public void SFEXT_G_GearUp() => targetPosition = 0;
-        public void SFEXT_G_GearDown() => targetPosition = 1;
+        public void SFEXT_G_GearUp()
+        {
+            targetPosition = 0;
+            if (!gameObject.activeInHierarchy)
+            {
+                vehicleAnimator.SetFloat(gearPositionParameterName, targetPosition);
+            }
+            
+        }
+        public void SFEXT_G_GearDown()
+        {
+            targetPosition = 1;
+            if (!gameObject.activeInHierarchy)
+            {
+                 vehicleAnimator.SetFloat(gearPositionParameterName, targetPosition);
+            }
+            
+        }
 
         private Vector3 prevVehiclePosition;
         private bool prevIsGrounded;
