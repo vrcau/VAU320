@@ -154,7 +154,7 @@ namespace A320VAU.FWS
                 gpws.PlayOneShot(altitudeCallouts[altitudeCalloutIndex]);
 
                 // RETARD
-                if (altitudeCalloutIndex == 12 && saccAirVehicle.ThrottleInput != 0)
+                if (altitudeCalloutIndex == 12 && saccAirVehicle.ThrottleInput != 0.375f)
                 {
                     SendCustomEventDelayedSeconds(nameof(CalloutRetard), 1);
                 }
