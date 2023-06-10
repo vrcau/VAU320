@@ -118,7 +118,7 @@ namespace A320VAU.DFUNC
                 if (holdThrottle && Input.GetKeyUp(startKey))
                 {
                     holdThrottle = false;
-                    airVehicle.ThrottleInput = 0;
+                    airVehicle.ThrottleInput = 0.375f;
                 }
 
                 var trigger = selected && Input.GetAxisRaw(triggerAxis) > 0.75f;
