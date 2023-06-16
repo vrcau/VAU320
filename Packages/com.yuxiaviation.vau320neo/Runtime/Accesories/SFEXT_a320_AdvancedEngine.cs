@@ -55,8 +55,9 @@ namespace A320VAU.SFEXT
         public void SFEXT_O_LoseOwnership() => isOwner = false;
 
         public void SFEXT_G_Explode() => ResetStatus();
+        public void SFEXT_O_Explode() => ResetStatus();
         public void SFEXT_G_RespawnButton() => ResetStatus();
-
+        public void SFEXT_O_RespawnButton() => ResetStatus();
         public void SFEXT_L_BoardingEnter() => onBoarding = true;
         public void SFEXT_L_BoardingEnxit() => onBoarding = false;
 

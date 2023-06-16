@@ -72,6 +72,11 @@ namespace A320VAU.ND
             NDModeChanged();
         }
 
+        private void OnEnable()
+        {
+            NDModeChanged();
+            //SendCustomEventDelayedSeconds(nameof(NDModeChanged), 0.5f);
+        }
         private void LateUpdate()
         {
             UpdateHeading();

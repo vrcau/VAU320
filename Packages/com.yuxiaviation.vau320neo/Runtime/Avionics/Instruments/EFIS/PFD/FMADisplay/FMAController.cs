@@ -5,14 +5,14 @@ using UnityEngine.UI;
 using VRC.SDKBase;
 using VRC.Udon;
 using A320VAU.Common;
-
+using A320VAU.ECAM;
 namespace A320VAU.PFD
 {
     public class FMAController : UdonSharpBehaviour
     {
         public SaccEntity SaccEntity;
         public SaccAirVehicle SaccAirVehicle;
-
+        public ECAMDataInterface FlightData;
         public DFUNC_Cruise DFUNC_Cruise;
         public DFUNC_AltHold DFUNC_AltHold;
 
@@ -481,7 +481,7 @@ namespace A320VAU.PFD
 
         public void LateUpdate()
         {
-            ManThrType = SaccAirVehicle.ThrottleInput == 1f ? ManThrType.TOGA : ManThrType.None;
+            ManThrType = FlightData.ThrottleLevelerR == 1f ? ManThrType.TOGA : ManThrType.None;
             if ((bool)DFUNC_AltHold.GetProgramVariable("AltHold"))
             {
                 VerticalActiveMode = "ALT";

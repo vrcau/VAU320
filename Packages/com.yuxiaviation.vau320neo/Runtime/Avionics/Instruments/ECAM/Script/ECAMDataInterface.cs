@@ -151,7 +151,8 @@ namespace A320VAU.ECAM
         public SFEXT_AuxiliaryPowerUnit APU;
         public bool IsAPURunning
         {
-            get => APU.started;
+            //get => APU.started;
+            get => Mathf.Approximately(APU.apuAudioSource.volume, 1.0f);
         }
 
         [Header("Cabin Door")]

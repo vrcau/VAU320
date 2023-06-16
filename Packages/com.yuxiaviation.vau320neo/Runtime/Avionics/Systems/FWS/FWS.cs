@@ -154,7 +154,7 @@ namespace A320VAU.FWS
                 gpws.PlayOneShot(altitudeCallouts[altitudeCalloutIndex]);
 
                 // RETARD
-                if (altitudeCalloutIndex == 12 && saccAirVehicle.ThrottleInput != 0)
+                if (altitudeCalloutIndex == 10 && ECAMController.AdvancedData.ThrottleLevelerR != 0.375f)
                 {
                     SendCustomEventDelayedSeconds(nameof(CalloutRetard), 1);
                 }
@@ -170,13 +170,20 @@ namespace A320VAU.FWS
                 // Repeat when after 11s (>50ft) / 4s (<50ft)
                 var diff = Time.time - _lastCallout;
                 var lastCalloutLength = altitudeCallouts[_lastAltitudeCalloutIndex].length;
-                if (!saccAirVehicle.Taxiing && altitudeCalloutIndex != -1 && (
-                        (radioAltitude > 50f && diff > 11f + lastCalloutLength)
-                        ||
-                        (radioAltitude < 50f && diff > 4f + lastCalloutLength)
-                    ) && Mathf.Abs(radioAltitude - altitudeCalloutIndexs[altitudeCalloutIndex]) < 10)
+                if (!saccAirVehicle.Taxiing)
                 {
-                    gpws.PlayOneShot(altitudeCallouts[altitudeCalloutIndex]);
+                    if (altitudeCalloutIndex != -1 && (
+                            (radioAltitude > 50f && diff > 11f + lastCalloutLength)
+                            ||
+                            (radioAltitude < 50f && diff > 4f + lastCalloutLength)
+                        ) && Mathf.Abs(radioAltitude - altitudeCalloutIndexs[altitudeCalloutIndex]) < 10)
+                    {
+                        gpws.PlayOneShot(altitudeCallouts[altitudeCalloutIndex]);
+                        _lastCallout = Time.time;
+                    }
+                }
+                else
+                {
                     _lastCallout = Time.time;
                 }
             }
@@ -184,8 +191,8 @@ namespace A320VAU.FWS
             _lastAltitudeCalloutIndex = altitudeCalloutIndex;
         }
 
-        private int GetAltitudeCalloutIndex(float radioAltitude)
-        {
+            private int GetAltitudeCalloutIndex(float radioAltitude)
+            {
             for (int index = altitudeCalloutIndexs.Length - 1; index != -1; index--)
             {
                 if (radioAltitude < altitudeCalloutIndexs[index])
@@ -248,7 +255,14 @@ namespace A320VAU.FWS
                 MasterCautionLightFO.SetActive(true);
                 gpws.PlayOneShot(Caution);
             }
-
+            else
+            {
+                gpws.audioSource.Stop();
+                MasterWarningLightCAPT.SetActive(false);
+                MasterWarningLightFO.SetActive(false);
+                MasterCautionLightCAPT.SetActive(false);
+                MasterCautionLightFO.SetActive(false);
+            }
             #endregion
 
             _activeWarnings = new string[0];
