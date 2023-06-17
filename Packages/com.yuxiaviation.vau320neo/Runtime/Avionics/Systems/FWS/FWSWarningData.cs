@@ -20,6 +20,7 @@ namespace A320VAU.FWS
             SetupGear();
             SetupMemo();
             SetupConfig();
+            SetupSpeed();
         }
 
         private FWSWarningMessageData GetWarningMessageData(string id)
@@ -44,6 +45,7 @@ namespace A320VAU.FWS
             MonitorGear();
             MonitorMemo();
             MonitorConfig();
+            MonitorSpeed();
 
             fws._hasWarningDataVisableChange = _hasWarningDataVisibleChange;
             fws._hasWarningVisableChange = _hasWarningVisibleChange;

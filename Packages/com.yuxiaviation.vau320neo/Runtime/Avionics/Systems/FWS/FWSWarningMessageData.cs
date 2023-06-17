@@ -1,6 +1,7 @@
 ﻿
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC.SDKBase;
 using VRC.Udon;
 
@@ -15,7 +16,7 @@ namespace A320VAU.FWS
         public string WarningTitle; // exmaple: ENGINE DUAL FAILURE
         public WarningStyle WarningTitleStyle;
         public WarningColor TitleColor;
-        public bool IsVisable = false;
+        [HideInInspector] public bool isVisable = false;
         public DisplayZone Zone; // on the left or right of the ecam
         public WarningType Type;
         public WarningLevel Level;

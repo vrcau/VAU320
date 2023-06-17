@@ -22,24 +22,24 @@ namespace A320VAU.FWS
             //     if (FWS.saccAirVehicle.Taxiing)
             //     {
             //         // Ground
-            //         BRAKES_HOT.MessageLine[0].IsMessageVisable = true;
-            //         BRAKES_HOT.MessageLine[1].IsMessageVisable = true;
-            //         BRAKES_HOT.MessageLine[2].IsMessageVisable = true;
+            //         BRAKES_HOT.MessageLine[0].IsMessageVisible = true;
+            //         BRAKES_HOT.MessageLine[1].IsMessageVisible = true;
+            //         BRAKES_HOT.MessageLine[2].IsMessageVisible = true;
             //         // Air
-            //         BRAKES_HOT.MessageLine[3].IsMessageVisable = false;
-            //         BRAKES_HOT.MessageLine[4].IsMessageVisable = false;
-            //         BRAKES_HOT.MessageLine[5].IsMessageVisable = false;
+            //         BRAKES_HOT.MessageLine[3].IsMessageVisible = false;
+            //         BRAKES_HOT.MessageLine[4].IsMessageVisible = false;
+            //         BRAKES_HOT.MessageLine[5].IsMessageVisible = false;
             //     }
             //     else
             //     {
             //         // Ground
-            //         BRAKES_HOT.MessageLine[0].IsMessageVisable = false;
-            //         BRAKES_HOT.MessageLine[1].IsMessageVisable = false;
-            //         BRAKES_HOT.MessageLine[2].IsMessageVisable = false;
+            //         BRAKES_HOT.MessageLine[0].IsMessageVisible = false;
+            //         BRAKES_HOT.MessageLine[1].IsMessageVisible = false;
+            //         BRAKES_HOT.MessageLine[2].IsMessageVisible = false;
             //         // Air
-            //         BRAKES_HOT.MessageLine[3].IsMessageVisable = true;
-            //         BRAKES_HOT.MessageLine[4].IsMessageVisable = FWS.equipmentData.GearNose.targetPosition != 1;
-            //         BRAKES_HOT.MessageLine[5].IsMessageVisable = true;
+            //         BRAKES_HOT.MessageLine[3].IsMessageVisible = true;
+            //         BRAKES_HOT.MessageLine[4].IsMessageVisible = FWS.equipmentData.GearNose.targetPosition != 1;
+            //         BRAKES_HOT.MessageLine[5].IsMessageVisible = true;
             //     }
             // }
         }

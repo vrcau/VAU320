@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: FMGCRadNav
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 710fd2a09d777cc428fad825264f1d94,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 1ae0c29cc11786249a8be7a43a13a0e8,
     type: 2}
   udonAssembly: 
   assemblyError: 

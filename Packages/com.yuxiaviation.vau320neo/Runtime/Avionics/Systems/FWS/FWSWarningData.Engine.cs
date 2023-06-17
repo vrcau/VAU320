@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UdonSharp;
-
 
 namespace A320VAU.FWS
 {
@@ -11,19 +8,19 @@ namespace A320VAU.FWS
         private FWSWarningMessageData ENGINE1_FIRE;
         private FWSWarningMessageData ENGINE2_FIRE;
 
-        public FWSWarningMessageData DUAL_ENGINE_FAULT;
+        private FWSWarningMessageData DUAL_ENGINE_FAULT;
 
-        public FWSWarningMessageData ENGINE1_SHUT_DOWN;
+        private FWSWarningMessageData ENGINE1_SHUT_DOWN;
 
-        public FWSWarningMessageData ENGINE1_FAIL;
-        public FWSWarningMessageData ENGINE2_FAIL;
+        private FWSWarningMessageData ENGINE1_FAIL;
+        private FWSWarningMessageData ENGINE2_FAIL;
 
-        public FWSWarningMessageData ENGINE1_EGT_OVERLIMIT;
-        public FWSWarningMessageData ENGINE2_EGT_OVERLIMIT;
-        public FWSWarningMessageData ENGINE1_N1_OVERLIMIT;
-        public FWSWarningMessageData ENGINE2_N1_OVERLIMIT;
-        public FWSWarningMessageData ENGINE1_N2_OVERLIMIT;
-        public FWSWarningMessageData ENGINE2_N2_OVERLIMIT;
+        private FWSWarningMessageData ENGINE1_EGT_OVERLIMIT;
+        private FWSWarningMessageData ENGINE2_EGT_OVERLIMIT;
+        private FWSWarningMessageData ENGINE1_N1_OVERLIMIT;
+        private FWSWarningMessageData ENGINE2_N1_OVERLIMIT;
+        private FWSWarningMessageData ENGINE1_N2_OVERLIMIT;
+        private FWSWarningMessageData ENGINE2_N2_OVERLIMIT;
 
         private void SetupEngine()
         {
@@ -56,132 +53,132 @@ namespace A320VAU.FWS
             var engine2N2 = FWS.equipmentData.N2RRef * 100;
 
             #region ENGIEN FIRE
-            SetWarnVisible(ref ENGINE1_FIRE.IsVisable, FWS.equipmentData.EngineL.fire, true);
-            if (ENGINE1_FIRE.IsVisable)
+            SetWarnVisible(ref ENGINE1_FIRE.isVisable, FWS.equipmentData.EngineL.fire, true);
+            if (ENGINE1_FIRE.isVisable)
             {
-                SetWarnVisible(ref ENGINE1_FIRE.MessageLine[0].IsMessageVisable, !Mathf.Approximately(FWS.saccAirVehicle.ThrottleInput, FWS.equipmentData.EngineL.idlePoint));
-                SetWarnVisible(ref ENGINE1_FIRE.MessageLine[1].IsMessageVisable, FWS.equipmentData.EngineL.fuel);
-                SetWarnVisible(ref ENGINE1_FIRE.MessageLine[2].IsMessageVisable, true);
-                SetWarnVisible(ref ENGINE1_FIRE.MessageLine[3].IsMessageVisable, true);
+                SetWarnVisible(ref ENGINE1_FIRE.MessageLine[0].isMessageVisible, !Mathf.Approximately(FWS.saccAirVehicle.ThrottleInput, FWS.equipmentData.EngineL.idlePoint));
+                SetWarnVisible(ref ENGINE1_FIRE.MessageLine[1].isMessageVisible, FWS.equipmentData.EngineL.fuel);
+                SetWarnVisible(ref ENGINE1_FIRE.MessageLine[2].isMessageVisible, true);
+                SetWarnVisible(ref ENGINE1_FIRE.MessageLine[3].isMessageVisible, true);
             }
 
-            SetWarnVisible(ref ENGINE2_FIRE.IsVisable, FWS.equipmentData.EngineR.fire, true);
-            if (ENGINE2_FIRE.IsVisable)
+            SetWarnVisible(ref ENGINE2_FIRE.isVisable, FWS.equipmentData.EngineR.fire, true);
+            if (ENGINE2_FIRE.isVisable)
             {
-                SetWarnVisible(ref ENGINE2_FIRE.MessageLine[0].IsMessageVisable, !Mathf.Approximately(FWS.saccAirVehicle.ThrottleInput, FWS.equipmentData.EngineR.idlePoint));
-                SetWarnVisible(ref ENGINE2_FIRE.MessageLine[1].IsMessageVisable, FWS.equipmentData.EngineR.fuel);
-                SetWarnVisible(ref ENGINE2_FIRE.MessageLine[2].IsMessageVisable, true);
-                SetWarnVisible(ref ENGINE2_FIRE.MessageLine[3].IsMessageVisable, true);
+                SetWarnVisible(ref ENGINE2_FIRE.MessageLine[0].isMessageVisible, !Mathf.Approximately(FWS.saccAirVehicle.ThrottleInput, FWS.equipmentData.EngineR.idlePoint));
+                SetWarnVisible(ref ENGINE2_FIRE.MessageLine[1].isMessageVisible, FWS.equipmentData.EngineR.fuel);
+                SetWarnVisible(ref ENGINE2_FIRE.MessageLine[2].isMessageVisible, true);
+                SetWarnVisible(ref ENGINE2_FIRE.MessageLine[3].isMessageVisible, true);
             }
             #endregion
 
             #region DUAL ENGINE FAIL
-            SetWarnVisible(ref DUAL_ENGINE_FAULT.IsVisable,
+            SetWarnVisible(ref DUAL_ENGINE_FAULT.isVisable,
                 !FWS.saccAirVehicle.Taxiing && !FWS.equipmentData.IsEngineLRunning &&
                 !FWS.equipmentData.IsEngineRRunning, true);
-            if (DUAL_ENGINE_FAULT.IsVisable)
+            if (DUAL_ENGINE_FAULT.isVisable)
             {
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[0].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[1].IsMessageVisable, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerL, FWS.equipmentData.EngineL.idlePoint));
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[2].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[3].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[4].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[5].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[6].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[7].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[8].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[9].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[10].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[11].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[12].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[13].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[14].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[15].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[16].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[17].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[18].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[19].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[20].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[21].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[22].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[23].IsMessageVisable, true);
-                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[24].IsMessageVisable, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[0].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[1].isMessageVisible, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerL, FWS.equipmentData.EngineL.idlePoint));
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[2].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[3].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[4].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[5].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[6].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[7].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[8].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[9].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[10].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[11].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[12].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[13].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[14].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[15].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[16].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[17].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[18].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[19].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[20].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[21].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[22].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[23].isMessageVisible, true);
+                SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[24].isMessageVisible, true);
             }
             #endregion
 
             #region ENGINE FAIL
-            SetWarnVisible(ref ENGINE1_FAIL.IsVisable, !FWS.saccAirVehicle.Taxiing && !FWS.equipmentData.IsEngineLRunning, true);
-            if (ENGINE1_FAIL.IsVisable)
+            SetWarnVisible(ref ENGINE1_FAIL.isVisable, !FWS.saccAirVehicle.Taxiing && !FWS.equipmentData.IsEngineLRunning, true);
+            if (ENGINE1_FAIL.isVisable)
             {
-                SetWarnVisible(ref ENGINE1_FAIL.MessageLine[0].IsMessageVisable, true);
-                SetWarnVisible(ref ENGINE1_FAIL.MessageLine[1].IsMessageVisable, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerL, FWS.equipmentData.EngineL.idlePoint));
-                SetWarnVisible(ref ENGINE1_FAIL.MessageLine[2].IsMessageVisable, true);
-                SetWarnVisible(ref ENGINE1_FAIL.MessageLine[3].IsMessageVisable, true);
-                SetWarnVisible(ref ENGINE1_FAIL.MessageLine[4].IsMessageVisable, true);
-                SetWarnVisible(ref ENGINE1_FAIL.MessageLine[5].IsMessageVisable, true);
-                SetWarnVisible(ref ENGINE1_FAIL.MessageLine[6].IsMessageVisable, true);
-                SetWarnVisible(ref ENGINE1_FAIL.MessageLine[7].IsMessageVisable, true);
+                SetWarnVisible(ref ENGINE1_FAIL.MessageLine[0].isMessageVisible, true);
+                SetWarnVisible(ref ENGINE1_FAIL.MessageLine[1].isMessageVisible, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerL, FWS.equipmentData.EngineL.idlePoint));
+                SetWarnVisible(ref ENGINE1_FAIL.MessageLine[2].isMessageVisible, true);
+                SetWarnVisible(ref ENGINE1_FAIL.MessageLine[3].isMessageVisible, true);
+                SetWarnVisible(ref ENGINE1_FAIL.MessageLine[4].isMessageVisible, true);
+                SetWarnVisible(ref ENGINE1_FAIL.MessageLine[5].isMessageVisible, true);
+                SetWarnVisible(ref ENGINE1_FAIL.MessageLine[6].isMessageVisible, true);
+                SetWarnVisible(ref ENGINE1_FAIL.MessageLine[7].isMessageVisible, true);
             }
 
-            SetWarnVisible(ref ENGINE2_FAIL.IsVisable, !FWS.saccAirVehicle.Taxiing && !FWS.equipmentData.IsEngineRRunning, true);
-            if (ENGINE2_FAIL.IsVisable)
+            SetWarnVisible(ref ENGINE2_FAIL.isVisable, !FWS.saccAirVehicle.Taxiing && !FWS.equipmentData.IsEngineRRunning, true);
+            if (ENGINE2_FAIL.isVisable)
             {
-                SetWarnVisible(ref ENGINE2_FAIL.MessageLine[0].IsMessageVisable, true);
-                SetWarnVisible(ref ENGINE2_FAIL.MessageLine[1].IsMessageVisable, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerR, FWS.equipmentData.EngineR.idlePoint));
-                SetWarnVisible(ref ENGINE2_FAIL.MessageLine[2].IsMessageVisable, true);
-                SetWarnVisible(ref ENGINE2_FAIL.MessageLine[3].IsMessageVisable, true);
-                SetWarnVisible(ref ENGINE2_FAIL.MessageLine[4].IsMessageVisable, true);
-                SetWarnVisible(ref ENGINE2_FAIL.MessageLine[5].IsMessageVisable, true);
-                SetWarnVisible(ref ENGINE2_FAIL.MessageLine[6].IsMessageVisable, true);
-                SetWarnVisible(ref ENGINE2_FAIL.MessageLine[7].IsMessageVisable, true);
+                SetWarnVisible(ref ENGINE2_FAIL.MessageLine[0].isMessageVisible, true);
+                SetWarnVisible(ref ENGINE2_FAIL.MessageLine[1].isMessageVisible, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerR, FWS.equipmentData.EngineR.idlePoint));
+                SetWarnVisible(ref ENGINE2_FAIL.MessageLine[2].isMessageVisible, true);
+                SetWarnVisible(ref ENGINE2_FAIL.MessageLine[3].isMessageVisible, true);
+                SetWarnVisible(ref ENGINE2_FAIL.MessageLine[4].isMessageVisible, true);
+                SetWarnVisible(ref ENGINE2_FAIL.MessageLine[5].isMessageVisible, true);
+                SetWarnVisible(ref ENGINE2_FAIL.MessageLine[6].isMessageVisible, true);
+                SetWarnVisible(ref ENGINE2_FAIL.MessageLine[7].isMessageVisible, true);
             }
             #endregion
 
             #region EGT Overlimit
-            SetWarnVisible(ref ENGINE1_EGT_OVERLIMIT.IsVisable, FWS.equipmentData.EGTL > 1060f, true);
-            if (ENGINE1_EGT_OVERLIMIT.IsVisable)
+            SetWarnVisible(ref ENGINE1_EGT_OVERLIMIT.isVisable, FWS.equipmentData.EGTL > 1060f, true);
+            if (ENGINE1_EGT_OVERLIMIT.isVisable)
             {
-                SetWarnVisible(ref ENGINE1_EGT_OVERLIMIT.MessageLine[0].IsMessageVisable, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerL, FWS.equipmentData.EngineL.idlePoint));
-                SetWarnVisible(ref ENGINE1_EGT_OVERLIMIT.MessageLine[1].IsMessageVisable, FWS.equipmentData.EngineL.fuel);
+                SetWarnVisible(ref ENGINE1_EGT_OVERLIMIT.MessageLine[0].isMessageVisible, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerL, FWS.equipmentData.EngineL.idlePoint));
+                SetWarnVisible(ref ENGINE1_EGT_OVERLIMIT.MessageLine[1].isMessageVisible, FWS.equipmentData.EngineL.fuel);
             }
 
-            SetWarnVisible(ref ENGINE2_EGT_OVERLIMIT.IsVisable, FWS.equipmentData.EGTR > 1060f, true);
-            if (ENGINE2_EGT_OVERLIMIT.IsVisable)
+            SetWarnVisible(ref ENGINE2_EGT_OVERLIMIT.isVisable, FWS.equipmentData.EGTR > 1060f, true);
+            if (ENGINE2_EGT_OVERLIMIT.isVisable)
             {
-                SetWarnVisible(ref ENGINE2_EGT_OVERLIMIT.MessageLine[0].IsMessageVisable, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerR, FWS.equipmentData.EngineR.idlePoint));
-                SetWarnVisible(ref ENGINE2_EGT_OVERLIMIT.MessageLine[1].IsMessageVisable, FWS.equipmentData.EngineR.fuel);
+                SetWarnVisible(ref ENGINE2_EGT_OVERLIMIT.MessageLine[0].isMessageVisible, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerR, FWS.equipmentData.EngineR.idlePoint));
+                SetWarnVisible(ref ENGINE2_EGT_OVERLIMIT.MessageLine[1].isMessageVisible, FWS.equipmentData.EngineR.fuel);
             }
             #endregion
 
             #region N1 OVERLIMIT
-            SetWarnVisible(ref ENGINE1_N1_OVERLIMIT.IsVisable, engine1N1 > 100f, true);
-            if (ENGINE1_N1_OVERLIMIT.IsVisable)
+            SetWarnVisible(ref ENGINE1_N1_OVERLIMIT.isVisable, engine1N1 > 100f, true);
+            if (ENGINE1_N1_OVERLIMIT.isVisable)
             {
-                SetWarnVisible(ref ENGINE1_N1_OVERLIMIT.MessageLine[0].IsMessageVisable, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerL, FWS.equipmentData.EngineL.idlePoint));
-                SetWarnVisible(ref ENGINE1_N1_OVERLIMIT.MessageLine[1].IsMessageVisable, FWS.equipmentData.EngineL.fuel);
+                SetWarnVisible(ref ENGINE1_N1_OVERLIMIT.MessageLine[0].isMessageVisible, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerL, FWS.equipmentData.EngineL.idlePoint));
+                SetWarnVisible(ref ENGINE1_N1_OVERLIMIT.MessageLine[1].isMessageVisible, FWS.equipmentData.EngineL.fuel);
             }
 
-            SetWarnVisible(ref ENGINE2_N1_OVERLIMIT.IsVisable, engine2N1 > 100f, true);
-            if (ENGINE2_N1_OVERLIMIT.IsVisable)
+            SetWarnVisible(ref ENGINE2_N1_OVERLIMIT.isVisable, engine2N1 > 100f, true);
+            if (ENGINE2_N1_OVERLIMIT.isVisable)
             {
-                SetWarnVisible(ref ENGINE2_N1_OVERLIMIT.MessageLine[0].IsMessageVisable, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerR, FWS.equipmentData.EngineR.idlePoint));
-                SetWarnVisible(ref ENGINE2_N1_OVERLIMIT.MessageLine[1].IsMessageVisable, FWS.equipmentData.EngineR.fuel);
+                SetWarnVisible(ref ENGINE2_N1_OVERLIMIT.MessageLine[0].isMessageVisible, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerR, FWS.equipmentData.EngineR.idlePoint));
+                SetWarnVisible(ref ENGINE2_N1_OVERLIMIT.MessageLine[1].isMessageVisible, FWS.equipmentData.EngineR.fuel);
             }
             #endregion
 
             #region N2 OVERLIMIT
-            SetWarnVisible(ref ENGINE1_N2_OVERLIMIT.IsVisable, engine1N2 > 100f, true);
-            if (ENGINE1_N2_OVERLIMIT.IsVisable)
+            SetWarnVisible(ref ENGINE1_N2_OVERLIMIT.isVisable, engine1N2 > 100f, true);
+            if (ENGINE1_N2_OVERLIMIT.isVisable)
             {
-                SetWarnVisible(ref ENGINE1_N2_OVERLIMIT.MessageLine[0].IsMessageVisable, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerL, FWS.equipmentData.EngineL.idlePoint));
-                SetWarnVisible(ref ENGINE1_N2_OVERLIMIT.MessageLine[1].IsMessageVisable, FWS.equipmentData.EngineL.fuel);
+                SetWarnVisible(ref ENGINE1_N2_OVERLIMIT.MessageLine[0].isMessageVisible, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerL, FWS.equipmentData.EngineL.idlePoint));
+                SetWarnVisible(ref ENGINE1_N2_OVERLIMIT.MessageLine[1].isMessageVisible, FWS.equipmentData.EngineL.fuel);
             }
 
-            SetWarnVisible(ref ENGINE2_N2_OVERLIMIT.IsVisable, engine2N2 > 100f, true);
-            if (ENGINE2_N2_OVERLIMIT.IsVisable)
+            SetWarnVisible(ref ENGINE2_N2_OVERLIMIT.isVisable, engine2N2 > 100f, true);
+            if (ENGINE2_N2_OVERLIMIT.isVisable)
             {
-                SetWarnVisible(ref ENGINE2_N2_OVERLIMIT.MessageLine[0].IsMessageVisable, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerR, FWS.equipmentData.EngineR.idlePoint));
-                SetWarnVisible(ref ENGINE2_N2_OVERLIMIT.MessageLine[1].IsMessageVisable, FWS.equipmentData.EngineR.fuel);
+                SetWarnVisible(ref ENGINE2_N2_OVERLIMIT.MessageLine[0].isMessageVisible, !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerR, FWS.equipmentData.EngineR.idlePoint));
+                SetWarnVisible(ref ENGINE2_N2_OVERLIMIT.MessageLine[1].isMessageVisible, FWS.equipmentData.EngineR.fuel);
             }
             #endregion
 
@@ -190,11 +187,11 @@ namespace A320VAU.FWS
             // {
             //     if (!FWS.Engine1.starter)
             //     {
-            //         setWarningMessageVisableValue(ref ENGINE1_SHUT_DOWN.MessageLine[0].IsMessageVisable, false);
-            //         setWarningMessageVisableValue(ref ENGINE1_SHUT_DOWN.MessageLine[1].IsMessageVisable, false);
-            //         setWarningMessageVisableValue(ref ENGINE1_SHUT_DOWN.MessageLine[2].IsMessageVisable, false);
-            //         setWarningMessageVisableValue(ref ENGINE1_SHUT_DOWN.MessageLine[3].IsMessageVisable, true);
-            //         setWarningMessageVisableValue(ref ENGINE1_SHUT_DOWN.MessageLine[4].IsMessageVisable, true);
+            //         setWarningMessageVisableValue(ref ENGINE1_SHUT_DOWN.MessageLine[0].IsMessageVisible, false);
+            //         setWarningMessageVisableValue(ref ENGINE1_SHUT_DOWN.MessageLine[1].IsMessageVisible, false);
+            //         setWarningMessageVisableValue(ref ENGINE1_SHUT_DOWN.MessageLine[2].IsMessageVisible, false);
+            //         setWarningMessageVisableValue(ref ENGINE1_SHUT_DOWN.MessageLine[3].IsMessageVisible, true);
+            //         setWarningMessageVisableValue(ref ENGINE1_SHUT_DOWN.MessageLine[4].IsMessageVisible, true);
             //     }
             // }
         }

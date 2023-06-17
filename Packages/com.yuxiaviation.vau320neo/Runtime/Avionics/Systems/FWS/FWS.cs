@@ -218,7 +218,7 @@ namespace A320VAU.FWS
             {
                 foreach (var memo in fwsWarningMessageDatas)
                 {
-                    if (memo.IsVisable && memo.Type == WarningType.Primary && !Contains(_activeWarnings, memo.Id))
+                    if (memo.isVisable && memo.Type == WarningType.Primary && !Contains(_activeWarnings, memo.Id))
                     {
                         switch (memo.Level)
                         {
