@@ -54,8 +54,6 @@ namespace A320VAU.ND.Pages
 
         private void InstantiateMarkers(int range, EFISVisibilityType efisVisibilityType)
         {
-            VLogger.Info($"EFISVisibilityType: {efisVisibilityType}");
-            
             Range = range;
             VisibilityType = efisVisibilityType;
             scale = uiRadius / (range * 926.0f);
@@ -63,7 +61,7 @@ namespace A320VAU.ND.Pages
             foreach (var marker in _markers) Destroy(marker);
             _markers = new GameObject[0];
             
-            for (int index = 0; index < _navaidDatabase.identities.Length; index++)
+            for (var index = 0; index < _navaidDatabase.identities.Length; index++)
             {
                 var type = (NavaidCapability)_navaidDatabase.capabilities[index];
                 if (type == NavaidCapability.ILS) break;
@@ -93,7 +91,7 @@ namespace A320VAU.ND.Pages
             }
 
             if (efisVisibilityType != EFISVisibilityType.WPT && efisVisibilityType != EFISVisibilityType.APPT) return;
-            for (int index = 0; index < _navaidDatabase.waypointIdentities.Length; index ++)
+            for (var index = 0; index < _navaidDatabase.waypointIdentities.Length; index ++)
             {
                 var identity = _navaidDatabase.waypointIdentities[index];
                 var waypointTransform = _navaidDatabase.waypointTransforms[index];
@@ -143,29 +141,15 @@ namespace A320VAU.ND.Pages
         
         private void UpdateMarkerRotations(GameObject[] markers, Quaternion rotation)
         {
-            for (var i = 0; i < markers.Length; i++)
+            foreach (var marker in markers)
             {
-                var marker = markers[i];
                 if (marker == null) continue;
                 marker.transform.localRotation = rotation;
             }
-
         }
 
-        public void SetRange(int range) => InstantiateMarkers(range, GetVisibilityType());
+        public void SetRange(int range) => InstantiateMarkers(range, VisibilityType);
         public void SetVisibilityType(EFISVisibilityType visibilityType) => InstantiateMarkers(Range, visibilityType);
-        public void ToggleVisibilityTypeCSTR() => ToggleVisibilityType(EFISVisibilityType.CSTR);
-        public void ToggleVisibilityTypeWPT() => ToggleVisibilityType(EFISVisibilityType.WPT);
-        public void ToggleVisibilityTypeVORD() => ToggleVisibilityType(EFISVisibilityType.VORDME);
-        public void ToggleVisibilityTypeNDB() => ToggleVisibilityType(EFISVisibilityType.NDB);
-        public void ToggleVisibilityTypeAPPT() => ToggleVisibilityType(EFISVisibilityType.APPT);
-
-        private void ToggleVisibilityType(EFISVisibilityType type)
-        {
-            SetVisibilityType(VisibilityType == type ? EFISVisibilityType.NONE : type);
-        }
-        
-        public EFISVisibilityType GetVisibilityType() => (EFISVisibilityType)VisibilityType;
 
         private NavaidDatabase GetNavaidDatabase()
         {

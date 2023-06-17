@@ -20,14 +20,14 @@ namespace A320VAU.FWS
                 Mathf.Approximately(FWS.equipmentData.ThrottleLevelerR, 1)&& 
                 FWS.saccAirVehicle.Taxiing)
             {
-                SetWarnVisible(ref FLAPS_NOT_IN_TAKEOFF_CONFIG.IsVisable,
+                SetWarnVisible(ref FLAPS_NOT_IN_TAKEOFF_CONFIG.isVisable,
                     !(FWS.equipmentData.Flap.detentIndex == 1 || FWS.equipmentData.Flap.detentIndex == 2), true);
-                SetWarnVisible(ref PARK_BRAKE_ON.IsVisable, FWS.equipmentData.Brake.ParkBreakSet, true);
+                SetWarnVisible(ref PARK_BRAKE_ON.isVisable, FWS.equipmentData.Brake.ParkBreakSet, true);
             }
             else
             {
-                SetWarnVisible(ref FLAPS_NOT_IN_TAKEOFF_CONFIG.IsVisable, false, true);
-                SetWarnVisible(ref PARK_BRAKE_ON.IsVisable, false, true);
+                SetWarnVisible(ref FLAPS_NOT_IN_TAKEOFF_CONFIG.isVisable, false, true);
+                SetWarnVisible(ref PARK_BRAKE_ON.isVisable, false, true);
             }
         }
     }

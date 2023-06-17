@@ -1,8 +1,5 @@
-﻿
-using UdonSharp;
+﻿using UdonSharp;
 using UnityEngine;
-using VRC.SDKBase;
-using VRC.Udon;
 
 namespace A320VAU.FWS
 {
@@ -11,6 +8,6 @@ namespace A320VAU.FWS
     {
         public WarningColor MessageColor;
         public string MessageText;
-        public bool IsMessageVisable;
+        [HideInInspector] public bool isMessageVisible;
     }
 }

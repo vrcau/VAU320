@@ -1,9 +1,12 @@
-﻿using UdonSharp;
+﻿using System;
+using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
 using YuxiFlightInstruments.BasicFlightData;
 using A320VAU.Common;
+using A320VAU.ND.Pages;
 using VirtualAviationJapan;
+// ReSharper disable UnusedMember.Global
 
 namespace A320VAU.ND
 {
@@ -24,6 +27,7 @@ namespace A320VAU.ND
         [Tooltip("一些罗盘动画起始角度并不为0")]
         public float HDGoffset = 0;
 
+        #region UI Elements
         [Header("UI element")]
         public Text TASText;
         public Text GSText;
@@ -44,11 +48,25 @@ namespace A320VAU.ND
         public GameObject NavInfoIndicatior;
 
         public GameObject GSIndicator;
+        #endregion
+
+        #region EFIS
+        [Header("EFIS Status Display")]
+        public GameObject cstr;
+        public GameObject waypoint;
+        public GameObject vordme;
+        public GameObject ndb;
+        public GameObject airport;
 
         [Header("Pages")]
         public GameObject ARCPage;
         public GameObject VORPage;
         public GameObject ILSPage;
+
+        private EFISVisibilityType _efisVisibilityType;
+        #endregion
+
+        private MapDisplay[] _mapDisplays;
 
         [FieldChangeCallback(nameof(NDMode))] public NDMode _ndMode;
         public NDMode NDMode
@@ -64,19 +82,24 @@ namespace A320VAU.ND
             }
         }
 
+        #region AnimationHash
         private readonly int HEADING_HASH = Animator.StringToHash("HeadingNormalize");
         private readonly int SLIPANGLE_HASH = Animator.StringToHash("SlipAngleNormalize");
+        #endregion
 
-        void Start()
+        private void Start()
         {
             NDModeChanged();
+            
+            _mapDisplays = GetComponentsInChildren<MapDisplay>(true);
         }
 
         private void OnEnable()
         {
             NDModeChanged();
-            //SendCustomEventDelayedSeconds(nameof(NDModeChanged), 0.5f);
         }
+
+        #region Update
         private void LateUpdate()
         {
             UpdateHeading();
@@ -86,9 +109,20 @@ namespace A320VAU.ND
 
             //导航更新
             UpdateNavigation();
-
+        }
+        
+        private void UpdateHeading()
+        {
+            float HeadingAngle = FlightData.magneticHeading;
+            IndicatorAnimator.SetFloat(HEADING_HASH, (HeadingAngle - HDGoffset) / 360f);
         }
 
+        private void UpdateSlip()
+        {
+            IndicatorAnimator.SetFloat(SLIPANGLE_HASH, Mathf.Clamp01((FlightData.SlipAngle + MAXSLIPANGLE) / (MAXSLIPANGLE + MAXSLIPANGLE)));
+        }
+        
+        #region Navaid
         private void UpdateNavigation()
         {
             VOR1SelectOnly.SetActive(NaviData1.Index >= 0);
@@ -157,7 +191,16 @@ namespace A320VAU.ND
                     break;
             }
         }
+        
+        private Vector3 GetNavaidPosition(NavSelector navSelector)
+        {
+            var t = navSelector.NavaidTransform;
+            return (t ? t : transform).position;
+        }
+        #endregion
+        #endregion
 
+        #region Navigation Display Pages
         private void NDModeChanged()
         {
             ARCPage.SetActive(false);
@@ -194,26 +237,60 @@ namespace A320VAU.ND
         public void NDPageChangeLocal()
         {
             Debug.Log("OnNDPageChange");
-            //for one deriction
+            // for one deriction
             NDMode = (NDMode)(((int)NDMode + 1)%5);
         }
+        #endregion
 
-        private void UpdateHeading()
+        #region EFIS
+        private void SetVisibilityType(EFISVisibilityType visibilityType)
         {
-            float HeadingAngle = FlightData.magneticHeading;
-            IndicatorAnimator.SetFloat(HEADING_HASH, (HeadingAngle - HDGoffset) / 360f);
+            _efisVisibilityType = visibilityType;
+            foreach (var mapDisplay in _mapDisplays)
+                mapDisplay.SetVisibilityType(visibilityType);
+
+            ResetEFIS();
+            switch (visibilityType)
+            {
+                case EFISVisibilityType.CSTR:
+                    cstr.SetActive(true);
+                    break;
+                case EFISVisibilityType.WPT:
+                    waypoint.SetActive(true);
+                    break;
+                case EFISVisibilityType.VORDME:
+                    vordme.SetActive(true);
+                    break;
+                case EFISVisibilityType.NDB:
+                    ndb.SetActive(true);
+                    break;
+                case EFISVisibilityType.APPT:
+                    airport.SetActive(true);
+                    break;
+            }
+        }
+        
+        // For TouchSwitch Event
+        public void ToggleVisibilityTypeCSTR() => ToggleVisibilityType(EFISVisibilityType.CSTR);
+        public void ToggleVisibilityTypeWPT() => ToggleVisibilityType(EFISVisibilityType.WPT);
+        public void ToggleVisibilityTypeVORD() => ToggleVisibilityType(EFISVisibilityType.VORDME);
+        public void ToggleVisibilityTypeNDB() => ToggleVisibilityType(EFISVisibilityType.NDB);
+        public void ToggleVisibilityTypeAPPT() => ToggleVisibilityType(EFISVisibilityType.APPT);
+
+        private void ToggleVisibilityType(EFISVisibilityType type)
+        {
+            SetVisibilityType(_efisVisibilityType == type ? EFISVisibilityType.NONE : type);
         }
 
-        private void UpdateSlip()
+        private void ResetEFIS()
         {
-            IndicatorAnimator.SetFloat(SLIPANGLE_HASH, Mathf.Clamp01((FlightData.SlipAngle + MAXSLIPANGLE) / (MAXSLIPANGLE + MAXSLIPANGLE)));
+            cstr.SetActive(false);
+            waypoint.SetActive(false);
+            vordme.SetActive(false);
+            ndb.SetActive(false);
+            airport.SetActive(false);
         }
-
-        private Vector3 GetNavaidPosition(NavSelector navSelector)
-        {
-            var t = navSelector.NavaidTransform;
-            return (t ? t : transform).position;
-        }
+        #endregion
     }
 
     public enum NDMode

@@ -189,7 +189,7 @@ namespace A320VAU.ECAM
             var hasWarning = false;
             foreach (var memo in FWS.fwsWarningMessageDatas)
             {
-                if (memo.IsVisable)
+                if (memo.isVisable)
                 {
                     switch (memo.Type)
                     {
@@ -230,7 +230,7 @@ namespace A320VAU.ECAM
                                 var lastLineLength = 0;
                                 foreach (var messageLine in memo.MessageLine)
                                 {
-                                    if (messageLine.IsMessageVisable)
+                                    if (messageLine.isMessageVisible)
                                     {
                                         leftMemoText += $"<color={getColorHexByWarningColor(messageLine.MessageColor)}>{messageLine.MessageText}</color>";
                                         // Warp when a single line text length >= 24
