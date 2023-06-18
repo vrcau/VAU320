@@ -165,36 +165,42 @@ namespace A320VAU.Editor.AircraftDebugger
                     SetBattery(false);
                     SetFlaps(0);
                     SetGear(true);
+                    SetEngineStarted(false);
                     break;
                 case AircraftConfigType.AdiruApuOn:
                     SetBattery(true);
                     BypassDUsSelfTest();
                     SetFlaps(0);
                     SetGear(true);
+                    SetEngineStarted(false);
                     break;
                 case AircraftConfigType.EngineStarted:
                     SetBattery(true);
                     BypassDUsSelfTest();
                     SetFlaps(0);
                     SetGear(true);
+                    SetEngineStarted();
                     break;
                 case AircraftConfigType.Takeoff:
                     SetBattery(true);
                     BypassDUsSelfTest();
                     SetFlaps(2);
                     SetGear(true);
+                    SetEngineStarted();
                     break;
                 case AircraftConfigType.Landing:
                     SetBattery(true);
                     BypassDUsSelfTest();
                     SetFlaps(4);
                     SetGear(true);
+                    SetEngineStarted();
                     break;
                 case AircraftConfigType.Cruise:
                     SetBattery(true);
                     BypassDUsSelfTest();
                     SetFlaps(0);
                     SetGear(false);
+                    SetEngineStarted();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
@@ -212,6 +218,15 @@ namespace A320VAU.Editor.AircraftDebugger
             foreach (var du in _saccEntity.GetComponentsInChildren<DU>(true))
             {
                 du.BypassSelftest();
+            }
+        }
+
+        private void SetEngineStarted(bool started = true)
+        {
+            if (!started) return;
+            foreach (var engine in _saccEntity.GetComponentsInChildren<SFEXT_a320_AdvancedEngine>(true))
+            {
+                engine._InstantStart();
             }
         }
     }
