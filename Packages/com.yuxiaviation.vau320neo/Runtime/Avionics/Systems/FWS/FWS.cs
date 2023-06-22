@@ -204,7 +204,7 @@ namespace A320VAU.FWS
 
         #endregion
 
-        private const float FWS_UPDATE_INTERVAL = 0.5f;
+        private const float FWS_UPDATE_INTERVAL = 0.1f;
         private float _lastFwsUpdate;
 
         private void UpdateFWS()
