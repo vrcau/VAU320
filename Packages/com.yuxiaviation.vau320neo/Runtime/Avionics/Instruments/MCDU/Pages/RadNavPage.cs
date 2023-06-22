@@ -31,11 +31,13 @@ namespace A320VAU.MCDU
         public override void OnPageInit(MCDU mcdu)
         {
             _mcdu = mcdu;
-            
+
             mcdu.titleLineText.text = "RADIO NAV";
             UpdateUI();
         }
-        
+
+
+        public override void OnPageUpdate() => UpdateUI();
         private void UpdateUI()
         {
             _mcdu.l1Label.text = "VOR1/FREQ";

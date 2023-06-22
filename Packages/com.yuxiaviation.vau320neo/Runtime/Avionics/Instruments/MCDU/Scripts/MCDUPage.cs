@@ -22,5 +22,6 @@ namespace A320VAU.MCDU
         public virtual void PrevPage() { }
         public virtual void NextPage() { }
         public virtual void OnPageInit(MCDU mcdu) { }
+        public virtual void OnPageUpdate() { }
     }
 }
