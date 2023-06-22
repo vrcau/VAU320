@@ -2,6 +2,9 @@ name: Unity Package
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'Packages/com.yuxiaviation.vau320neo/package.json'
 
 permissions:
   contents: read
@@ -15,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: nschloe/action-cached-lfs-checkout@354ab66d93f164e0bb45c8dea38a47f5e5540023
+        uses: apperry/action-cached-lfs-checkout@c0616236fe56259b047ba97925bad9d8b644be88
 
       - name: Get version
         id: version
@@ -55,3 +58,13 @@ jobs:
         with:
           name: ${{ env.zipFile }}
           path: ${{ env.zipFile }}
+
+      - name: Github Release
+        uses: 6thpath/action-github-release@ba2240e98166a319da08afddd79a2106215bf920
+        with:
+          tag_name: "v${{ steps.version.outputs.value }}"
+          generate_release_notes: true
+          files: |
+            ${{ env.zipFile }}
+            ${{ env.unityPackage }}
+            Packages/${{ env.packageName }}/package.json
