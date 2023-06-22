@@ -35,6 +35,9 @@ namespace A320VAU.ND.Pages
         private NavaidDatabase _navaidDatabase;
         private GameObject[] _markers = new GameObject[0];
 
+        private const float UPDATE_INTERVAL = 0.5f;
+        private float _lastUpdate;
+
         private void Start()
         {
             if (flightData == null)  flightData = GetComponentInParent<YFI_FlightDataInterface>();
@@ -127,6 +130,9 @@ namespace A320VAU.ND.Pages
 
         private void Update()
         {
+            if (Time.time - _lastUpdate < UPDATE_INTERVAL) return;
+            _lastUpdate = Time.time;
+            
             var entityTransform = saccEntity.transform;
             var rotation = Quaternion.AngleAxis(Vector3.SignedAngle(Vector3.forward, Vector3.ProjectOnPlane(entityTransform.forward, Vector3.up), Vector3.up) + magneticDeclination, Vector3.forward);
             transform.localRotation = rotation;
