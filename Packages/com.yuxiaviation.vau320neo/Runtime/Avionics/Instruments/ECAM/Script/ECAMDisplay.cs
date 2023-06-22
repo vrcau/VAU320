@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,19 +9,22 @@ using EsnyaSFAddons.DFUNC;
 using A320VAU.SFEXT;
 using A320VAU.Common;
 using A320VAU.FWS;
+using VRC.Udon.Common.Interfaces;
 
 namespace A320VAU.ECAM
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
-    public partial class ECAMDisplay : UdonSharpBehaviour
+    public class ECAMDisplay : UdonSharpBehaviour
     {
+        #region Aircraft Systems
         public SaccAirVehicle airVehicle;
         public SaccEntity EntityControl;
         public ECAMDataInterface AdvancedData;
         public AirbusAvionicsTheme AirbusAvionicsTheme;
         public FWS.FWS FWS;
-        
+        #endregion
 
+        #region UI Elements
         [Header("Left Engine")]
         public Text N1L;
         public Text N2L;
@@ -48,16 +52,31 @@ namespace A320VAU.ECAM
 
         public Text LeftMemoText;
         public Text RightMemoText;
+        #endregion
 
+        #region Animation 
         [Header("Animator")]
         public Animator ECAMAnimator;
-        private int ENG1N1_HASH = Animator.StringToHash("ENG1N1");
-        private int ENG2N1_HASH = Animator.StringToHash("ENG2N1");
-        private int ENG1EGT_HASH = Animator.StringToHash("ENG1EGT");
-        private int ENG2EGT_HASH = Animator.StringToHash("ENG2EGT");
-        private int ENG1N1CMD_HASH = Animator.StringToHash("ENG1N1Cmd");
-        private int ENG2N1CMD_HASH = Animator.StringToHash("ENG2N1Cmd");
-        private int FLAP_HASH = Animator.StringToHash("flapPos");
+        private readonly int ENG1N1_HASH = Animator.StringToHash("ENG1N1");
+        private readonly int ENG2N1_HASH = Animator.StringToHash("ENG2N1");
+        private readonly int ENG1EGT_HASH = Animator.StringToHash("ENG1EGT");
+        private readonly int ENG2EGT_HASH = Animator.StringToHash("ENG2EGT");
+        private readonly int ENG1N1CMD_HASH = Animator.StringToHash("ENG1N1Cmd");
+        private readonly int ENG2N1CMD_HASH = Animator.StringToHash("ENG2N1Cmd");
+        private readonly int FLAP_HASH = Animator.StringToHash("flapPos");
+        #endregion
+
+        #region Pages
+        public GameObject enginePage;
+        public GameObject statusPage;
+
+        public GameObject enginePageIndicator;
+        public GameObject statusPageIndicator;
+
+        public SystemPage CurrentPage { get; private set; }
+        public ECAMPage CurrentPageBehaviour { get; private set; }
+        #endregion
+        
         private float N1RefMax = 1.2f;
         private float EgtMax = 1000f;
 
@@ -67,13 +86,9 @@ namespace A320VAU.ECAM
             eng2AvailFlag.SetActive(false);
             flapText.text = "0";
 
+            ResetAllPages();
+            ToPage(SystemPage.Status);
             UpdateMemo();
-        }
-
-        public void LateUpdate()
-        {
-            UpdateEngineStatus();
-            UpdateFlapStatus();
         }
 
         private void OnEnable()
@@ -82,6 +97,16 @@ namespace A320VAU.ECAM
             UpdateFlapStatus(true);
         }
 
+        #region Update
+        public void LateUpdate()
+        {
+            UpdateEngineStatus();
+            UpdateFlapStatus();
+
+            if (CurrentPageBehaviour != null) CurrentPageBehaviour.OnPageUpdate();
+        }
+
+        #region EWD Update
         private void UpdateFlapStatus(bool forceUpdate = false)
         {
             if (forceUpdate || !AdvancedData.FlapInPosition) // Only Upadte when moving
@@ -255,6 +280,72 @@ namespace A320VAU.ECAM
             LeftMemoText.text = leftMemoText;
             RightMemoText.text = rightMemoText;
         }
+        #endregion
+        #endregion
+
+        #region Page Navigation
+        #region Button Functions
+        // ReSharper disable once UnusedMember.Global
+        public void ToggleEnginePage() => TogglePage(SystemPage.Engine);
+        // ReSharper disable once UnusedMember.Global
+        public void ToggleStatusPage() => TogglePage(SystemPage.Status);
+        #endregion
+        
+        private void TogglePage(SystemPage page, [CallerMemberName] string callerName = "")
+        {
+            SendCustomNetworkEvent(NetworkEventTarget.All, callerName);
+            if (CurrentPage != page)
+            {
+                ToPage(page);
+                return;
+            }
+            
+            ToPage(SystemPage.None);
+        }
+        
+        public void ToPage(SystemPage page)
+        {
+            ResetAllPages();
+            if (page != SystemPage.None)
+                CurrentPage = page;
+
+            switch (page)
+            {
+                // IDLE Auto
+                case SystemPage.None:
+                    // fallback for now
+                    CurrentPage = SystemPage.Status;
+                    ToPage(statusPage);
+                    statusPageIndicator.SetActive(true);
+                    break;
+                case SystemPage.Engine:
+                    ToPage(enginePage);
+                    enginePageIndicator.SetActive(true);
+                    break;
+                case SystemPage.Status:
+                    ToPage(statusPage);
+                    statusPageIndicator.SetActive(true);
+                    break;
+            }
+        }
+
+        private void ToPage(GameObject pageObject)
+        {
+            CurrentPageBehaviour = pageObject.GetComponent<ECAMPage>();
+            pageObject.SetActive(true);
+        }
+
+        private void ResetAllPages()
+        {
+            enginePageIndicator.SetActive(false);
+            statusPageIndicator.SetActive(false);
+            
+            CurrentPage = SystemPage.None;
+            
+            enginePage.SetActive(false);
+            statusPage.SetActive(false);
+        }
+        #endregion
 
         private string getColorHexByWarningColor(WarningColor color)
         {

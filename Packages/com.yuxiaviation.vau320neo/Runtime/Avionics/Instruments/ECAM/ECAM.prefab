@@ -4184,6 +4184,8 @@ MonoBehaviour:
   LeftMemoText: {fileID: 1214589861983640464}
   RightMemoText: {fileID: 1214589860522043196}
   ECAMAnimator: {fileID: 1214589862378127591}
+  enginePage: {fileID: 2398434371542297821}
+  statusPage: {fileID: 2398434370231061192}
 --- !u!114 &1214589862378127593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7103,6 +7105,12 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 4062025227873278872}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2398434370231061192 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1808130613123354960, guid: c5f0a3b414a3d0f47804697ef0b9924e,
+    type: 3}
+  m_PrefabInstance: {fileID: 4062025227873278872}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5362406513097119254
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7227,6 +7235,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 057cc55c6c9c66b449fa5d3ae530b15e, type: 3}
+--- !u!1 &2398434371542297821 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7720272663930256075, guid: 057cc55c6c9c66b449fa5d3ae530b15e,
+    type: 3}
+  m_PrefabInstance: {fileID: 5362406513097119254}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &2398434371542297810 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7720272663930256068, guid: 057cc55c6c9c66b449fa5d3ae530b15e,

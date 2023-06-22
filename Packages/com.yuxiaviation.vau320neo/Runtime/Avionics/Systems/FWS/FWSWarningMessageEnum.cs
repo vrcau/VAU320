@@ -36,7 +36,8 @@ namespace A320VAU.FWS
     public enum SystemPage {
         None = 0,
         Engine = 1,
-        Bleed = 2
+        Bleed = 2,
+        Status = 3
     }
 
     public enum WarningStyle {
