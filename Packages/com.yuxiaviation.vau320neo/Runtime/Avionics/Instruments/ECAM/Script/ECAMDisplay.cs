@@ -291,9 +291,8 @@ namespace A320VAU.ECAM
         public void ToggleStatusPage() => TogglePage(SystemPage.Status);
         #endregion
         
-        private void TogglePage(SystemPage page, [CallerMemberName] string callerName = "")
+        private void TogglePage(SystemPage page)
         {
-            SendCustomNetworkEvent(NetworkEventTarget.All, callerName);
             if (CurrentPage != page)
             {
                 ToPage(page);
