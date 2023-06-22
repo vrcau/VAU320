@@ -1,0 +1,17 @@
+name: Update Packages Index
+
+on:
+  workflow_run:
+    workflows: [Unity Package]
+    types:
+      - completed
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  update-packages-index:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    uses: vrcau/package-index/.github/workflows/release.yml@main
