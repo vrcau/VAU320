@@ -67,6 +67,9 @@ namespace A320VAU.ND
         #endregion
 
         private MapDisplay[] _mapDisplays;
+        
+        private const float UPDATE_INTERVAL = 0.5f;
+        private float _lastUpdate;
 
         [FieldChangeCallback(nameof(NDMode))] public NDMode _ndMode;
         public NDMode NDMode
@@ -107,7 +110,9 @@ namespace A320VAU.ND
             TASText.text = FlightData.TAS.ToString("f0");
             GSText.text = FlightData.groundSpeed.ToString("f0");
 
-            //导航更新
+            // 导航更新
+            if (Time.time - _lastUpdate < UPDATE_INTERVAL) return;
+            _lastUpdate = Time.time;
             UpdateNavigation();
         }
         
@@ -145,6 +150,7 @@ namespace A320VAU.ND
                     break;
             }
         }
+        
         private void UpdateNavigationInfo(NavSelector navigationReceiver)
         {
             if (NDMode != NDMode.PLAN)

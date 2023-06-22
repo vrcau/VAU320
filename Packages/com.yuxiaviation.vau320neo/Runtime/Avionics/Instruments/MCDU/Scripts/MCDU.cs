@@ -1,4 +1,5 @@
-﻿using UdonSharp;
+﻿using System;
+using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,6 +28,9 @@ namespace A320VAU.MCDU
 
         private bool _hasMessage = false;
         private string _mcduMessage = "";
+
+        private const float UPDATE_INTERVAL = 0.5f;
+        private float _lastUpdate;
 
         #region UI
 
@@ -211,6 +215,15 @@ namespace A320VAU.MCDU
         private void Start()
         {
             ToPage(McduMenuPage);
+        }
+
+        private void LateUpdate()
+        {
+            if (Time.time - UPDATE_INTERVAL < _lastUpdate) return;
+            _lastUpdate = Time.time;
+            
+            if (CurrentPage != null)
+                CurrentPage.OnPageUpdate();
         }
 
         public void ToPage(UdonSharpBehaviour page)

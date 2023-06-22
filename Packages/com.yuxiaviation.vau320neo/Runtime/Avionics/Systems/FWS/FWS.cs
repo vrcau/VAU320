@@ -204,8 +204,14 @@ namespace A320VAU.FWS
 
         #endregion
 
+        private const float FWS_UPDATE_INTERVAL = 0.1f;
+        private float _lastFwsUpdate;
+
         private void UpdateFWS()
         {
+            if (Time.time - _lastFwsUpdate < FWS_UPDATE_INTERVAL) return;
+            _lastFwsUpdate = Time.time;
+            
             var hasMasterWarning = false;
             var hasMasterCaution = false;
             _fwsWarningData.Monitor(this); // the core of the FWS
@@ -269,6 +275,7 @@ namespace A320VAU.FWS
             ECAMController.UpdateMemo();
         }
 
+        // ReSharper disable once UnusedMember.Global
         public void CancleWarning()
         {
             gpws.audioSource.Stop();
