@@ -13,7 +13,7 @@
     "sh.orels.udontoolkit": "https://github.com/orels1/UdonToolkit.git"
   },
   "vpmDependencies": {
-    "com.vrchat.udonsharp": "1.1.7"
+    "com.vrchat.udonsharp": "1.1.8"
   },
   "legacyFolders": {},
   "legacyFiles": {},

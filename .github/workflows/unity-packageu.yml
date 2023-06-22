@@ -68,3 +68,6 @@ jobs:
             ${{ env.zipFile }}
             ${{ env.unityPackage }}
             Packages/${{ env.packageName }}/package.json
+
+      - name: Update Package Index
+        uses: vrcau/package-index/.github/workflows/release.yml
