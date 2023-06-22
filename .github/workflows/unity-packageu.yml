@@ -7,7 +7,7 @@ on:
       - 'Packages/com.yuxiaviation.vau320neo/package.json'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
