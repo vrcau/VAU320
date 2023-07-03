@@ -13,7 +13,7 @@ using UnityEngine.Serialization;
 
 namespace A320VAU.PFD
 {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class PFDBasicDisplay : UdonSharpBehaviour
     {
         #region Aircraft Systems
