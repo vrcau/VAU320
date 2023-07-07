@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: NDDisplay
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 4ef358eff9a81a44bb8b79b4fb37d84c,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: afcf5083c79202643a5675dc0b09f93a,
     type: 2}
   udonAssembly: 
   assemblyError: 
   sourceCsScript: {fileID: 11500000, guid: 6733f2998b7d58c49aed282c01d74257, type: 3}
   scriptVersion: 2
   compiledVersion: 2
-  behaviourSyncMode: 1
+  behaviourSyncMode: 2
   hasInteractEvent: 0
   scriptID: 5980039850227252798
   serializationData:

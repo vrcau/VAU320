@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: PFDBasicDisplay
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 4e94dc87ca1f3f04cb8a0bc76f5822c3,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 8b3372fefe38fd4489d96e0901dcedfa,
     type: 2}
   udonAssembly: 
   assemblyError: 
   sourceCsScript: {fileID: 11500000, guid: 52c3cc33055fdad40a771c1761ec4cc5, type: 3}
   scriptVersion: 2
   compiledVersion: 2
-  behaviourSyncMode: 1
+  behaviourSyncMode: 2
   hasInteractEvent: 0
   scriptID: 7606720741474646634
   serializationData:

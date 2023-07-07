@@ -10,7 +10,7 @@ using VirtualAviationJapan;
 
 namespace A320VAU.ND
 {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class NDDisplay : UdonSharpBehaviour
     {
         [Tooltip("Flight Data Interface")]

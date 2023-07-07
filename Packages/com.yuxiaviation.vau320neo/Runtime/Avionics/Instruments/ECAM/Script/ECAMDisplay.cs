@@ -13,7 +13,7 @@ using VRC.Udon.Common.Interfaces;
 
 namespace A320VAU.ECAM
 {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class ECAMDisplay : UdonSharpBehaviour
     {
         #region Aircraft Systems

@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: ECAMDisplay
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 0bb4fcf11b569764bb3ca4bbe1b34639,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: a9f1650de9a74a9479b1d3145afae8d0,
     type: 2}
   udonAssembly: 
   assemblyError: 
   sourceCsScript: {fileID: 11500000, guid: f9618a3c573f102488b2e78da1569e1d, type: 3}
   scriptVersion: 2
   compiledVersion: 2
-  behaviourSyncMode: 4
+  behaviourSyncMode: 2
   hasInteractEvent: 0
   scriptID: 2872680020494833390
   serializationData:
