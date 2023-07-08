@@ -1,16 +1,16 @@
+using System;
 using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
+using Random = UnityEngine.Random;
 
 //note:this code is original from https://github.com/esnya/EsnyaSFAddons
 //to satisfy vau320's demand, moditied SteerAngle limiter
 
-namespace A320VAU.SFEXT
-{
+namespace A320VAU.SFEXT {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Continuous)]
-    public class SFEXT_a320_AdvancedGear : UdonSharpBehaviour
-    {
+    public class SFEXT_a320_AdvancedGear : UdonSharpBehaviour {
         public WheelCollider wheelCollider;
         public Transform suspensionTransform;
         public Transform steerTransform;
@@ -19,18 +19,21 @@ namespace A320VAU.SFEXT
         public Vector3 wheelRight = Vector3.right;
 
         [Header("Steering")]
-        [Tooltip("deg")] public float maxSteerAngle = 0;
-        [Tooltip("最小转向角度,80节时达到 deg")] public float minSteerAngle = 0;
+        [Tooltip("deg")] public float maxSteerAngle;
+
+        [Tooltip("最小转向角度,80节时达到 deg")] public float minSteerAngle;
         public float steerResponse = 1.0f;
 
         [Header("Brake")]
         [Tooltip("N/m")] public float brakeTorque = 10000;
+
         public float brakeResponse = 1.0f;
         public bool autoLimitGroundSpeed;
         public bool autoLimitGroundSpeedOnDesktop = true;
 
         [Header("Indicators")]
         public GameObject transitionIndicator;
+
         public GameObject downIndicator;
 
 
@@ -39,10 +42,12 @@ namespace A320VAU.SFEXT
 
         [Header("Sounds")]
         public AudioSource transitionSound;
+
         public AudioClip burstSound, breakSound;
 
         [Header("Failures")]
         [Tooltip("KIAS")] public float maxExtensionSpeed = 270;
+
         [Tooltip("KIAS")] public float maxRetractionSpeed = 235;
         [Tooltip("KIAS")] public float maxExtendedSpeed = 320;
         [Tooltip("KGS")] public float brakeMaxGroundSpeed = 60;
@@ -62,34 +67,41 @@ namespace A320VAU.SFEXT
         [Header("Misc")]
         public float timeNosieScale = 0.1f;
 
-        [System.NonSerialized] public float maxSteeringCurrent;
-        [System.NonSerialized] public float targetPosition;
-        [System.NonSerialized][UdonSynced(UdonSyncMode.Smooth)] public float position;
-        [System.NonSerialized][UdonSynced] public bool moving, inTransition;
-        private bool hasPilot, isOwner;
+        [UdonSynced] [FieldChangeCallback(nameof(Bursted))]
+        private bool _bursted;
+
         private SaccAirVehicle airVehicle;
-        private Rigidbody vehicleRigidbody;
-        private Animator vehicleAnimator;
         private DFUNC_Brake brakeFunction;
+        private GameObject burstEffectInstance;
+        [NonSerialized] [UdonSynced] public bool failed, broken, parkingBrake;
+        private bool hasPilot, isOwner;
+
+        private bool initialized;
+
+        [NonSerialized] public float maxSteeringCurrent;
+        [NonSerialized] [UdonSynced] public bool moving, inTransition;
+
+        [NonSerialized] [UdonSynced(UdonSyncMode.Smooth)]
+        public float position;
+
+        private bool prevIsGrounded;
+
+        private Vector3 prevVehiclePosition;
+        [NonSerialized] public float targetPosition;
+        private Animator vehicleAnimator;
+        private Rigidbody vehicleRigidbody;
+        private float wheelAngle;
         private Vector3 wheelPositionOffset;
         private Quaternion wheelRotationOffset = Quaternion.identity, steerRotationOffset = Quaternion.identity;
-        private float wheelAngle;
-        private GameObject burstEffectInstance;
-        [System.NonSerialized][UdonSynced] public bool failed, broken, parkingBrake;
-        [UdonSynced][FieldChangeCallback(nameof(Bursted))] private bool _bursted;
-        private bool Bursted
-        {
-            set
-            {
-                if (burstEffect)
-                {
-                    if (value && !burstEffectInstance)
-                    {
+
+        private bool Bursted {
+            set {
+                if (burstEffect) {
+                    if (value && !burstEffectInstance) {
                         burstEffectInstance = VRCInstantiate(burstEffect);
                         burstEffectInstance.transform.SetParent(wheelCollider.transform, false);
                     }
-                    else if (!value && burstEffectInstance)
-                    {
+                    else if (!value && burstEffectInstance) {
                         Destroy(burstEffectInstance);
                     }
                 }
@@ -101,9 +113,111 @@ namespace A320VAU.SFEXT
             get => _bursted;
         }
 
-        private bool initialized;
-        public void SFEXT_L_EntityStart()
-        {
+        private void Update() {
+            if (!initialized) return;
+
+            var deltaTime = Time.deltaTime;
+            var taxiing = airVehicle.Taxiing;
+
+            var groundVelocity =
+                (isOwner ? vehicleRigidbody.velocity : (vehicleRigidbody.position - prevVehiclePosition) / deltaTime) *
+                1.94384f;
+            prevVehiclePosition = vehicleRigidbody.position;
+
+            var groundSpeed = Vector3.Dot(groundVelocity, vehicleRigidbody.transform.forward);
+            if (isOwner) {
+                inTransition = !Mathf.Approximately(position, targetPosition);
+                moving = inTransition && !failed && !broken;
+            }
+
+            var retracted = !inTransition && Mathf.Approximately(position, 0);
+            var extended = !inTransition && Mathf.Approximately(position, 1);
+            var onGround = extended && taxiing;
+
+            if (transitionIndicator && transitionIndicator.activeSelf != inTransition)
+                transitionIndicator.SetActive(inTransition);
+            if (downIndicator && downIndicator.activeSelf != extended) downIndicator.SetActive(extended);
+
+            if (transitionSound && transitionSound.isPlaying != moving) {
+                if (moving) transitionSound.PlayDelayed(Random.value * 0.1f);
+                else transitionSound.Stop();
+            }
+
+            var targetBrakeStrength = GetTargetBrakeStrength(groundSpeed);
+            var targetBrakeTorque = targetBrakeStrength * brakeTorque;
+            var currentBrakeTorque = wheelCollider.brakeTorque;
+            wheelCollider.brakeTorque = Mathf.MoveTowards(currentBrakeTorque, targetBrakeTorque,
+                brakeTorque * brakeResponse * deltaTime);
+
+
+            if (inTransition) vehicleAnimator.SetFloat(gearPositionParameterName, position);
+
+            if (onGround && maxSteerAngle > 0) {
+                var normalizedSteerAngle = onGround ? airVehicle.RotationInputs.y : 0;
+                var targetSteerAngle = normalizedSteerAngle * GetTargetMaxSteerAngle(groundSpeed);
+                wheelCollider.steerAngle = Mathf.MoveTowards(wheelCollider.steerAngle, targetSteerAngle,
+                    deltaTime * steerResponse * maxSteerAngle);
+            }
+
+            if (!retracted) {
+                if (suspensionTransform) {
+                    Vector3 wheelPosition;
+                    Quaternion _;
+                    wheelCollider.GetWorldPose(out wheelPosition, out _);
+                    suspensionTransform.localPosition =
+                        suspensionTransform.parent.InverseTransformPoint(wheelPosition) * position +
+                        wheelPositionOffset;
+                }
+
+                if (wheelTransform || steerTransform) {
+                    var rpm = isOwner
+                        ? wheelCollider.rpm
+                        : groundSpeed * 0.514444f * 60.0f / (2 * wheelCollider.radius * Mathf.PI);
+                    if (taxiing) wheelAngle = (wheelAngle + rpm * 360 / 60 * Time.deltaTime) % 360;
+                    var steerRotation = Quaternion.AngleAxis(wheelCollider.steerAngle, wheelUp);
+                    if (wheelTransform)
+                        wheelTransform.localRotation = wheelRotationOffset *
+                                                       (steerTransform ? Quaternion.identity : steerRotation) *
+                                                       Quaternion.AngleAxis(wheelAngle, wheelRight);
+                    if (steerTransform) steerTransform.localRotation = steerRotationOffset * steerRotation;
+                }
+            }
+
+            if (isOwner) {
+                if (!retracted) {
+                    var ias = airVehicle.AirSpeed * 1.94384f;
+                    var maxSpeed = _GetMaxSpeed();
+                    var overspeed = maxSpeed > 0 && ias > maxSpeed;
+                    var mtbfMultiplier = overspeed ? ias / maxSpeed : 1.0f;
+                    var isGrounded = wheelCollider.isGrounded;
+
+                    if (!broken && (inTransition || overspeed) && Random.value < deltaTime * mtbfMultiplier /
+                        (overspeed ? mtbTransitionBraekOnOverspeed : mtbTransitionBraek)) broken = true;
+                    if (!failed && inTransition && Random.value < deltaTime * mtbfMultiplier /
+                        (overspeed ? mtbTransitionFailOnOverspeed : mtbTransitionFail)) failed = true;
+
+                    if (brakeTorque > 0 && groundSpeed > brakeMaxGroundSpeed && isGrounded &&
+                        groundSpeed / brakeMaxGroundSpeed * wheelCollider.brakeTorque / brakeTorque /
+                        mtbBurstOnOverGroundSpeed * Time.deltaTime > Random.value) Burst();
+
+                    var verticalSpeed = -vehicleRigidbody.velocity.y * 197;
+                    if (isGrounded && !prevIsGrounded && verticalSpeed > verticalSpeedLimit && Random.value <
+                        (verticalSpeed - verticalSpeedLimit) / (burstVerticalSpeed - verticalSpeedLimit)) Burst();
+
+                    prevIsGrounded = wheelCollider.isGrounded;
+                }
+
+                if (!failed && !broken) {
+                    var duration = transitionSound ? transitionSound.clip.length : 5.0f;
+                    position = Mathf.MoveTowards(position, targetPosition,
+                        Time.deltaTime / duration * Random.Range(1.0f - timeNosieScale, 1.0f + timeNosieScale));
+                }
+            }
+
+            if (!hasPilot && !moving) gameObject.SetActive(false);
+        }
+
+        public void SFEXT_L_EntityStart() {
             var entity = GetComponentInParent<SaccEntity>();
 
             airVehicle = entity.GetComponentInChildren<SaccAirVehicle>();
@@ -113,7 +227,10 @@ namespace A320VAU.SFEXT
 
             brakeFunction = entity.GetComponentInChildren<DFUNC_Brake>(true);
 
-            if (suspensionTransform) wheelPositionOffset = suspensionTransform.localPosition - suspensionTransform.parent.InverseTransformPoint(wheelCollider.transform.position);
+            if (suspensionTransform)
+                wheelPositionOffset = suspensionTransform.localPosition -
+                                      suspensionTransform.parent.InverseTransformPoint(wheelCollider.transform
+                                          .position);
             if (wheelTransform) wheelRotationOffset = wheelTransform.localRotation;
             if (steerTransform) steerRotationOffset = steerTransform.localRotation;
 
@@ -123,156 +240,51 @@ namespace A320VAU.SFEXT
             ResetStatus();
         }
 
-        public void SFEXT_O_PilotEnter()
-        {
+        public void SFEXT_O_PilotEnter() {
             isOwner = true;
         }
 
-        public void SFEXT_O_TakeOwnership() => isOwner = true;
-        public void SFEXT_O_LoseOwnership() => isOwner = false;
+        public void SFEXT_O_TakeOwnership() {
+            isOwner = true;
+        }
 
-        public void SFEXT_G_PilotEnter()
-        {
+        public void SFEXT_O_LoseOwnership() {
+            isOwner = false;
+        }
+
+        public void SFEXT_G_PilotEnter() {
             hasPilot = true;
             gameObject.SetActive(true);
         }
-        public void SFEXT_G_PilotExit() => hasPilot = false;
-        public void SFEXT_G_Explode() => ResetStatus();
-        public void SFEXT_G_RespawnButton() => ResetStatus();
 
-        public void SFEXT_G_GearUp()
-        {
+        public void SFEXT_G_PilotExit() {
+            hasPilot = false;
+        }
+
+        public void SFEXT_G_Explode() {
+            ResetStatus();
+        }
+
+        public void SFEXT_G_RespawnButton() {
+            ResetStatus();
+        }
+
+        public void SFEXT_G_GearUp() {
             targetPosition = 0;
-            if (!gameObject.activeInHierarchy)
-            {
-                vehicleAnimator.SetFloat(gearPositionParameterName, targetPosition);
-            }
-            
+            if (!gameObject.activeInHierarchy) vehicleAnimator.SetFloat(gearPositionParameterName, targetPosition);
         }
-        public void SFEXT_G_GearDown()
-        {
+
+        public void SFEXT_G_GearDown() {
             targetPosition = 1;
-            if (!gameObject.activeInHierarchy)
-            {
-                 vehicleAnimator.SetFloat(gearPositionParameterName, targetPosition);
-            }
-            
+            if (!gameObject.activeInHierarchy) vehicleAnimator.SetFloat(gearPositionParameterName, targetPosition);
         }
 
-        private Vector3 prevVehiclePosition;
-        private bool prevIsGrounded;
-
-        private void Update()
-        {
-            if (!initialized) return;
-
-            var deltaTime = Time.deltaTime;
-            var taxiing = airVehicle.Taxiing;
-
-            var groundVelocity = (isOwner ? vehicleRigidbody.velocity : (vehicleRigidbody.position - prevVehiclePosition) / deltaTime) * 1.94384f;
-            prevVehiclePosition = vehicleRigidbody.position;
-
-            var groundSpeed = Vector3.Dot(groundVelocity, vehicleRigidbody.transform.forward);
-            if (isOwner)
-            {
-                inTransition = !Mathf.Approximately(position, targetPosition);
-                moving = inTransition && !failed && !broken;
-            }
-            var retracted = !inTransition && Mathf.Approximately(position, 0);
-            var extended = !inTransition && Mathf.Approximately(position, 1);
-            var onGround = extended && taxiing;
-
-            if (transitionIndicator && transitionIndicator.activeSelf != inTransition) transitionIndicator.SetActive(inTransition);
-            if (downIndicator && downIndicator.activeSelf != extended) downIndicator.SetActive(extended);
-
-            if (transitionSound && transitionSound.isPlaying != moving)
-            {
-                if (moving) transitionSound.PlayDelayed(Random.value * 0.1f);
-                else transitionSound.Stop();
-            }
-
-            var targetBrakeStrength = GetTargetBrakeStrength(groundSpeed);
-            var targetBrakeTorque = targetBrakeStrength * brakeTorque;
-            var currentBrakeTorque = wheelCollider.brakeTorque;
-            wheelCollider.brakeTorque = Mathf.MoveTowards(currentBrakeTorque, targetBrakeTorque, brakeTorque * brakeResponse * deltaTime);
-
-
-            if (inTransition)
-            {
-                vehicleAnimator.SetFloat(gearPositionParameterName, position);
-            }
-
-            if (onGround && maxSteerAngle > 0)
-            {
-                var normalizedSteerAngle = onGround ? airVehicle.RotationInputs.y : 0;
-                var targetSteerAngle = normalizedSteerAngle * GetTargetMaxSteerAngle(groundSpeed);
-                wheelCollider.steerAngle = Mathf.MoveTowards(wheelCollider.steerAngle, targetSteerAngle, deltaTime * steerResponse * maxSteerAngle);
-            }
-
-            if (!retracted)
-            {
-                if (suspensionTransform)
-                {
-                    Vector3 wheelPosition; Quaternion _;
-                    wheelCollider.GetWorldPose(out wheelPosition, out _);
-                    suspensionTransform.localPosition = suspensionTransform.parent.InverseTransformPoint(wheelPosition) * position + wheelPositionOffset;
-                }
-
-                if (wheelTransform || steerTransform)
-                {
-                    var rpm = isOwner ? wheelCollider.rpm : groundSpeed * 0.514444f * 60.0f / (2 * wheelCollider.radius * Mathf.PI);
-                    if (taxiing) wheelAngle = (wheelAngle + rpm * 360 / 60 * Time.deltaTime) % 360;
-                    var steerRotation = Quaternion.AngleAxis(wheelCollider.steerAngle, wheelUp);
-                    if (wheelTransform) wheelTransform.localRotation = wheelRotationOffset * (steerTransform ? Quaternion.identity : steerRotation) * Quaternion.AngleAxis(wheelAngle, wheelRight);
-                    if (steerTransform) steerTransform.localRotation = steerRotationOffset * steerRotation;
-                }
-            }
-
-            if (isOwner)
-            {
-                if (!retracted)
-                {
-                    var ias = airVehicle.AirSpeed * 1.94384f;
-                    var maxSpeed = _GetMaxSpeed();
-                    var overspeed = maxSpeed > 0 && ias > maxSpeed;
-                    var mtbfMultiplier = overspeed ? ias / maxSpeed : 1.0f;
-                    var isGrounded = wheelCollider.isGrounded;
-
-                    if (!broken && (inTransition || overspeed) && Random.value < deltaTime * mtbfMultiplier / (overspeed ? mtbTransitionBraekOnOverspeed : mtbTransitionBraek)) broken = true;
-                    if (!failed && inTransition && Random.value < deltaTime * mtbfMultiplier / (overspeed ? mtbTransitionFailOnOverspeed : mtbTransitionFail)) failed = true;
-
-                    if (brakeTorque > 0 && groundSpeed > brakeMaxGroundSpeed && isGrounded && groundSpeed / brakeMaxGroundSpeed * wheelCollider.brakeTorque / brakeTorque / mtbBurstOnOverGroundSpeed * Time.deltaTime > Random.value)
-                    {
-                        Burst();
-                    }
-
-                    var verticalSpeed = -vehicleRigidbody.velocity.y * 197;
-                    if (isGrounded && !prevIsGrounded && verticalSpeed > verticalSpeedLimit && Random.value < (verticalSpeed - verticalSpeedLimit) / (burstVerticalSpeed - verticalSpeedLimit))
-                    {
-                        Burst();
-                    }
-
-                    prevIsGrounded = wheelCollider.isGrounded;
-                }
-
-                if (!failed && !broken)
-                {
-                    var duration = transitionSound ? transitionSound.clip.length : 5.0f;
-                    position = Mathf.MoveTowards(position, targetPosition, Time.deltaTime / duration * Random.Range(1.0f - timeNosieScale, 1.0f + timeNosieScale));
-                }
-            }
-
-            if (!hasPilot && !moving) gameObject.SetActive(false);
-        }
-
-        private void Burst()
-        {
+        private void Burst() {
             Bursted = true;
             RequestSerialization();
         }
 
-        public float _GetMaxSpeed()
-        {
+        public float _GetMaxSpeed() {
             if (Mathf.Approximately(position, 0)) return -1;
 
             if (Mathf.Approximately(position, 1)) return maxExtendedSpeed;
@@ -280,16 +292,14 @@ namespace A320VAU.SFEXT
             return position < 0.5f ? maxExtensionSpeed : maxRetractionSpeed;
         }
 
-        private float GetTargetMaxSteerAngle(float groundSpeed)
-        {
+        private float GetTargetMaxSteerAngle(float groundSpeed) {
             groundSpeed = groundSpeed * 1.94401f < 0 ? 0 : groundSpeed;
-            float SteerAngle = -1.23333f * groundSpeed + 98.66667f; //20节-74度 80节-0度
+            var SteerAngle = -1.23333f * groundSpeed + 98.66667f; //20节-74度 80节-0度
             maxSteeringCurrent = Mathf.Clamp(SteerAngle, minSteerAngle, maxSteerAngle);
             return maxSteeringCurrent;
-
         }
-        private void ResetStatus()
-        {
+
+        private void ResetStatus() {
             if (!initialized) return;
 
             targetPosition = position = 1.0f;
@@ -300,22 +310,24 @@ namespace A320VAU.SFEXT
             Bursted = false;
         }
 
-        private float GetTargetBrakeStrength(float groundSpeed)
-        {
+        private float GetTargetBrakeStrength(float groundSpeed) {
             if (Mathf.Approximately(position, 0.0f) || parkingBrake) return 1.0f;
-            if (!brakeFunction || (autoLimitGroundSpeed || !Networking.LocalPlayer.IsUserInVR() && autoLimitGroundSpeedOnDesktop) && groundSpeed >= brakeMaxGroundSpeed) return 0;
+            if (!brakeFunction ||
+                ((autoLimitGroundSpeed || (!Networking.LocalPlayer.IsUserInVR() && autoLimitGroundSpeedOnDesktop)) &&
+                 groundSpeed >= brakeMaxGroundSpeed)) return 0;
             return brakeFunction.BrakeInput;
         }
 
-        #region Math Utilities
-        private float Remap01(float value, float oldMin, float oldMax)
-        {
+    #region Math Utilities
+
+        private float Remap01(float value, float oldMin, float oldMax) {
             return (value - oldMin) / (oldMax - oldMin);
         }
-        private float ClampedRemap01(float value, float oldMin, float oldMax)
-        {
+
+        private float ClampedRemap01(float value, float oldMin, float oldMax) {
             return Mathf.Clamp01(Remap01(value, oldMin, oldMax));
         }
-        #endregion
+
+    #endregion
     }
 }

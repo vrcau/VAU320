@@ -1,13 +1,10 @@
-namespace A320VAU.FWS
-{
-    public enum DisplayZone
-    {
+namespace A320VAU.FWS {
+    public enum DisplayZone {
         Left = 0,
         Right = 1
     }
 
-    public enum WarningColor
-    {
+    public enum WarningColor {
         Danger = 0,
         Amber = 1,
         Green = 2,
@@ -15,8 +12,7 @@ namespace A320VAU.FWS
         Blue = 4
     }
 
-    public enum WarningType
-    {
+    public enum WarningType {
         SpecialLine = 0,
         ConfigMemo = 1,
         Memo = 2,
@@ -25,8 +21,7 @@ namespace A320VAU.FWS
         Independent = 5
     }
 
-    public enum WarningLevel
-    {
+    public enum WarningLevel {
         None = 0,
         Monitor = 1,
         Aware = 2,

@@ -1,18 +1,14 @@
 ﻿using UdonSharp;
 
-namespace A320VAU.FWS
-{
+namespace A320VAU.FWS {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
-    public partial class FWSWarningData : UdonSharpBehaviour
-    {
-        private FWS FWS;
-        private bool _hasWarningVisibleChange = false;
-        private bool _hasWarningDataVisibleChange = false;
-
+    public partial class FWSWarningData : UdonSharpBehaviour {
         private FWSWarningMessageData[] _fwsWarningMessageData;
+        private bool _hasWarningDataVisibleChange;
+        private bool _hasWarningVisibleChange;
+        private FWS FWS;
 
-        private void Start()
-        {
+        private void Start() {
             _fwsWarningMessageData = GetComponentsInChildren<FWSWarningMessageData>();
 
             SetupEngine();
@@ -23,10 +19,8 @@ namespace A320VAU.FWS
             SetupSpeed();
         }
 
-        private FWSWarningMessageData GetWarningMessageData(string id)
-        {
-            foreach (var data in _fwsWarningMessageData)
-            {
+        private FWSWarningMessageData GetWarningMessageData(string id) {
+            foreach (var data in _fwsWarningMessageData) {
                 if (data.Id != id) continue;
                 return data;
             }
@@ -34,8 +28,7 @@ namespace A320VAU.FWS
             return null;
         }
 
-        public void Monitor(FWS fws)
-        {
+        public void Monitor(FWS fws) {
             _hasWarningVisibleChange = false;
             _hasWarningDataVisibleChange = false;
             FWS = fws;
@@ -51,11 +44,10 @@ namespace A320VAU.FWS
             fws._hasWarningVisableChange = _hasWarningVisibleChange;
         }
 
-        private void SetWarnVisible(ref bool isVisible, bool newValue, bool isWarnData = false)
-        {
+        private void SetWarnVisible(ref bool isVisible, bool newValue, bool isWarnData = false) {
             if (isVisible == newValue) return;
             if (isWarnData) _hasWarningDataVisibleChange = true;
-            
+
             isVisible = newValue;
             _hasWarningVisibleChange = true;
         }

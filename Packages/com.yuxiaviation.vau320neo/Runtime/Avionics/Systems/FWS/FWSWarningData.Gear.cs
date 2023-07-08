@@ -1,21 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UdonSharp;
+﻿using UdonSharp;
 
-namespace A320VAU.FWS
-{
-    public partial class FWSWarningData : UdonSharpBehaviour
-    {
+namespace A320VAU.FWS {
+    public partial class FWSWarningData : UdonSharpBehaviour {
         private FWSWarningMessageData BRAKES_HOT;
 
-        private void SetupGear()
-        {
+        private void SetupGear() {
             BRAKES_HOT = GetWarningMessageData(nameof(BRAKES_HOT));
         }
 
-        private void MonitorGear()
-        {
+        private void MonitorGear() {
             // We don't have brake hot simulate, so......
             // if (BRAKES_HOT.IsVisable)
             // {

@@ -1,4 +1,5 @@
-﻿using UdonSharp;
+﻿using System.Globalization;
+using UdonSharp;
 using UnityEngine;
 
 namespace A320VAU.Common {
@@ -15,7 +16,7 @@ namespace A320VAU.Common {
         public Color BlueColor { get; private set; }
         public Color CarmineColor { get; private set; }
 
-        void Start() {
+        private void Start() {
             DangerColor = GetColorByHtmlString(Danger);
             AmberColor = GetColorByHtmlString(Amber);
             GreenColor = GetColorByHtmlString(Green);
@@ -28,13 +29,11 @@ namespace A320VAU.Common {
             hex = hex.Replace("#", "");
 
             byte a = 255;
-            byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
-            byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
-            byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
-            
-            if (hex.Length == 8) {
-                a = byte.Parse(hex.Substring(6, 2), System.Globalization.NumberStyles.HexNumber);
-            }
+            var r = byte.Parse(hex.Substring(0, 2), NumberStyles.HexNumber);
+            var g = byte.Parse(hex.Substring(2, 2), NumberStyles.HexNumber);
+            var b = byte.Parse(hex.Substring(4, 2), NumberStyles.HexNumber);
+
+            if (hex.Length == 8) a = byte.Parse(hex.Substring(6, 2), NumberStyles.HexNumber);
 
             return new Color32(r, g, b, a);
         }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: Clock
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 5d381f498d687c147821fab2af134d08,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 7511c9e9f9a7d2742a5c5288e7caed75,
     type: 2}
   udonAssembly: 
   assemblyError: 

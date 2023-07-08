@@ -1,6 +1,6 @@
-﻿[merge]
-tool = unityyamlmerge
+﻿[filter "usharp-prefab"]
+smudge = powershell .gitscripts/filter-usharp-assets.ps1
+clean = powershell .gitscripts/filter-usharp-assets.ps1
 
-[mergetool "unityyamlmerge"]
-trustExitCode = false
-cmd = 'D:\Program Files\Unity\Hub\Editor\2019.4.31f1\Editor\Data\Tools\UnityYAMLMerge.exe' merge -p "$BASE" "$REMOTE" "$LOCAL" "$MERGED"
+[diff "usharp-prefab"]
+textconv = powershell .gitscripts/filter-usharp-assets.ps1
