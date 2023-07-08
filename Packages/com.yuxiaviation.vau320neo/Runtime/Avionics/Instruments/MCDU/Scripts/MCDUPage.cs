@@ -1,10 +1,8 @@
 ﻿using UdonSharp;
 
-namespace A320VAU.MCDU
-{
+namespace A320VAU.MCDU {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
-    public class MCDUPage : UdonSharpBehaviour
-    {
+    public class MCDUPage : UdonSharpBehaviour {
         public virtual void L1() { }
         public virtual void L2() { }
         public virtual void L3() { }

@@ -1,23 +1,20 @@
-﻿
-using SaccFlightAndVehicles;
+﻿using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
 
-namespace A320VAU.SFEXT
-{
+namespace A320VAU.SFEXT {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
-    public class SFEXT_a320_EngineFanDriver : UdonSharpBehaviour
-    {
+    public class SFEXT_a320_EngineFanDriver : UdonSharpBehaviour {
         public Transform[] fanTransforms;
         public Vector3[] fanAxises = { Vector3.up };
 
         private SFEXT_a320_AdvancedEngine[] engines;
         private float[] fanAngles;
-        private Vector3[] fanParentAxises;
         private Quaternion[] fanInitialRotations;
+        private Vector3[] fanParentAxises;
         private bool hasPilot;
-        private void Start()
-        {
+
+        private void Start() {
             var entity = GetComponentInParent<SaccEntity>();
             engines = entity.gameObject.GetComponentsInChildren<SFEXT_a320_AdvancedEngine>(true);
 
@@ -25,8 +22,7 @@ namespace A320VAU.SFEXT
             fanParentAxises = new Vector3[engines.Length];
             fanInitialRotations = new Quaternion[engines.Length];
 
-            for (var i = 0; i < engines.Length; i++)
-            {
+            for (var i = 0; i < engines.Length; i++) {
                 var fan = fanTransforms[i];
                 fanAngles[i] = 0;
                 fanInitialRotations[i] = fan.localRotation;
@@ -36,19 +32,10 @@ namespace A320VAU.SFEXT
             gameObject.SetActive(false);
         }
 
-        public void SFEXT_G_PilotEnter()
-        {
-            hasPilot = true;
-            gameObject.SetActive(true);
-        }
-        public void SFEXT_G_PilotExit() => hasPilot = false;
-
-        private void Update()
-        {
+        private void Update() {
             var deltaTime = Time.deltaTime;
             var stopped = true;
-            for (var i = 0; i < engines.Length; i++)
-            {
+            for (var i = 0; i < engines.Length; i++) {
                 var engine = engines[i];
                 var fan = fanTransforms[i];
                 var fanAngle = fanAngles[i];
@@ -64,6 +51,15 @@ namespace A320VAU.SFEXT
             }
 
             if (!hasPilot && stopped) gameObject.SetActive(false);
+        }
+
+        public void SFEXT_G_PilotEnter() {
+            hasPilot = true;
+            gameObject.SetActive(true);
+        }
+
+        public void SFEXT_G_PilotExit() {
+            hasPilot = false;
         }
     }
 }

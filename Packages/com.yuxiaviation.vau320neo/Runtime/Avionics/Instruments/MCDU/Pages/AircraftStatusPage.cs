@@ -1,16 +1,13 @@
 ﻿using UdonSharp;
 
-namespace A320VAU.MCDU
-{
+namespace A320VAU.MCDU {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
-    public class AircraftStatusPage : MCDUPage
-    {
+    public class AircraftStatusPage : MCDUPage {
         private MCDU _mcdu;
-        
-        public override void OnPageInit(MCDU mcdu)
-        {
+
+        public override void OnPageInit(MCDU mcdu) {
             _mcdu = mcdu;
-            
+
             mcdu.titleLineText.text = "V320-251N";
 
             mcdu.l1Label.text = "ENG";

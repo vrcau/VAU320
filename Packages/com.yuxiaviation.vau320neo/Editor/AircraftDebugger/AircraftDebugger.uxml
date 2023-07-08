@@ -4,59 +4,61 @@
         <Label name="unselected-warning" class="sub-title" text="Select a GameObject which part of vehicle."/>
         <VisualElement name="controls">
             <Box>
-                <Label text="Config" class="title" />
+                <Label text="Config" class="title"/>
                 <Label class="sub-title not-in-play-mode-warning" text="Enter Play Mode Frist."/>
-                <Label text="Proile" class="sub-title disable-when-not-in-play-mode" />
-                <Label text="WARNING: Profile won't adjust speed and altitude" class="sub-title disable-when-not-in-play-mode" />
-                <Label text="WARNING: You need to click twice to bypass DU selftest" class="sub-title disable-when-not-in-play-mode" />
+                <Label text="Proile" class="sub-title disable-when-not-in-play-mode"/>
+                <Label text="WARNING: Profile won't adjust speed and altitude"
+                       class="sub-title disable-when-not-in-play-mode"/>
+                <Label text="WARNING: You need to click twice to bypass DU selftest"
+                       class="sub-title disable-when-not-in-play-mode"/>
                 <VisualElement class="row disable-when-not-in-play-mode disable-when-not-in-play-mode">
-                    <Button text="Cold and Dark" name="cold-and-dark" />
+                    <Button text="Cold and Dark" name="cold-and-dark"/>
                     <Button text="ADIRU and APU on" name="adiru-apu-on"/>
                     <Button text="Engine Started" name="engine-started"/>
                     <Button text="Takeoff" name="takeoff"/>
                     <Button text="Landing" name="landing"/>
                     <Button text="Cruise" name="cruise"/>
                 </VisualElement>
-                <Label text="Flaps" class="sub-title disable-when-not-in-play-mode" />
+                <Label text="Flaps" class="sub-title disable-when-not-in-play-mode"/>
                 <VisualElement class="row disable-when-not-in-play-mode">
-                    <Button text="Flaps 0" name="flaps-0" />
-                    <Button text="Flaps 1/1+f" name="flaps-1" />
-                    <Button text="Flaps 2" name="flaps-2" />
-                    <Button text="Flaps 3" name="flaps-3" />
-                    <Button text="Flaps FULL" name="flaps-full" />
+                    <Button text="Flaps 0" name="flaps-0"/>
+                    <Button text="Flaps 1/1+f" name="flaps-1"/>
+                    <Button text="Flaps 2" name="flaps-2"/>
+                    <Button text="Flaps 3" name="flaps-3"/>
+                    <Button text="Flaps FULL" name="flaps-full"/>
                 </VisualElement>
-                <Label text="Gear" class="sub-title disable-when-not-in-play-mode" />
+                <Label text="Gear" class="sub-title disable-when-not-in-play-mode"/>
                 <VisualElement class="row disable-when-not-in-play-mode">
-                    <Button text="Gear Up" name="gear-up" />
-                    <Button text="Gear Down" name="gear-down" />
+                    <Button text="Gear Up" name="gear-up"/>
+                    <Button text="Gear Down" name="gear-down"/>
                 </VisualElement>
-                <Label text="ELEC" class="sub-title disable-when-not-in-play-mode" />
+                <Label text="ELEC" class="sub-title disable-when-not-in-play-mode"/>
                 <VisualElement class="row disable-when-not-in-play-mode">
-                    <Button text="Battery On" name="battery-on" />
-                    <Button text="Battery Off" name="battery-off" />
+                    <Button text="Battery On" name="battery-on"/>
+                    <Button text="Battery Off" name="battery-off"/>
                 </VisualElement>
             </Box>
             <Box>
-                <Label text="SaccFlight Vehicle" class="title" />
+                <Label text="SaccFlight Vehicle" class="title"/>
                 <Label class="sub-title not-in-play-mode-warning" text="Enter Play Mode Frist."/>
                 <VisualElement class="row disable-when-not-in-play-mode">
-                    <Button text="Pilot" name="pilot" />
-                    <Button text="Explode" name="explode" />
-                    <Button text="Respawn" name="respawn" />
+                    <Button text="Pilot" name="pilot"/>
+                    <Button text="Explode" name="explode"/>
+                    <Button text="Respawn" name="respawn"/>
                 </VisualElement>
             </Box>
             <Box>
-                <Label text="Position" class="title" />
-                <Label class="sub-title not-in-play-mode-warning" text="Enter Play Mode Frist."/>
-                <Label text="TODO" class="todo disable-when-not-in-play-mode"/>
-            </Box>
-            <Box>
-                <Label text="Systeam Failure" class="title" />
+                <Label text="Position" class="title"/>
                 <Label class="sub-title not-in-play-mode-warning" text="Enter Play Mode Frist."/>
                 <Label text="TODO" class="todo disable-when-not-in-play-mode"/>
             </Box>
             <Box>
-                <Label text="Components Selection" class="title" />
+                <Label text="Systeam Failure" class="title"/>
+                <Label class="sub-title not-in-play-mode-warning" text="Enter Play Mode Frist."/>
+                <Label text="TODO" class="todo disable-when-not-in-play-mode"/>
+            </Box>
+            <Box>
+                <Label text="Components Selection" class="title"/>
                 <Label text="TODO" class="todo"/>
             </Box>
         </VisualElement>

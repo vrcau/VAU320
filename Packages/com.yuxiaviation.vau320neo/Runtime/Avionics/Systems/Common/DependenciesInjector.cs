@@ -7,20 +7,20 @@ using EsnyaSFAddons.DFUNC;
 using EsnyaSFAddons.SFEXT;
 using SaccFlightAndVehicles;
 using UdonSharp;
-#if !COMPILER_UDONSHARP && UNITY_EDITOR
-using UdonSharpEditor;
-#endif
 using UnityEditor;
 using UnityEngine;
 using VirtualAviationJapan;
 using YuxiFlightInstruments.BasicFlightData;
+#if !COMPILER_UDONSHARP && UNITY_EDITOR
+using UdonSharpEditor;
+#endif
 
-namespace A320VAU.Common
-{
+namespace A320VAU.Common {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
-    public class DependenciesInjector : UdonSharpBehaviour
-    {
-        [Header("Aircraft Systems")] public SaccAirVehicle saccAirVehicle;
+    public class DependenciesInjector : UdonSharpBehaviour {
+        [Header("Aircraft Systems")]
+        public SaccAirVehicle saccAirVehicle;
+
         public SaccEntity saccEntity;
 
         public YFI_FlightDataInterface flightData;
@@ -60,40 +60,33 @@ namespace A320VAU.Common
 
         [Header("Engines Dependencies Search Settings")]
         public string leftLadingGearName = "AdvancedGear_L";
+
         public string rightLadingGearName = "AdvancedGear_R";
         public string frontLadingGearName = "AdvancedGear_C";
 
-        private void Start()
-        {
+        private void Start() {
             navaidDatabase = GameObject.Find(nameof(NavaidDatabase)).GetComponent<NavaidDatabase>();
         }
 
-        public static DependenciesInjector GetInstance(UdonSharpBehaviour behaviour)
-        {
+        public static DependenciesInjector GetInstance(UdonSharpBehaviour behaviour) {
             return behaviour.GetComponentInParent<DependenciesInjector>();
         }
     }
 
 #if !COMPILER_UDONSHARP && UNITY_EDITOR
     [CustomEditor(typeof(DependenciesInjector))]
-    public class DependenciesInjectorEditor : Editor
-    {
-        public override void OnInspectorGUI()
-        {
+    public class DependenciesInjectorEditor : Editor {
+        public override void OnInspectorGUI() {
             if (UdonSharpGUI.DrawDefaultUdonSharpBehaviourHeader(target)) return;
-            
+
             var injector = target as DependenciesInjector;
             if (injector == null) return;
 
             base.OnInspectorGUI();
-            if (GUILayout.Button("Setup"))
-            {
-                Setup(injector);
-            }
+            if (GUILayout.Button("Setup")) Setup(injector);
         }
 
-        private static void Setup(DependenciesInjector injector)
-        {
+        private static void Setup(DependenciesInjector injector) {
             injector.saccEntity = injector.GetComponentInChildren<SaccEntity>(true);
             injector.saccAirVehicle = injector.GetComponentInChildren<SaccAirVehicle>(true);
 
@@ -109,7 +102,7 @@ namespace A320VAU.Common
             injector.radioAltimeter = injector.GetComponentInChildren<RadioAltimeter.RadioAltimeter>(true);
 
             injector.equipmentData = injector.GetComponentInChildren<ECAMDataInterface>(true);
-            
+
             injector.fmgc = injector.GetComponentInChildren<FMGC.FMGC>(true);
 
             injector.airbusAvionicsTheme = injector.GetComponentInChildren<AirbusAvionicsTheme>(true);
@@ -117,35 +110,19 @@ namespace A320VAU.Common
             // Engines
             var engines = injector.GetComponentsInChildren<SFEXT_a320_AdvancedEngine>(true);
             foreach (var engine in engines)
-            {
                 if (engine.gameObject.name == injector.engine1Name)
-                {
                     injector.engine1 = engine;
-                }
-                else if (engine.gameObject.name == injector.engine2Name)
-                {
-                    injector.engine2 = engine;
-                }
-            }
-            
+                else if (engine.gameObject.name == injector.engine2Name) injector.engine2 = engine;
+
             // Gears
             injector.gear = injector.GetComponentInChildren<DFUNC_Gear>(true);
             var gears = injector.GetComponentsInChildren<SFEXT_a320_AdvancedGear>(true);
             foreach (var gear in gears)
-            {
                 if (gear.gameObject.name == injector.leftLadingGearName)
-                {
                     injector.leftLadingGear = gear;
-                }
                 else if (gear.gameObject.name == injector.rightLadingGearName)
-                {
                     injector.rightLadingGear = gear;
-                }
-                else if (gear.gameObject.name == injector.frontLadingGearName)
-                {
-                    injector.frontLadingGear = gear;
-                }
-            }
+                else if (gear.gameObject.name == injector.frontLadingGearName) injector.frontLadingGear = gear;
         }
     }
 #endif

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: RadioAltimeter
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: f1ca4dcfe65eda7499ef34a502f9e35a,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 455559b81674cf64e89fe29e329eb118,
     type: 2}
   udonAssembly: 
   assemblyError: 
@@ -260,13 +260,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: <radioAltitude>k__BackingField
+      Data: _maxRange
     - Name: $v
       Entry: 7
       Data: 13|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: <radioAltitude>k__BackingField
+      Data: _maxRange
     - Name: <UserType>k__BackingField
       Entry: 7
       Data: 14|System.RuntimeType, mscorlib
@@ -314,13 +314,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: _maxRange
+      Data: _offset
     - Name: $v
       Entry: 7
       Data: 16|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: _maxRange
+      Data: _offset
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 14
@@ -362,13 +362,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: _offset
+      Data: <radioAltitude>k__BackingField
     - Name: $v
       Entry: 7
       Data: 18|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: _offset
+      Data: <radioAltitude>k__BackingField
     - Name: <UserType>k__BackingField
       Entry: 9
       Data: 14

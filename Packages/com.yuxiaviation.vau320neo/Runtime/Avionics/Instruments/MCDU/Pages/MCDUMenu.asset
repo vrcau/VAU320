@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: MCDUMenu
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 0bcba8ded0fc4e64f9e96886d683e84c,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: b0824dbba9f3de44490fb1526d93da81,
     type: 2}
   udonAssembly: 
   assemblyError: 
@@ -50,19 +50,19 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: _mcdu
+      Data: aircraftStatusPage
     - Name: $v
       Entry: 7
       Data: 2|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: _mcdu
+      Data: aircraftStatusPage
     - Name: <UserType>k__BackingField
       Entry: 7
       Data: 3|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.MCDU.MCDU, com.yuxiaviation.vau320neo
+      Data: A320VAU.MCDU.AircraftStatusPage, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -86,7 +86,7 @@ MonoBehaviour:
       Data: 
     - Name: <IsSerialized>k__BackingField
       Entry: 5
-      Data: false
+      Data: true
     - Name: _fieldAttributes
       Entry: 7
       Data: 5|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
@@ -110,19 +110,19 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: aircraftStatusPage
+      Data: _mcdu
     - Name: $v
       Entry: 7
       Data: 6|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: aircraftStatusPage
+      Data: _mcdu
     - Name: <UserType>k__BackingField
       Entry: 7
       Data: 7|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.MCDU.AircraftStatusPage, com.yuxiaviation.vau320neo
+      Data: A320VAU.MCDU.MCDU, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -140,7 +140,7 @@ MonoBehaviour:
       Data: 
     - Name: <IsSerialized>k__BackingField
       Entry: 5
-      Data: true
+      Data: false
     - Name: _fieldAttributes
       Entry: 7
       Data: 8|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
