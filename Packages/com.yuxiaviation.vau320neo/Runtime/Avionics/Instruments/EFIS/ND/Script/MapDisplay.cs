@@ -11,44 +11,33 @@ namespace A320VAU.ND.Pages {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     [DefaultExecutionOrder(1000)] // After Virtual-CNS NavaidDatabase
     public class MapDisplay : UdonSharpBehaviour {
-        private SaccEntity _saccEntity;
-        
-        [PublicAPI] public EFISVisibilityType VisibilityType { get; private set; }
-        [PublicAPI] public int Range { get; private set; }
-        
-        [Tooltip("unit: nm")]
-        public int defaultRange = 40;
-        public EFISVisibilityType defaultVisibilityType = EFISVisibilityType.NONE;
-
-    #region UI Elements
-        public int uiRadius = 180;
-
-        // Templates
-        public GameObject vorTemplate,
-            vorDmeTemplate,
-            ndbTemplate,
-            dmeOrTacanTemplate,
-            waypointTemplate,
-            airportTemplate;
-    #endregion
-
-        private GameObject[] _markers = { };
-        private float scale;
-        
-        // delay update
-        private float _lastUpdate;
         private const float UPDATE_INTERVAL = 0.5f;
 
+        [Tooltip("unit: nm")]
+        public int defaultRange = 40;
+
+        public EFISVisibilityType defaultVisibilityType = EFISVisibilityType.NONE;
+
         private DependenciesInjector _injector;
+
+        // delay update
+        private float _lastUpdate;
+
+        private GameObject[] _markers = { };
         private NavaidDatabase _navaidDatabase;
+        private SaccEntity _saccEntity;
         private float magneticDeclination;
+        private float scale;
+
+        [PublicAPI] public EFISVisibilityType VisibilityType { get; private set; }
+        [PublicAPI] public int Range { get; private set; }
 
         private void Start() {
             _injector = DependenciesInjector.GetInstance(this);
-            
+
             _saccEntity = _injector.saccEntity;
             _navaidDatabase = _injector.navaidDatabase;
-            
+
             if (_navaidDatabase == null) {
                 Debug.LogError("Can't get NavaidDatabase instance, Map unavailable", this);
                 gameObject.SetActive(false);
@@ -161,6 +150,20 @@ namespace A320VAU.ND.Pages {
         public void SetVisibilityType(EFISVisibilityType visibilityType) {
             InstantiateMarkers(Range, visibilityType);
         }
+
+    #region UI Elements
+
+        public int uiRadius = 180;
+
+        // Templates
+        public GameObject vorTemplate,
+            vorDmeTemplate,
+            ndbTemplate,
+            dmeOrTacanTemplate,
+            waypointTemplate,
+            airportTemplate;
+
+    #endregion
     }
 
     public enum EFISVisibilityType {

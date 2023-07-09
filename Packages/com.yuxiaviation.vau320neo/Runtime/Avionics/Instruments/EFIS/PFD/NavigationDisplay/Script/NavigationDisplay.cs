@@ -8,23 +8,22 @@ namespace A320VAU.PFD {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     [DefaultExecutionOrder(90)] // After Nav Selector, Before Instruments
     public class NavigationDisplay : UdonSharpBehaviour {
-        private DependenciesInjector _injector;
-        private FMGC.FMGC _fmgc;
-        private NavSelector _ils;
+        private const int UPDATE_STEP_COUNT = 4;
 
         [Tooltip("信息显示")]
         public Text NaviInfo;
 
         public int updateIntervalFrames = 10;
+        private FMGC.FMGC _fmgc;
+        private NavSelector _ils;
+        private DependenciesInjector _injector;
         private int updateIntervalOffsetFrames;
-        
-        private const int UPDATE_STEP_COUNT = 4;
 
         private void Start() {
             _injector = DependenciesInjector.GetInstance(this);
             _fmgc = _injector.fmgc;
             _ils = _fmgc.radNav.ILS;
-            
+
             NaviInfo.text = "---\n--- < size = 14 > .-- </ size >\n- < size = 14 > .- </ size >;";
         }
 

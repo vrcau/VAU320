@@ -6,10 +6,9 @@ using VirtualAviationJapan;
 namespace A320VAU.FMGC {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class FMGC : UdonSharpBehaviour {
-        private DependenciesInjector _injector;
-        
         public NavaidDatabase navaidDatabase;
         public FMGCRadNav radNav;
+        private DependenciesInjector _injector;
 
         private void Start() {
             _injector = DependenciesInjector.GetInstance(this);

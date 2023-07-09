@@ -1,8 +1,6 @@
-﻿using System;
-using A320VAU.Avionics;
+﻿using A320VAU.Avionics;
 using A320VAU.Brake;
 using A320VAU.DFUNC;
-using A320VAU.Common;
 using A320VAU.SFEXT;
 using Avionics.Systems.Common;
 using EsnyaSFAddons.DFUNC;
@@ -72,6 +70,10 @@ namespace A320VAU.Common {
         public string rightLadingGearName = "AdvancedGear_R";
         public string frontLadingGearName = "AdvancedGear_C";
 
+        private void Awake() {
+            Setup();
+        }
+
         private void Start() {
             navaidDatabase = GameObject.Find(nameof(NavaidDatabase)).GetComponent<NavaidDatabase>();
         }
@@ -79,8 +81,6 @@ namespace A320VAU.Common {
         public static DependenciesInjector GetInstance(UdonSharpBehaviour behaviour) {
             return behaviour.GetComponentInParent<DependenciesInjector>();
         }
-
-        private void Awake() => Setup();
 
         internal void Setup() {
             saccEntity = GetComponentInChildren<SaccEntity>(true);
@@ -128,12 +128,12 @@ namespace A320VAU.Common {
                 else if (gear.gameObject.name == rightLadingGearName)
                     rightLadingGear = gear;
                 else if (gear.gameObject.name == frontLadingGearName) frontLadingGear = gear;
-            
+
         #if !COMPILER_UDONSHARP && UNITY_EDITOR
             EditorUtility.SetDirty(this);
         #endif
         }
-        
+
         private static NavaidDatabase GetNavaidDatabase() {
             var navaidDatabaseObject = GameObject.Find(nameof(NavaidDatabase));
             if (navaidDatabaseObject == null) {

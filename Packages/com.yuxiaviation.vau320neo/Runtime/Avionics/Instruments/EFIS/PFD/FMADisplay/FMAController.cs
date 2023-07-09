@@ -7,11 +7,10 @@ using UnityEngine.UI;
 
 namespace A320VAU.PFD {
     public class FMAController : UdonSharpBehaviour {
-        private DependenciesInjector _injector;
-        
         private AircraftSystemData _aircraftSystemData;
-        private DFUNC_Cruise _cruiseDFunc;
         private DFUNC_AltHold _altHoldDFunc;
+        private DFUNC_Cruise _cruiseDFunc;
+        private DependenciesInjector _injector;
 
         private void Start() {
             _injector = DependenciesInjector.GetInstance(this);
@@ -19,7 +18,7 @@ namespace A320VAU.PFD {
             _aircraftSystemData = _injector.equipmentData;
             _cruiseDFunc = _injector.cruise;
             _altHoldDFunc = _injector.altHold;
-            
+
             AutoThrustModeText.text = "";
             ManThrText.text = "";
             AutoBrkArmModeText.text = "";
@@ -46,7 +45,9 @@ namespace A320VAU.PFD {
         }
 
         public void LateUpdate() {
-            ManThrType = Mathf.Approximately(_aircraftSystemData.engine1ThrottleLeveler, 1f) ? ManThrType.TOGA : ManThrType.None;
+            ManThrType = Mathf.Approximately(_aircraftSystemData.engine1ThrottleLeveler, 1f)
+                ? ManThrType.TOGA
+                : ManThrType.None;
             if ((bool)_altHoldDFunc.GetProgramVariable("AltHold")) {
                 VerticalActiveMode = "ALT";
                 LateralActiveMode = "HDG";

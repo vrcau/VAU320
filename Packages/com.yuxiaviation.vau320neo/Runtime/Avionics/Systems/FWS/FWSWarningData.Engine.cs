@@ -1,7 +1,4 @@
-﻿using UdonSharp;
-using UnityEngine;
-
-namespace A320VAU.FWS {
+﻿namespace A320VAU.FWS {
     public partial class FWSWarningData {
         private FWSWarningMessageData DUAL_ENGINE_FAULT;
 

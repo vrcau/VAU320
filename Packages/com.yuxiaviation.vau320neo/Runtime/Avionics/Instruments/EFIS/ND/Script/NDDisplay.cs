@@ -12,28 +12,56 @@ namespace A320VAU.ND {
     public class NDDisplay : UdonSharpBehaviour {
         private const float UPDATE_INTERVAL = 0.5f;
         private const float MAX_SLIP_ANGLE = 50;
-        
-        private float _lastUpdate;
-
-        private DependenciesInjector _injector;
-        private YFI_FlightDataInterface FlightData;
-        private FMGC.FMGC _fmgc;
-        
-        private NavSelector _vor1;
-        private NavSelector _vor2;
 
         public int MainDataSource = 1;
 
         [Tooltip("仪表的动画控制器")]
         public Animator IndicatorAnimator;
-        
+
+        [FieldChangeCallback(nameof(NDMode))] public NDMode _ndMode;
+        private FMGC.FMGC _fmgc;
+
+        private DependenciesInjector _injector;
+
+        private float _lastUpdate;
+
+        private MapDisplay[] _mapDisplays;
+
+        private NavSelector _vor1;
+        private NavSelector _vor2;
+        private YFI_FlightDataInterface FlightData;
+
+        public NDMode NDMode {
+            get => _ndMode;
+            set {
+                _ndMode = (NDMode)((int)value < 0 ? 0 : (int)value % 5);
+                NDModeChanged();
+            }
+        }
+
+        private void Start() {
+            _injector = DependenciesInjector.GetInstance(this);
+            FlightData = _injector.flightData;
+            _fmgc = _injector.fmgc;
+
+            _vor1 = _fmgc.radNav.VOR1;
+            _vor2 = _fmgc.radNav.VOR2;
+
+            NDModeChanged();
+            _mapDisplays = GetComponentsInChildren<MapDisplay>(true);
+        }
+
+        private void OnEnable() {
+            NDModeChanged();
+        }
+
     #region Animation Hashs
 
         private readonly int HEADING_HASH = Animator.StringToHash("HeadingNormalize");
         private readonly int SLIP_ANGLE_HASH = Animator.StringToHash("SlipAngleNormalize");
 
     #endregion
-        
+
     #region UI Elements
 
         [Header("UI element")]
@@ -63,7 +91,7 @@ namespace A320VAU.ND {
         public GameObject GSIndicator;
 
     #endregion
-        
+
     #region EFIS Indicator Elements
 
         [Header("EFIS Status Display")]
@@ -83,33 +111,6 @@ namespace A320VAU.ND {
         private EFISVisibilityType _efisVisibilityType;
 
     #endregion
-
-        [FieldChangeCallback(nameof(NDMode))] public NDMode _ndMode;
-        public NDMode NDMode {
-            get => _ndMode;
-            set {
-                _ndMode = (NDMode)((int)value < 0 ? 0 : (int)value % 5);
-                NDModeChanged();
-            }
-        }
-
-        private MapDisplay[] _mapDisplays;
-
-        private void Start() {
-            _injector = DependenciesInjector.GetInstance(this);
-            FlightData = _injector.flightData;
-            _fmgc = _injector.fmgc;
-
-            _vor1 = _fmgc.radNav.VOR1;
-            _vor2 = _fmgc.radNav.VOR2;
-            
-            NDModeChanged();
-            _mapDisplays = GetComponentsInChildren<MapDisplay>(true);
-        }
-
-        private void OnEnable() {
-            NDModeChanged();
-        }
 
     #region Update
 

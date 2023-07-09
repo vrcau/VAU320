@@ -1,5 +1,3 @@
-using UdonSharp;
-
 namespace A320VAU.FWS {
     public partial class FWSWarningData {
         private FWSWarningMessageData APU_AVAIL;

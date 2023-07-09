@@ -9,18 +9,76 @@ using UnityEngine.UI;
 namespace A320VAU.Common {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class ECAMDisplay : UdonSharpBehaviour {
+        // for warning text
+        private const int SingleLineMaxLength = 24;
+
+        // for instrument animation
+        private const float MAX_EGT = 1000f;
+        private const float MAX_N1 = 1.2f;
+
+        [Header("Animator")]
+        public Animator ECAMAnimator;
+
+        // for engine started event
+        private bool _isEngine1RunningLastFrame;
+        private bool _isEngine2RunningLastFrame;
+
+        private void Start() {
+            _injector = DependenciesInjector.GetInstance(this);
+
+            _airVehicle = _injector.saccAirVehicle;
+            _saccEntity = _injector.saccEntity;
+            _airbusAvionicsTheme = _injector.airbusAvionicsTheme;
+            _aircraftSystemData = _injector.equipmentData;
+            _fws = _injector.fws;
+
+            eng1AvailFlag.SetActive(false);
+            eng2AvailFlag.SetActive(false);
+            flapText.text = "0";
+
+            ResetAllPages();
+            ToPage(SystemPage.Status);
+
+            UpdateMemo();
+            UpdateEngineStatus();
+            UpdateFlapStatus(true);
+        }
+
+    #region Utils
+
+        private static string GetColorHexByWarningColor(WarningColor color) {
+            switch (color) {
+                case WarningColor.Amber:
+                    return AirbusAvionicsTheme.Amber;
+                case WarningColor.Danger:
+                    return AirbusAvionicsTheme.Danger;
+                case WarningColor.Green:
+                    return AirbusAvionicsTheme.Green;
+                case WarningColor.Blue:
+                    return AirbusAvionicsTheme.Blue;
+                case WarningColor.White:
+                    return "#FFFFFF";
+                default:
+                    return AirbusAvionicsTheme.Green;
+            }
+        }
+
+    #endregion
+
     #region Aircraft Systems
 
         private DependenciesInjector _injector;
-        
+
         private SaccAirVehicle _airVehicle;
         private SaccEntity _saccEntity;
         private AircraftSystemData _aircraftSystemData;
         private AirbusAvionicsTheme _airbusAvionicsTheme;
         private FWS.FWS _fws;
+
     #endregion
 
     #region UI Elements
+
         [Header("Left Engine")]
         public Text N1L;
 
@@ -38,16 +96,19 @@ namespace A320VAU.Common {
         public Image StartingR;
         public Text FFR;
         public GameObject eng2AvailFlag;
-        
+
         [Header("Flap")]
         public Text flapText;
 
         [Header("Memo")]
         public Text LeftMemoText;
+
         public Text RightMemoText;
+
     #endregion
-        
+
     #region Animation Hashs
+
         private readonly int ENG1N1_HASH = Animator.StringToHash("ENG1N1");
         private readonly int ENG2N1_HASH = Animator.StringToHash("ENG2N1");
         private readonly int ENG1EGT_HASH = Animator.StringToHash("ENG1EGT");
@@ -55,42 +116,9 @@ namespace A320VAU.Common {
         private readonly int ENG1N1CMD_HASH = Animator.StringToHash("ENG1N1Cmd");
         private readonly int ENG2N1CMD_HASH = Animator.StringToHash("ENG2N1Cmd");
         private readonly int FLAP_HASH = Animator.StringToHash("flapPos");
+
     #endregion
-        
-        [Header("Animator")]
-        public Animator ECAMAnimator;
-        
-        // for warning text
-        private const int SingleLineMaxLength = 24;
-        
-        // for engine started event
-        private bool _isEngine1RunningLastFrame;
-        private bool _isEngine2RunningLastFrame;
-        
-        // for instrument animation
-        private const float MAX_EGT = 1000f;
-        private const float MAX_N1 = 1.2f;
 
-        private void Start() {
-            _injector = DependenciesInjector.GetInstance(this);
-
-            _airVehicle = _injector.saccAirVehicle;
-            _saccEntity = _injector.saccEntity;
-            _airbusAvionicsTheme = _injector.airbusAvionicsTheme;
-            _aircraftSystemData = _injector.equipmentData;
-            _fws = _injector.fws;
-            
-            eng1AvailFlag.SetActive(false);
-            eng2AvailFlag.SetActive(false);
-            flapText.text = "0";
-
-            ResetAllPages();
-            ToPage(SystemPage.Status);
-            
-            UpdateMemo();
-            UpdateEngineStatus();
-            UpdateFlapStatus(true);
-        }
     #region Pages
 
         public GameObject enginePage;
@@ -105,6 +133,7 @@ namespace A320VAU.Common {
     #endregion
 
     #region Update
+
         public void LateUpdate() {
             UpdateEngineStatus();
             UpdateFlapStatus();
@@ -114,6 +143,7 @@ namespace A320VAU.Common {
         }
 
     #region EWD Update
+
         private void UpdateFlapStatus(bool forceUpdate = false) {
             if (forceUpdate || !_aircraftSystemData.flapInPosition) // Only Update when moving
             {
@@ -281,14 +311,14 @@ namespace A320VAU.Common {
         public void ToggleEnginePage() {
             TogglePage(SystemPage.Engine);
         }
-        
+
         [PublicAPI]
         public void ToggleStatusPage() {
             TogglePage(SystemPage.Status);
         }
 
     #endregion
-        
+
         private void TogglePage(SystemPage page) {
             if (CurrentPage != page) {
                 ToPage(page);
@@ -338,25 +368,6 @@ namespace A320VAU.Common {
             statusPage.SetActive(false);
         }
 
-    #endregion
-
-    #region Utils
-        private static string GetColorHexByWarningColor(WarningColor color) {
-            switch (color) {
-                case WarningColor.Amber:
-                    return AirbusAvionicsTheme.Amber;
-                case WarningColor.Danger:
-                    return AirbusAvionicsTheme.Danger;
-                case WarningColor.Green:
-                    return AirbusAvionicsTheme.Green;
-                case WarningColor.Blue:
-                    return AirbusAvionicsTheme.Blue;
-                case WarningColor.White:
-                    return "#FFFFFF";
-                default:
-                    return AirbusAvionicsTheme.Green;
-            }
-        }
     #endregion
     }
 }

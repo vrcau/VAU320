@@ -1,6 +1,4 @@
-﻿using A320VAU.Avionics;
-using A320VAU.Common;
-using A320VAU.SFEXT;
+﻿using A320VAU.Common;
 using Avionics.Systems.Common;
 using EsnyaSFAddons.DFUNC;
 using JetBrains.Annotations;
@@ -12,7 +10,49 @@ using YuxiFlightInstruments.BasicFlightData;
 namespace A320VAU.PFD {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class PFDBasicDisplay : UdonSharpBehaviour {
+        [Header("EFIS Indicator")]
+        public GameObject flightDirectionIndicator;
+
+        public GameObject landingSystemIndicator;
+
+        private float _altitude;
+        private float BankAngle;
+        private float HeadingAngle;
+
+        private float PitchAngle;
+        private float RadioHeight;
+
+        [PublicAPI] public bool isFlightDirectionOn { get; private set; }
+        [PublicAPI] public bool isLandingSystemOn { get; private set; }
+
+        private void Start() {
+            _injector = DependenciesInjector.GetInstance(this);
+
+            _flightData = _injector.flightData;
+            _radioAltimeter = _injector.radioAltimeter;
+            _aircraftSystemData = _injector.equipmentData;
+            _fcu = _injector.fcu;
+            _flaps = _injector.flaps;
+
+            // Reset Flight Direction and Landing System
+            flightDirectionIndicator.SetActive(isFlightDirectionOn);
+            flightDirectionFail.SetActive(isFlightDirectionOn);
+
+            landingSystem.SetActive(isLandingSystemOn);
+            landingSystemIndicator.SetActive(isLandingSystemOn);
+        }
+
+    #region Math
+
+        private static float Remap01(float value, float valueMin, float valueMax) {
+            value = Mathf.Clamp01((value - valueMin) / (valueMax - valueMin));
+            return value;
+        }
+
+    #endregion
+
     #region UI Elements
+
         [Header("UI Elements")]
         public GameObject VSbackground;
 
@@ -33,12 +73,13 @@ namespace A320VAU.PFD {
         public GameObject[] disableOnGround;
 
         public GameObject[] enableOnGround;
+
     #endregion
-        
+
     #region Aircraft Systems
 
         private DependenciesInjector _injector;
-        
+
         private YFI_FlightDataInterface _flightData;
         private RadioAltimeter.RadioAltimeter _radioAltimeter;
         private AircraftSystemData _aircraftSystemData;
@@ -46,7 +87,7 @@ namespace A320VAU.PFD {
         private DFUNC_AdvancedFlaps _flaps;
 
     #endregion
-        
+
     #region Indicator Settings
 
         [Header("Indicator Settings")]
@@ -110,37 +151,6 @@ namespace A320VAU.PFD {
         private readonly int VLS_HASH = Animator.StringToHash("VLSNormalize");
 
     #endregion
-
-        [Header("EFIS Indicator")]
-        public GameObject flightDirectionIndicator;
-        public GameObject landingSystemIndicator;
-
-        private float _altitude;
-        private float BankAngle;
-        private float HeadingAngle;
-
-        private float PitchAngle;
-        private float RadioHeight;
-
-        [PublicAPI] public bool isFlightDirectionOn { get; private set; }
-        [PublicAPI] public bool isLandingSystemOn { get; private set; }
-
-        private void Start() {
-            _injector = DependenciesInjector.GetInstance(this);
-            
-            _flightData = _injector.flightData;
-            _radioAltimeter = _injector.radioAltimeter;
-            _aircraftSystemData = _injector.equipmentData;
-            _fcu = _injector.fcu;
-            _flaps = _injector.flaps;
-            
-            // Reset Flight Direction and Landing System
-            flightDirectionIndicator.SetActive(isFlightDirectionOn);
-            flightDirectionFail.SetActive(isFlightDirectionOn);
-
-            landingSystem.SetActive(isLandingSystemOn);
-            landingSystemIndicator.SetActive(isLandingSystemOn);
-        }
 
     #region Update
 
@@ -383,21 +393,12 @@ namespace A320VAU.PFD {
             flightDirectionIndicator.SetActive(isFlightDirectionOn);
             flightDirectionFail.SetActive(isFlightDirectionOn);
         }
-        
+
         [PublicAPI]
         public void ToggleLandingSystem() {
             isLandingSystemOn = !isLandingSystemOn;
             landingSystem.SetActive(isLandingSystemOn);
             landingSystemIndicator.SetActive(isLandingSystemOn);
-        }
-
-    #endregion
-        
-    #region Math
-
-        private static float Remap01(float value, float valueMin, float valueMax) {
-            value = Mathf.Clamp01((value - valueMin) / (valueMax - valueMin));
-            return value;
         }
 
     #endregion
