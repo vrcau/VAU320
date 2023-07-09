@@ -58,7 +58,7 @@ namespace A320VAU.FWS {
                 SetWarnVisible(ref ENGINE1_FIRE.MessageLine[3].isMessageVisible, true);
             }
 
-            SetWarnVisible(ref ENGINE2_FIRE.isVisable, FWS.equipmentData.isEngine1Fuel, true);
+            SetWarnVisible(ref ENGINE2_FIRE.isVisable, FWS.equipmentData.isEngine2Fire, true);
             if (ENGINE2_FIRE.isVisable) {
                 SetWarnVisible(ref ENGINE2_FIRE.MessageLine[0].isMessageVisible,
                     !FWS.equipmentData.isEngine2ThrottleLevelerIdle);
