@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace A320VAU.FWS {
-    public partial class FWSWarningData : UdonSharpBehaviour {
+    public partial class FWSWarningData {
         private FWSWarningMessageData DUAL_ENGINE_FAULT;
 
         private FWSWarningMessageData ENGINE1_EGT_OVERLIMIT;
@@ -41,28 +41,28 @@ namespace A320VAU.FWS {
         }
 
         private void MonitorEngine() {
-            var engine1N1 = FWS.equipmentData.N1LRef * 100;
-            var engine2N1 = FWS.equipmentData.N2LRef * 100;
+            var engine1N1 = FWS.equipmentData.engine1n1 * 100;
+            var engine2N1 = FWS.equipmentData.engine1n2 * 100;
 
-            var engine1N2 = FWS.equipmentData.N2RRef * 100;
-            var engine2N2 = FWS.equipmentData.N2RRef * 100;
+            var engine1N2 = FWS.equipmentData.engine2n1 * 100;
+            var engine2N2 = FWS.equipmentData.engine2n2 * 100;
 
         #region ENGIEN FIRE
 
-            SetWarnVisible(ref ENGINE1_FIRE.isVisable, FWS.equipmentData.EngineL.fire, true);
+            SetWarnVisible(ref ENGINE1_FIRE.isVisable, FWS.equipmentData.isEngine1Fire, true);
             if (ENGINE1_FIRE.isVisable) {
                 SetWarnVisible(ref ENGINE1_FIRE.MessageLine[0].isMessageVisible,
-                    !Mathf.Approximately(FWS.saccAirVehicle.ThrottleInput, FWS.equipmentData.EngineL.idlePoint));
-                SetWarnVisible(ref ENGINE1_FIRE.MessageLine[1].isMessageVisible, FWS.equipmentData.EngineL.fuel);
+                    !FWS.equipmentData.isEngine1ThrottleLevelerIdle);
+                SetWarnVisible(ref ENGINE1_FIRE.MessageLine[1].isMessageVisible, FWS.equipmentData.isEngine1Running);
                 SetWarnVisible(ref ENGINE1_FIRE.MessageLine[2].isMessageVisible, true);
                 SetWarnVisible(ref ENGINE1_FIRE.MessageLine[3].isMessageVisible, true);
             }
 
-            SetWarnVisible(ref ENGINE2_FIRE.isVisable, FWS.equipmentData.EngineR.fire, true);
+            SetWarnVisible(ref ENGINE2_FIRE.isVisable, FWS.equipmentData.isEngine1Fuel, true);
             if (ENGINE2_FIRE.isVisable) {
                 SetWarnVisible(ref ENGINE2_FIRE.MessageLine[0].isMessageVisible,
-                    !Mathf.Approximately(FWS.saccAirVehicle.ThrottleInput, FWS.equipmentData.EngineR.idlePoint));
-                SetWarnVisible(ref ENGINE2_FIRE.MessageLine[1].isMessageVisible, FWS.equipmentData.EngineR.fuel);
+                    !FWS.equipmentData.isEngine2ThrottleLevelerIdle);
+                SetWarnVisible(ref ENGINE2_FIRE.MessageLine[1].isMessageVisible, FWS.equipmentData.isEngine2Fuel);
                 SetWarnVisible(ref ENGINE2_FIRE.MessageLine[2].isMessageVisible, true);
                 SetWarnVisible(ref ENGINE2_FIRE.MessageLine[3].isMessageVisible, true);
             }
@@ -72,12 +72,12 @@ namespace A320VAU.FWS {
         #region DUAL ENGINE FAIL
 
             SetWarnVisible(ref DUAL_ENGINE_FAULT.isVisable,
-                !FWS.saccAirVehicle.Taxiing && !FWS.equipmentData.IsEngineLRunning &&
-                !FWS.equipmentData.IsEngineRRunning, true);
+                !FWS.saccAirVehicle.Taxiing && !FWS.equipmentData.isEngine1Running &&
+                !FWS.equipmentData.isEngine2Running, true);
             if (DUAL_ENGINE_FAULT.isVisable) {
                 SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[0].isMessageVisible, true);
                 SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[1].isMessageVisible,
-                    !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerL, FWS.equipmentData.EngineL.idlePoint));
+                    !FWS.equipmentData.isBothThrottleLevelerIdle);
                 SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[2].isMessageVisible, true);
                 SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[3].isMessageVisible, true);
                 SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[4].isMessageVisible, true);
@@ -108,11 +108,11 @@ namespace A320VAU.FWS {
         #region ENGINE FAIL
 
             SetWarnVisible(ref ENGINE1_FAIL.isVisable,
-                !FWS.saccAirVehicle.Taxiing && !FWS.equipmentData.IsEngineLRunning, true);
+                !FWS.saccAirVehicle.Taxiing && !FWS.equipmentData.isEngine1Running, true);
             if (ENGINE1_FAIL.isVisable) {
                 SetWarnVisible(ref ENGINE1_FAIL.MessageLine[0].isMessageVisible, true);
                 SetWarnVisible(ref ENGINE1_FAIL.MessageLine[1].isMessageVisible,
-                    !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerL, FWS.equipmentData.EngineL.idlePoint));
+                    !FWS.equipmentData.isEngine1ThrottleLevelerIdle);
                 SetWarnVisible(ref ENGINE1_FAIL.MessageLine[2].isMessageVisible, true);
                 SetWarnVisible(ref ENGINE1_FAIL.MessageLine[3].isMessageVisible, true);
                 SetWarnVisible(ref ENGINE1_FAIL.MessageLine[4].isMessageVisible, true);
@@ -122,11 +122,11 @@ namespace A320VAU.FWS {
             }
 
             SetWarnVisible(ref ENGINE2_FAIL.isVisable,
-                !FWS.saccAirVehicle.Taxiing && !FWS.equipmentData.IsEngineRRunning, true);
+                !FWS.saccAirVehicle.Taxiing && !FWS.equipmentData.isEngine2Running, true);
             if (ENGINE2_FAIL.isVisable) {
                 SetWarnVisible(ref ENGINE2_FAIL.MessageLine[0].isMessageVisible, true);
                 SetWarnVisible(ref ENGINE2_FAIL.MessageLine[1].isMessageVisible,
-                    !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerR, FWS.equipmentData.EngineR.idlePoint));
+                    !FWS.equipmentData.isEngine2ThrottleLevelerIdle);
                 SetWarnVisible(ref ENGINE2_FAIL.MessageLine[2].isMessageVisible, true);
                 SetWarnVisible(ref ENGINE2_FAIL.MessageLine[3].isMessageVisible, true);
                 SetWarnVisible(ref ENGINE2_FAIL.MessageLine[4].isMessageVisible, true);
@@ -139,20 +139,20 @@ namespace A320VAU.FWS {
 
         #region EGT Overlimit
 
-            SetWarnVisible(ref ENGINE1_EGT_OVERLIMIT.isVisable, FWS.equipmentData.EGTL > 1060f, true);
+            SetWarnVisible(ref ENGINE1_EGT_OVERLIMIT.isVisable, FWS.equipmentData.engine1EGT > 1060f, true);
             if (ENGINE1_EGT_OVERLIMIT.isVisable) {
                 SetWarnVisible(ref ENGINE1_EGT_OVERLIMIT.MessageLine[0].isMessageVisible,
-                    !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerL, FWS.equipmentData.EngineL.idlePoint));
+                    !FWS.equipmentData.isEngine1ThrottleLevelerIdle);
                 SetWarnVisible(ref ENGINE1_EGT_OVERLIMIT.MessageLine[1].isMessageVisible,
-                    FWS.equipmentData.EngineL.fuel);
+                    FWS.equipmentData.isEngine1Fuel);
             }
 
-            SetWarnVisible(ref ENGINE2_EGT_OVERLIMIT.isVisable, FWS.equipmentData.EGTR > 1060f, true);
+            SetWarnVisible(ref ENGINE2_EGT_OVERLIMIT.isVisable, FWS.equipmentData.engine2EGT > 1060f, true);
             if (ENGINE2_EGT_OVERLIMIT.isVisable) {
                 SetWarnVisible(ref ENGINE2_EGT_OVERLIMIT.MessageLine[0].isMessageVisible,
-                    !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerR, FWS.equipmentData.EngineR.idlePoint));
+                    !FWS.equipmentData.isEngine2ThrottleLevelerIdle);
                 SetWarnVisible(ref ENGINE2_EGT_OVERLIMIT.MessageLine[1].isMessageVisible,
-                    FWS.equipmentData.EngineR.fuel);
+                    FWS.equipmentData.isEngine2Fuel);
             }
 
         #endregion
@@ -162,17 +162,17 @@ namespace A320VAU.FWS {
             SetWarnVisible(ref ENGINE1_N1_OVERLIMIT.isVisable, engine1N1 > 100f, true);
             if (ENGINE1_N1_OVERLIMIT.isVisable) {
                 SetWarnVisible(ref ENGINE1_N1_OVERLIMIT.MessageLine[0].isMessageVisible,
-                    !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerL, FWS.equipmentData.EngineL.idlePoint));
+                    !FWS.equipmentData.isEngine1ThrottleLevelerIdle);
                 SetWarnVisible(ref ENGINE1_N1_OVERLIMIT.MessageLine[1].isMessageVisible,
-                    FWS.equipmentData.EngineL.fuel);
+                    FWS.equipmentData.isEngine1Fuel);
             }
 
             SetWarnVisible(ref ENGINE2_N1_OVERLIMIT.isVisable, engine2N1 > 100f, true);
             if (ENGINE2_N1_OVERLIMIT.isVisable) {
                 SetWarnVisible(ref ENGINE2_N1_OVERLIMIT.MessageLine[0].isMessageVisible,
-                    !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerR, FWS.equipmentData.EngineR.idlePoint));
+                    !FWS.equipmentData.isEngine2ThrottleLevelerIdle);
                 SetWarnVisible(ref ENGINE2_N1_OVERLIMIT.MessageLine[1].isMessageVisible,
-                    FWS.equipmentData.EngineR.fuel);
+                    FWS.equipmentData.isEngine2Fuel);
             }
 
         #endregion
@@ -182,17 +182,17 @@ namespace A320VAU.FWS {
             SetWarnVisible(ref ENGINE1_N2_OVERLIMIT.isVisable, engine1N2 > 100f, true);
             if (ENGINE1_N2_OVERLIMIT.isVisable) {
                 SetWarnVisible(ref ENGINE1_N2_OVERLIMIT.MessageLine[0].isMessageVisible,
-                    !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerL, FWS.equipmentData.EngineL.idlePoint));
+                    !FWS.equipmentData.isEngine1ThrottleLevelerIdle);
                 SetWarnVisible(ref ENGINE1_N2_OVERLIMIT.MessageLine[1].isMessageVisible,
-                    FWS.equipmentData.EngineL.fuel);
+                    FWS.equipmentData.isEngine1Fuel);
             }
 
             SetWarnVisible(ref ENGINE2_N2_OVERLIMIT.isVisable, engine2N2 > 100f, true);
             if (ENGINE2_N2_OVERLIMIT.isVisable) {
                 SetWarnVisible(ref ENGINE2_N2_OVERLIMIT.MessageLine[0].isMessageVisible,
-                    !Mathf.Approximately(FWS.equipmentData.ThrottleLevelerR, FWS.equipmentData.EngineR.idlePoint));
+                    !FWS.equipmentData.isEngine2ThrottleLevelerIdle);
                 SetWarnVisible(ref ENGINE2_N2_OVERLIMIT.MessageLine[1].isMessageVisible,
-                    FWS.equipmentData.EngineR.fuel);
+                    FWS.equipmentData.isEngine2Fuel);
             }
 
         #endregion

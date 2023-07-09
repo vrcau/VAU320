@@ -12,8 +12,8 @@ namespace A320VAU.FWS {
         }
 
         private void MonitorConfigMemo() {
-            var isEngine1Running = FWS.equipmentData.IsEngineLRunning;
-            var isEngine2Running = FWS.equipmentData.IsEngineRRunning;
+            var isEngine1Running = FWS.equipmentData.isEngine1Running;
+            var isEngine2Running = FWS.equipmentData.isEngine2Running;
 
         #region Takeoff Memo
 
@@ -32,7 +32,7 @@ namespace A320VAU.FWS {
 
                 TAKEOFF_MEMO.MessageLine[5].isMessageVisible = true;
                 // CABIN READY
-                if (!FWS.equipmentData.Canopy.CanopyOpen) {
+                if (!FWS.equipmentData.isCabinDoorOpen) {
                     SetWarnVisible(ref TAKEOFF_MEMO.MessageLine[6].isMessageVisible, false);
                     SetWarnVisible(ref TAKEOFF_MEMO.MessageLine[7].isMessageVisible, false);
                     SetWarnVisible(ref TAKEOFF_MEMO.MessageLine[8].isMessageVisible, true);
@@ -49,8 +49,8 @@ namespace A320VAU.FWS {
 
                 SetWarnVisible(ref TAKEOFF_MEMO.MessageLine[11].isMessageVisible, true);
                 // FLAP T.O & T.O CONFIG TEST
-                if ((FWS.equipmentData.Flap.detentIndex == 1 && FWS.equipmentData.Flap.targetDetentIndex == 1) ||
-                    (FWS.equipmentData.Flap.detentIndex == 2 && FWS.equipmentData.Flap.targetDetentIndex == 2)) {
+                if ((FWS.equipmentData.flapCurrentIndex == 1 && FWS.equipmentData.flapTargetIndex == 1) ||
+                    (FWS.equipmentData.flapCurrentIndex == 2 && FWS.equipmentData.flapTargetIndex == 2)) {
                     // FLAP T.O
                     SetWarnVisible(ref TAKEOFF_MEMO.MessageLine[12].isMessageVisible, false);
                     SetWarnVisible(ref TAKEOFF_MEMO.MessageLine[13].isMessageVisible, false);
@@ -82,7 +82,7 @@ namespace A320VAU.FWS {
 
             if (LANDING_MEMO.isVisable) {
                 // GEAR DN
-                if (FWS.equipmentData.GearLeft.targetPosition == 1) {
+                if (FWS.equipmentData.IsGearsDown) {
                     SetWarnVisible(ref LANDING_MEMO.MessageLine[0].isMessageVisible, false);
                     SetWarnVisible(ref LANDING_MEMO.MessageLine[1].isMessageVisible, false);
                     SetWarnVisible(ref LANDING_MEMO.MessageLine[2].isMessageVisible, true);
@@ -109,7 +109,7 @@ namespace A320VAU.FWS {
                 LANDING_MEMO.MessageLine[11].isMessageVisible = true;
 
                 // FLAPS FULL
-                if (FWS.equipmentData.Flap.targetDetentIndex == 4) {
+                if (FWS.equipmentData.flapTargetIndex == 4) {
                     SetWarnVisible(ref LANDING_MEMO.MessageLine[12].isMessageVisible, false);
                     SetWarnVisible(ref LANDING_MEMO.MessageLine[13].isMessageVisible, false);
                     SetWarnVisible(ref LANDING_MEMO.MessageLine[14].isMessageVisible, true);

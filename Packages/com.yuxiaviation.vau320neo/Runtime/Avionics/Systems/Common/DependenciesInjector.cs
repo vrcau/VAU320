@@ -2,8 +2,9 @@
 using A320VAU.Avionics;
 using A320VAU.Brake;
 using A320VAU.DFUNC;
-using A320VAU.ECAM;
+using A320VAU.Common;
 using A320VAU.SFEXT;
+using Avionics.Systems.Common;
 using EsnyaSFAddons.DFUNC;
 using EsnyaSFAddons.SFEXT;
 using SaccFlightAndVehicles;
@@ -45,7 +46,7 @@ namespace A320VAU.Common {
         public GPWS_OWML gpws;
         public RadioAltimeter.RadioAltimeter radioAltimeter;
 
-        public ECAMDataInterface equipmentData;
+        public AircraftSystemData equipmentData;
 
         public FMGC.FMGC fmgc;
 
@@ -90,7 +91,7 @@ namespace A320VAU.Common {
             gpws = GetComponentInChildren<GPWS_OWML>(true);
             radioAltimeter = GetComponentInChildren<RadioAltimeter.RadioAltimeter>(true);
 
-            equipmentData = GetComponentInChildren<ECAMDataInterface>(true);
+            equipmentData = GetComponentInChildren<AircraftSystemData>(true);
 
             fmgc = GetComponentInChildren<FMGC.FMGC>(true);
 

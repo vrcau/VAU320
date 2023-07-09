@@ -1,13 +1,14 @@
 ﻿using System;
 using A320VAU.Common;
 using A320VAU.FWS;
+using Avionics.Systems.Common;
 using EsnyaSFAddons.SFEXT;
 using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace A320VAU.ECAM {
+namespace A320VAU.Common {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class ECAMDisplay : UdonSharpBehaviour {
         private float EgtMax = 1000f;
@@ -52,7 +53,7 @@ namespace A320VAU.ECAM {
 
         public SaccAirVehicle airVehicle;
         public SaccEntity EntityControl;
-        public ECAMDataInterface AdvancedData;
+        public AircraftSystemData AdvancedData;
         public AirbusAvionicsTheme AirbusAvionicsTheme;
         public FWS.FWS FWS;
 
@@ -133,11 +134,11 @@ namespace A320VAU.ECAM {
     #region EWD Update
 
         private void UpdateFlapStatus(bool forceUpdate = false) {
-            if (forceUpdate || !AdvancedData.FlapInPosition) // Only Upadte when moving
+            if (forceUpdate || !AdvancedData.flapInPosition) // Only Upadte when moving
             {
                 flapText.color = AirbusAvionicsTheme.BlueColor;
-                ECAMAnimator.SetFloat(FLAP_HASH, AdvancedData.FlapRefAngle);
-                switch (AdvancedData.FlapTargetPosition) {
+                ECAMAnimator.SetFloat(FLAP_HASH, AdvancedData.flapAngle);
+                switch (AdvancedData.flapTargetIndex) {
                     case 0:
                         flapText.text = "0";
                         break;
@@ -164,66 +165,66 @@ namespace A320VAU.ECAM {
         }
 
         private void UpdateEngineStatus() {
-            N1L.text = (AdvancedData.N1LRef * 100).ToString("F1");
-            N2L.text = (AdvancedData.N2LRef * 100).ToString("F1");
-            EGTL.text = AdvancedData.EGTL.ToString("F0");
-            FFL.text = AdvancedData.FuelFlowL.ToString("F0");
+            N1L.text = (AdvancedData.engine1n1 * 100).ToString("F1");
+            N2L.text = (AdvancedData.engine1n2 * 100).ToString("F1");
+            EGTL.text = AdvancedData.engine1EGT.ToString("F0");
+            FFL.text = AdvancedData.engine1fuelFlow.ToString("F0");
 
-            if (AdvancedData.IsEngineLStarting)
+            if (AdvancedData.isEngine1Starting)
                 StartingL.color = new Color(0.376f, 0.376f, 0.376f);
             else
                 StartingL.color = new Color(0, 0, 0);
 
-            ECAMAnimator.SetFloat(ENG1N1_HASH, AdvancedData.N1LRef / N1RefMax);
-            ECAMAnimator.SetFloat(ENG1EGT_HASH, AdvancedData.EGTL / EgtMax);
-            ECAMAnimator.SetFloat(ENG1N1CMD_HASH, AdvancedData.TargetRefN1L);
+            ECAMAnimator.SetFloat(ENG1N1_HASH, AdvancedData.engine1n1 / N1RefMax);
+            ECAMAnimator.SetFloat(ENG1EGT_HASH, AdvancedData.engine1EGT / EgtMax);
+            ECAMAnimator.SetFloat(ENG1N1CMD_HASH, AdvancedData.engine1TargetN1);
 
 
-            if (AdvancedData.IsEngineLRunning) {
+            if (AdvancedData.isEngine1Running) {
                 if (!isEng1RunnningLastFarme) {
                     eng1AvailFlag.SetActive(true);
                     EntityControl.SendEventToExtensions("SFEXT_G_SFEXT_G_EngineStarted");
                 }
 
-                if (AdvancedData.EngineL.n1 > 0.9f * AdvancedData.EngineL.idleN1) eng1AvailFlag.SetActive(false);
+                if (AdvancedData.isEngine1Avail) eng1AvailFlag.SetActive(false);
             }
             else {
                 if (isEng1RunnningLastFarme) EntityControl.SendEventToExtensions("SFEXT_G_EngineShutDown");
                 eng1AvailFlag.SetActive(false);
             }
 
-            isEng1RunnningLastFarme = AdvancedData.IsEngineLRunning;
+            isEng1RunnningLastFarme = AdvancedData.isEngine1Running;
 
             // 2发
-            N1R.text = (AdvancedData.N1RRef * 100).ToString("F1");
-            N2R.text = (AdvancedData.N2RRef * 100).ToString("F1");
-            EGTR.text = AdvancedData.EGTR.ToString("F0");
-            FFR.text = AdvancedData.FuelFlowR.ToString("F0");
+            N1R.text = (AdvancedData.engine2n1 * 100).ToString("F1");
+            N2R.text = (AdvancedData.engine2n2 * 100).ToString("F1");
+            EGTR.text = AdvancedData.engine2EGT.ToString("F0");
+            FFR.text = AdvancedData.engine2fuelFlow.ToString("F0");
 
-            if (AdvancedData.IsEngineRStarting)
+            if (AdvancedData.isEngine2Starting)
                 StartingR.color = new Color(0.376f, 0.376f, 0.376f);
             else
                 StartingR.color = new Color(0, 0, 0);
 
-            ECAMAnimator.SetFloat(ENG2N1_HASH, AdvancedData.N1RRef / N1RefMax);
-            ECAMAnimator.SetFloat(ENG2EGT_HASH, AdvancedData.EGTR / EgtMax);
-            ECAMAnimator.SetFloat(ENG2N1CMD_HASH, AdvancedData.TargetRefN1R);
+            ECAMAnimator.SetFloat(ENG2N1_HASH, AdvancedData.engine2n1 / N1RefMax);
+            ECAMAnimator.SetFloat(ENG2EGT_HASH, AdvancedData.engine2EGT / EgtMax);
+            ECAMAnimator.SetFloat(ENG2N1CMD_HASH, AdvancedData.engine2TargetN1);
 
             // AVAIL FLAG
-            if (AdvancedData.IsEngineRRunning) {
+            if (AdvancedData.isEngine2Running) {
                 if (!isEng2RunnningLastFarme) {
                     eng2AvailFlag.SetActive(true);
                     EntityControl.SendEventToExtensions("SFEXT_G_SFEXT_G_EngineStarted");
                 }
 
-                if (AdvancedData.EngineR.n1 > 0.9f * AdvancedData.EngineR.idleN1) eng2AvailFlag.SetActive(false);
+                if (AdvancedData.isEngine2Avail) eng2AvailFlag.SetActive(false);
             }
             else {
                 if (isEng2RunnningLastFarme) EntityControl.SendEventToExtensions("SFEXT_G_EngineShutDown");
                 eng2AvailFlag.SetActive(false);
             }
 
-            isEng2RunnningLastFarme = AdvancedData.IsEngineRRunning;
+            isEng2RunnningLastFarme = AdvancedData.isEngine2Running;
         }
 
         private readonly int SingleLineMaxLength = 24;

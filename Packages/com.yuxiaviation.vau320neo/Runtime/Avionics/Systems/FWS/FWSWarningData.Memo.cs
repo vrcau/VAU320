@@ -1,7 +1,7 @@
 using UdonSharp;
 
 namespace A320VAU.FWS {
-    public partial class FWSWarningData : UdonSharpBehaviour {
+    public partial class FWSWarningData {
         private FWSWarningMessageData APU_AVAIL;
         private FWSWarningMessageData APU_BLEED;
         private FWSWarningMessageData PARK_BRK;
@@ -13,10 +13,10 @@ namespace A320VAU.FWS {
         }
 
         private void MonitorMemo() {
-            SetWarnVisible(ref APU_BLEED.isVisable, FWS.equipmentData.IsAPURunning);
+            SetWarnVisible(ref APU_BLEED.isVisable, FWS.equipmentData.isAPURunning);
             // APU BLEED will replace APU AVAIL if APU BLEED is on, but we don't have "APU BLEED" simulate.
             // SetWarnVisible(ref APU_AVAIL.IsVisable, FWS.equipmentData.IsAPURunning);
-            SetWarnVisible(ref PARK_BRK.isVisable, FWS.equipmentData.Brake.ParkBreakSet);
+            SetWarnVisible(ref PARK_BRK.isVisable, FWS.equipmentData.isParkBreakSet);
         }
     }
 }
