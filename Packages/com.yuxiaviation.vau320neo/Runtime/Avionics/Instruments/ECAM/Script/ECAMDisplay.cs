@@ -71,13 +71,13 @@ namespace A320VAU.Common {
         private const float MAX_EGT = 1000f;
         private const float MAX_N1 = 1.2f;
 
-        public void Start() {
+        private void Start() {
             _injector = DependenciesInjector.GetInstance(this);
 
             _airVehicle = _injector.saccAirVehicle;
             _saccEntity = _injector.saccEntity;
-            _aircraftSystemData = _injector.equipmentData;
             _airbusAvionicsTheme = _injector.airbusAvionicsTheme;
+            _aircraftSystemData = _injector.equipmentData;
             _fws = _injector.fws;
             
             eng1AvailFlag.SetActive(false);
@@ -88,13 +88,9 @@ namespace A320VAU.Common {
             ToPage(SystemPage.Status);
             
             UpdateMemo();
-        }
-
-        private void OnEnable() {
             UpdateEngineStatus();
             UpdateFlapStatus(true);
         }
-
     #region Pages
 
         public GameObject enginePage;
