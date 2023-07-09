@@ -1,16 +1,20 @@
-﻿using UdonSharp;
+﻿using A320VAU.Common;
+using UdonSharp;
 using UnityEngine;
 using VirtualAviationJapan;
 
 namespace A320VAU.FMGC {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class FMGC : UdonSharpBehaviour {
+        private DependenciesInjector _injector;
+        
         public NavaidDatabase navaidDatabase;
-
         public FMGCRadNav radNav;
 
         private void Start() {
-            navaidDatabase = NavaidDatabase.GetInstance();
+            _injector = DependenciesInjector.GetInstance(this);
+
+            navaidDatabase = _injector.navaidDatabase;
             if (!navaidDatabase)
                 Debug.LogError("You don't have a NavaidDatabase in your scene, FMGC won't work.", this);
 
