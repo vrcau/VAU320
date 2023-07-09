@@ -1,6 +1,9 @@
 ﻿using A320VAU.Avionics;
+using A320VAU.Common;
 using A320VAU.SFEXT;
+using Avionics.Systems.Common;
 using EsnyaSFAddons.DFUNC;
+using JetBrains.Annotations;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +12,8 @@ using YuxiFlightInstruments.BasicFlightData;
 namespace A320VAU.PFD {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class PFDBasicDisplay : UdonSharpBehaviour {
-        [Header("UI element")]
+    #region UI Elements
+        [Header("UI Elements")]
         public GameObject VSbackground;
 
         public Text VSText;
@@ -29,53 +33,20 @@ namespace A320VAU.PFD {
         public GameObject[] disableOnGround;
 
         public GameObject[] enableOnGround;
-
-        [Header("EFIS Indicator")]
-        public GameObject flightDirectionIndicator;
-
-        public GameObject landingSystemIndicator;
-
-        private float _altitude;
-        private float BankAngle;
-        private float HeadingAngle;
-
-        private float PitchAngle;
-        private float RadioHeight;
-
-        public bool isFlightDirectionOn { get; private set; }
-        public bool isLandingSystemOn { get; private set; }
-
-        private void Start() {
-            // Reset Flight Direction and Landing System
-            flightDirectionIndicator.SetActive(isFlightDirectionOn);
-            flightDirectionFail.SetActive(isFlightDirectionOn);
-
-            landingSystem.SetActive(isLandingSystemOn);
-            landingSystemIndicator.SetActive(isLandingSystemOn);
-        }
-
-    #region Math
-
-        private static float Remap01(float value, float valueMin, float valueMax) {
-            value = Mathf.Clamp01((value - valueMin) / (valueMax - valueMin));
-            return value;
-        }
-
     #endregion
-
+        
     #region Aircraft Systems
 
-        [Header("Aircraft Systems")]
-        [Tooltip("Flight Data Interface")]
-        public YFI_FlightDataInterface FlightData;
-
-        public GPWS_OWML GPWSController;
-        public FCU.FCU FCU;
-        public DFUNC_AdvancedFlaps Flaps;
-        public SFEXT_a320_AdvancedGear Gear;
+        private DependenciesInjector _injector;
+        
+        private YFI_FlightDataInterface _flightData;
+        private RadioAltimeter.RadioAltimeter _radioAltimeter;
+        private AircraftSystemData _aircraftSystemData;
+        private FCU.FCU _fcu;
+        private DFUNC_AdvancedFlaps _flaps;
 
     #endregion
-
+        
     #region Indicator Settings
 
         [Header("Indicator Settings")]
@@ -116,38 +87,69 @@ namespace A320VAU.PFD {
 
     #endregion
 
-    #region Animation Hash
+    #region Animation Hashs
 
-        //animator strings that are sent every frame are converted to int for optimization
-        private int AIRSPEED_HASH = Animator.StringToHash("AirSpeedNormalize");
-        private int AIRSPEED_SECLECT_HASH = Animator.StringToHash("AirSpeedSelectNormalize");
-        private int PITCH_HASH = Animator.StringToHash("PitchAngleNormalize");
-        private int BANK_HASH = Animator.StringToHash("BankAngleNormalize");
-        private int ALT_HASH = Animator.StringToHash("AltitudeNormalize");
-        private int ALT10_HASH = Animator.StringToHash("Altitude10Normalize");
-        private int ALT100_HASH = Animator.StringToHash("Altitude100Normalize");
-        private int ALT1000_HASH = Animator.StringToHash("Altitude1000Normalize");
-        private int ALT10000_HASH = Animator.StringToHash("Altitude10000Normalize");
-        private int ROC_HASH = Animator.StringToHash("VerticalSpeedNormalize");
-        private int HEADING_HASH = Animator.StringToHash("HeadingNormalize");
-        private int SLIPANGLE_HASH = Animator.StringToHash("SlipAngleNormalize");
-        private int RH_HASH = Animator.StringToHash("RHNormalize");
-        private int TRKPCH_HASH = Animator.StringToHash("TRKPCHNormalize");
-        private int VMAX_HASH = Animator.StringToHash("VMAXNormalize");
-        private int VSW_HASH = Animator.StringToHash("VSWNormalize");
-        private int VFE_NEXT_HASH = Animator.StringToHash("VFENEXTNormalize");
-        private int VLS_HASH = Animator.StringToHash("VLSNormalize");
+        // animator strings that are sent every frame are converted to int for optimization
+        private readonly int AIRSPEED_HASH = Animator.StringToHash("AirSpeedNormalize");
+        private readonly int AIRSPEED_SECLECT_HASH = Animator.StringToHash("AirSpeedSelectNormalize");
+        private readonly int PITCH_HASH = Animator.StringToHash("PitchAngleNormalize");
+        private readonly int BANK_HASH = Animator.StringToHash("BankAngleNormalize");
+        private readonly int ALT_HASH = Animator.StringToHash("AltitudeNormalize");
+        private readonly int ALT10_HASH = Animator.StringToHash("Altitude10Normalize");
+        private readonly int ALT100_HASH = Animator.StringToHash("Altitude100Normalize");
+        private readonly int ALT1000_HASH = Animator.StringToHash("Altitude1000Normalize");
+        private readonly int ALT10000_HASH = Animator.StringToHash("Altitude10000Normalize");
+        private readonly int ROC_HASH = Animator.StringToHash("VerticalSpeedNormalize");
+        private readonly int HEADING_HASH = Animator.StringToHash("HeadingNormalize");
+        private readonly int SLIP_ANGLE_HASH = Animator.StringToHash("SlipAngleNormalize");
+        private readonly int RH_HASH = Animator.StringToHash("RHNormalize");
+        private readonly int TRKPCH_HASH = Animator.StringToHash("TRKPCHNormalize");
+        private readonly int VMAX_HASH = Animator.StringToHash("VMAXNormalize");
+        private readonly int VSW_HASH = Animator.StringToHash("VSWNormalize");
+        private readonly int VFE_NEXT_HASH = Animator.StringToHash("VFENEXTNormalize");
+        private readonly int VLS_HASH = Animator.StringToHash("VLSNormalize");
 
     #endregion
+
+        [Header("EFIS Indicator")]
+        public GameObject flightDirectionIndicator;
+        public GameObject landingSystemIndicator;
+
+        private float _altitude;
+        private float BankAngle;
+        private float HeadingAngle;
+
+        private float PitchAngle;
+        private float RadioHeight;
+
+        [PublicAPI] public bool isFlightDirectionOn { get; private set; }
+        [PublicAPI] public bool isLandingSystemOn { get; private set; }
+
+        private void Start() {
+            _injector = DependenciesInjector.GetInstance(this);
+            
+            _flightData = _injector.flightData;
+            _radioAltimeter = _injector.radioAltimeter;
+            _aircraftSystemData = _injector.equipmentData;
+            _fcu = _injector.fcu;
+            _flaps = _injector.flaps;
+            
+            // Reset Flight Direction and Landing System
+            flightDirectionIndicator.SetActive(isFlightDirectionOn);
+            flightDirectionFail.SetActive(isFlightDirectionOn);
+
+            landingSystem.SetActive(isLandingSystemOn);
+            landingSystemIndicator.SetActive(isLandingSystemOn);
+        }
 
     #region Update
 
         private void LateUpdate() {
             //这里可以用来做仪表更新延迟之类的逻辑
-            PitchAngle = FlightData.pitch;
-            BankAngle = FlightData.bank;
-            HeadingAngle = FlightData.magneticHeading;
-            RadioHeight = (float)GPWSController.GetProgramVariable("radioAltitude");
+            PitchAngle = _flightData.pitch;
+            BankAngle = _flightData.bank;
+            HeadingAngle = _flightData.magneticHeading;
+            RadioHeight = _radioAltimeter.radioAltitude;
             //AirSpeed
             UpdateAirspeed();
             //Altitude
@@ -191,24 +193,24 @@ namespace A320VAU.PFD {
         public int GreenDotSpeed = 195;
 
         private void UpdateAirspeed() {
-            foreach (var item in disableOnGround) item.SetActive(!FlightData.SAVControl.Taxiing);
-            foreach (var item in enableOnGround) item.SetActive(FlightData.SAVControl.Taxiing);
+            foreach (var item in disableOnGround) item.SetActive(!_flightData.SAVControl.Taxiing);
+            foreach (var item in enableOnGround) item.SetActive(_flightData.SAVControl.Taxiing);
 
-            IndicatorAnimator.SetFloat(AIRSPEED_HASH, FlightData.TAS / MAXSPEED);
+            IndicatorAnimator.SetFloat(AIRSPEED_HASH, _flightData.TAS / MAXSPEED);
 
         #region Target Speed
 
-            IndicatorAnimator.SetFloat(AIRSPEED_SECLECT_HASH, FCU.TargetSpeed / 500f);
+            IndicatorAnimator.SetFloat(AIRSPEED_SECLECT_HASH, _fcu.TargetSpeed / 500f);
 
-            TargetSpeedTopText.text = FCU.TargetSpeed.ToString();
-            TargetSpeedBottomText.text = FCU.TargetSpeed.ToString();
+            TargetSpeedTopText.text = _fcu.TargetSpeed.ToString();
+            TargetSpeedBottomText.text = _fcu.TargetSpeed.ToString();
 
             TargetSpeedBottom.SetActive(false);
             TargetSpeedTop.SetActive(false);
-            if (FlightData.TAS - FCU.TargetSpeed > 45)
+            if (_flightData.TAS - _fcu.TargetSpeed > 45)
                 TargetSpeedBottom.SetActive(true);
 
-            if (FCU.TargetSpeed - FlightData.TAS > 45)
+            if (_fcu.TargetSpeed - _flightData.TAS > 45)
                 TargetSpeedTop.SetActive(true);
 
         #endregion
@@ -216,13 +218,13 @@ namespace A320VAU.PFD {
         #region VMAX
 
             var VMAX = VMO;
-            if (Flaps.targetSpeedLimit < VMAX)
-                VMAX = (int)Flaps.targetSpeedLimit;
+            if (_aircraftSystemData.flapTargetSpeedLimit < VMAX)
+                VMAX = (int)_flaps.targetSpeedLimit;
 
-            if (Flaps.speedLimit < VMAX)
-                VMAX = (int)Flaps.speedLimit;
+            if (_aircraftSystemData.flapCurrentSpeedLimit < VMAX)
+                VMAX = (int)_flaps.speedLimit;
 
-            if (Gear.position != 0 && VLE < VMAX)
+            if (!_aircraftSystemData.IsGearsUp && VLE < VMAX)
                 VMAX = VLE;
 
             IndicatorAnimator.SetFloat(VMAX_HASH, VMAX / 360f);
@@ -232,10 +234,20 @@ namespace A320VAU.PFD {
         #region VSW
 
             var VSW = VSWCONF0;
-            if (Flaps.detentIndex == 1) VSW = VSWCONF1;
-            if (Flaps.detentIndex == 2) VSW = VSWCONF2;
-            if (Flaps.detentIndex == 3) VSW = VSWCONF3;
-            if (Flaps.detentIndex == 4) VSW = VSWCONFFULL;
+            switch (_aircraftSystemData.flapCurrentIndex) {
+                case 1:
+                    VSW = VSWCONF1;
+                    break;
+                case 2:
+                    VSW = VSWCONF2;
+                    break;
+                case 3:
+                    VSW = VSWCONF3;
+                    break;
+                case 4:
+                    VSW = VSWCONFFULL;
+                    break;
+            }
 
             IndicatorAnimator.SetFloat(VSW_HASH, VSW / 300f);
 
@@ -243,16 +255,16 @@ namespace A320VAU.PFD {
 
         #region VFE NEXT
 
-            var VFENext = Flaps.speedLimits[1];
-            switch (Flaps.targetDetentIndex) {
+            var VFENext = _flaps.speedLimits[1];
+            switch (_flaps.targetDetentIndex) {
                 case 1:
-                    VFENext = Flaps.speedLimits[2];
+                    VFENext = _flaps.speedLimits[2];
                     break;
                 case 2:
-                    VFENext = Flaps.speedLimits[3];
+                    VFENext = _flaps.speedLimits[3];
                     break;
                 case 3:
-                    VFENext = Flaps.speedLimits[4];
+                    VFENext = _flaps.speedLimits[4];
                     break;
             }
 
@@ -263,7 +275,7 @@ namespace A320VAU.PFD {
         #region VLS
 
             var VLS = 1.28f * VSW;
-            switch (Flaps.detentIndex) {
+            switch (_flaps.detentIndex) {
                 case 2:
                     VLS = 1.13f * VSW;
                     break;
@@ -278,9 +290,9 @@ namespace A320VAU.PFD {
         }
 
         private void UpdateMachNumber() {
-            if (FlightData.mach > 0.5f) {
+            if (_flightData.mach > 0.5f) {
                 MachNumberText.gameObject.SetActive(true);
-                MachNumberText.text = "." + (FlightData.mach * 100).ToString("f0");
+                MachNumberText.text = "." + (_flightData.mach * 100).ToString("f0");
             }
             else {
                 MachNumberText.gameObject.SetActive(false);
@@ -293,7 +305,7 @@ namespace A320VAU.PFD {
 
         private void UpdateAltitude() {
             //默认都会写Altitude
-            _altitude = FlightData.altitude;
+            _altitude = _flightData.altitude;
             IndicatorAnimator.SetFloat(ALT_HASH, _altitude / MAXALT);
 
             if (!altbybit) return;
@@ -318,8 +330,8 @@ namespace A320VAU.PFD {
     #endregion
 
         private void UpdateVerticalSpeed() {
-            var verticalSpeed = FlightData.verticalSpeed;
-            var VerticalSpeedNormal = Remap01(FlightData.verticalSpeed, -MAXVS, MAXVS);
+            var verticalSpeed = _flightData.verticalSpeed;
+            var VerticalSpeedNormal = Remap01(_flightData.verticalSpeed, -MAXVS, MAXVS);
             IndicatorAnimator.SetFloat(ROC_HASH, VerticalSpeedNormal);
             if (Mathf.Abs(verticalSpeed) > 200) {
                 VSbackground.SetActive(true);
@@ -352,31 +364,40 @@ namespace A320VAU.PFD {
         }
 
         private void UpdateSlip() {
-            IndicatorAnimator.SetFloat(SLIPANGLE_HASH,
-                Mathf.Clamp01((FlightData.SlipAngle + MAXSLIPANGLE) / (MAXSLIPANGLE + MAXSLIPANGLE)));
+            IndicatorAnimator.SetFloat(SLIP_ANGLE_HASH,
+                Mathf.Clamp01((_flightData.SlipAngle + MAXSLIPANGLE) / (MAXSLIPANGLE + MAXSLIPANGLE)));
         }
 
         private void UpdateTrickPitch() {
             IndicatorAnimator.SetFloat(TRKPCH_HASH,
-                Mathf.Clamp01((FlightData.trackPitchAngle + MAXTRACKPITCH) / (MAXTRACKPITCH + MAXTRACKPITCH)));
+                Mathf.Clamp01((_flightData.trackPitchAngle + MAXTRACKPITCH) / (MAXTRACKPITCH + MAXTRACKPITCH)));
         }
 
     #endregion
 
     #region Touch Switch Event
 
-        // ReSharper disable once UnusedMember.Global
+        [PublicAPI]
         public void ToggleFlightDirection() {
             isFlightDirectionOn = !isFlightDirectionOn;
             flightDirectionIndicator.SetActive(isFlightDirectionOn);
             flightDirectionFail.SetActive(isFlightDirectionOn);
         }
-
-        // ReSharper disable once UnusedMember.Global
+        
+        [PublicAPI]
         public void ToggleLandingSystem() {
             isLandingSystemOn = !isLandingSystemOn;
             landingSystem.SetActive(isLandingSystemOn);
             landingSystemIndicator.SetActive(isLandingSystemOn);
+        }
+
+    #endregion
+        
+    #region Math
+
+        private static float Remap01(float value, float valueMin, float valueMax) {
+            value = Mathf.Clamp01((value - valueMin) / (valueMax - valueMin));
+            return value;
         }
 
     #endregion

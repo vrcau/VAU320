@@ -19,7 +19,7 @@
             if (VFE < VMAX)
                 VMAX = (int)FWS.equipmentData.flapTargetSpeedLimit;
 
-            if (FWS.equipmentData.IsGearsDown && VLE < VMAX)
+            if (FWS.equipmentData.IsGearsTargetDown && VLE < VMAX)
                 VMAX = VLE;
 
             SetWarnVisible(ref OVERSPEED.isVisable, FWS.flightData.groundSpeed > VMAX + 4f, true);
