@@ -50,19 +50,19 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: _injector
+      Data: _altHoldDFunc
     - Name: $v
       Entry: 7
       Data: 2|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: _injector
+      Data: _altHoldDFunc
     - Name: <UserType>k__BackingField
       Entry: 7
       Data: 3|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.Common.DependenciesInjector, com.yuxiaviation.vau320neo
+      Data: SaccFlightAndVehicles.DFUNC_AltHold, SaccFlightAndVehicles.Runtime
     - Name: 
       Entry: 8
       Data: 
@@ -164,19 +164,19 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: _altHoldDFunc
+      Data: _injector
     - Name: $v
       Entry: 7
       Data: 9|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: _altHoldDFunc
+      Data: _injector
     - Name: <UserType>k__BackingField
       Entry: 7
       Data: 10|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: SaccFlightAndVehicles.DFUNC_AltHold, SaccFlightAndVehicles.Runtime
+      Data: A320VAU.Common.DependenciesInjector, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
