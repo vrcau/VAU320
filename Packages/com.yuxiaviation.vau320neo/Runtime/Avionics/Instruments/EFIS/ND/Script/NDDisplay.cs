@@ -1,60 +1,39 @@
 ﻿using A320VAU.Common;
 using A320VAU.ND.Pages;
+using JetBrains.Annotations;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
 using VirtualAviationJapan;
 using YuxiFlightInstruments.BasicFlightData;
 
-// ReSharper disable UnusedMember.Global
-
 namespace A320VAU.ND {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class NDDisplay : UdonSharpBehaviour {
         private const float UPDATE_INTERVAL = 0.5f;
+        private const float MAX_SLIP_ANGLE = 50;
+        
+        private float _lastUpdate;
 
-        [Tooltip("Flight Data Interface")]
-        public YFI_FlightDataInterface FlightData;
-
-        [Tooltip("Navi Data1")]
-        public NavSelector NaviData1;
-
-        [Tooltip("Navi Data2")]
-        public NavSelector NaviData2;
+        private DependenciesInjector _injector;
+        private YFI_FlightDataInterface FlightData;
+        private FMGC.FMGC _fmgc;
+        
+        private NavSelector _vor1;
+        private NavSelector _vor2;
 
         public int MainDataSource = 1;
 
         [Tooltip("仪表的动画控制器")]
         public Animator IndicatorAnimator;
+        
+    #region Animation Hashs
 
-        public float MAXSLIPANGLE = 50;
+        private readonly int HEADING_HASH = Animator.StringToHash("HeadingNormalize");
+        private readonly int SLIP_ANGLE_HASH = Animator.StringToHash("SlipAngleNormalize");
 
-        [Tooltip("一些罗盘动画起始角度并不为0")]
-        public float HDGoffset;
-
-        [FieldChangeCallback(nameof(NDMode))] public NDMode _ndMode;
-        private float _lastUpdate;
-
-        private MapDisplay[] _mapDisplays;
-
-        public NDMode NDMode {
-            get => _ndMode;
-            set {
-                _ndMode = (NDMode)((int)value < 0 ? 0 : (int)value % 5);
-                NDModeChanged();
-            }
-        }
-
-        private void Start() {
-            NDModeChanged();
-
-            _mapDisplays = GetComponentsInChildren<MapDisplay>(true);
-        }
-
-        private void OnEnable() {
-            NDModeChanged();
-        }
-
+    #endregion
+        
     #region UI Elements
 
         [Header("UI element")]
@@ -84,8 +63,8 @@ namespace A320VAU.ND {
         public GameObject GSIndicator;
 
     #endregion
-
-    #region EFIS
+        
+    #region EFIS Indicator Elements
 
         [Header("EFIS Status Display")]
         public GameObject cstr;
@@ -105,12 +84,32 @@ namespace A320VAU.ND {
 
     #endregion
 
-    #region AnimationHash
+        [FieldChangeCallback(nameof(NDMode))] public NDMode _ndMode;
+        public NDMode NDMode {
+            get => _ndMode;
+            set {
+                _ndMode = (NDMode)((int)value < 0 ? 0 : (int)value % 5);
+                NDModeChanged();
+            }
+        }
 
-        private readonly int HEADING_HASH = Animator.StringToHash("HeadingNormalize");
-        private readonly int SLIPANGLE_HASH = Animator.StringToHash("SlipAngleNormalize");
+        private MapDisplay[] _mapDisplays;
 
-    #endregion
+        private void Start() {
+            _injector = DependenciesInjector.GetInstance(this);
+            FlightData = _injector.flightData;
+            _fmgc = _injector.fmgc;
+
+            _vor1 = _fmgc.radNav.VOR1;
+            _vor2 = _fmgc.radNav.VOR2;
+            
+            NDModeChanged();
+            _mapDisplays = GetComponentsInChildren<MapDisplay>(true);
+        }
+
+        private void OnEnable() {
+            NDModeChanged();
+        }
 
     #region Update
 
@@ -128,50 +127,50 @@ namespace A320VAU.ND {
 
         private void UpdateHeading() {
             var HeadingAngle = FlightData.magneticHeading;
-            IndicatorAnimator.SetFloat(HEADING_HASH, (HeadingAngle - HDGoffset) / 360f);
+            IndicatorAnimator.SetFloat(HEADING_HASH, HeadingAngle / 360f);
         }
 
         private void UpdateSlip() {
-            IndicatorAnimator.SetFloat(SLIPANGLE_HASH,
-                Mathf.Clamp01((FlightData.SlipAngle + MAXSLIPANGLE) / (MAXSLIPANGLE + MAXSLIPANGLE)));
+            IndicatorAnimator.SetFloat(SLIP_ANGLE_HASH,
+                Mathf.Clamp01((FlightData.SlipAngle + MAX_SLIP_ANGLE) / (MAX_SLIP_ANGLE + MAX_SLIP_ANGLE)));
         }
 
     #region Navaid
 
         private void UpdateNavigation() {
-            VOR1SelectOnly.SetActive(NaviData1.Index >= 0);
-            VOR2SelectOnly.SetActive(NaviData2.Index >= 0);
-            NavInfoIndicatior.SetActive(NaviData2.Index >= 0);
+            VOR1SelectOnly.SetActive(_vor1.Index >= 0);
+            VOR2SelectOnly.SetActive(_vor2.Index >= 0);
+            NavInfoIndicatior.SetActive(_vor2.Index >= 0);
 
             //功能：waypoint 更新 右下角距离更新 向台背台（TODO）
             //Waypoint & Navaid indication 先只实现一下Navaid indication模式
             //种类
             switch (MainDataSource) {
                 case 1:
-                    UpdateNavigationInfo(NaviData1);
+                    UpdateNavigationInfo(_vor1);
                     break;
                 case 2:
-                    UpdateNavigationInfo(NaviData2);
+                    UpdateNavigationInfo(_vor2);
                     break;
                 default:
-                    UpdateNavigationInfo(NaviData1);
+                    UpdateNavigationInfo(_vor1);
                     break;
             }
         }
 
         private void UpdateNavigationInfo(NavSelector navigationReceiver) {
             if (NDMode != NDMode.PLAN) {
-                if (NaviData1.Index >= 0) {
-                    VOR1Name.text = NaviData1.Identity;
-                    VOR1Dist.text = NaviData1.HasDME
-                        ? (Vector3.Distance(transform.position, GetNavaidPosition(NaviData1)) / 1852.0f).ToString("f2")
+                if (_vor1.Index >= 0) {
+                    VOR1Name.text = _vor1.Identity;
+                    VOR1Dist.text = _vor1.HasDME
+                        ? (Vector3.Distance(transform.position, GetNavaidPosition(_vor1)) / 1852.0f).ToString("f2")
                         : "--.-";
                 }
 
-                if (NaviData2.Index >= 0) {
-                    VOR2Name.text = NaviData2.Identity;
-                    VOR2Dist.text = NaviData2.HasDME
-                        ? (Vector3.Distance(transform.position, GetNavaidPosition(NaviData2)) / 1852.0f).ToString("f2")
+                if (_vor2.Index >= 0) {
+                    VOR2Name.text = _vor2.Identity;
+                    VOR2Dist.text = _vor2.HasDME
+                        ? (Vector3.Distance(transform.position, GetNavaidPosition(_vor2)) / 1852.0f).ToString("f2")
                         : "--.-";
                 }
             }
@@ -201,7 +200,7 @@ namespace A320VAU.ND {
                             : "---.--";
                         line3Text.text = "CRS";
 
-                        line4Text.text = NaviData1.Identity;
+                        line4Text.text = _vor1.Identity;
                     }
 
                     break;
@@ -240,17 +239,20 @@ namespace A320VAU.ND {
             }
         }
 
+        [PublicAPI]
         public void NDPageNextLocal() {
             NDMode = (NDMode)((int)NDMode + 1);
         }
 
+        [PublicAPI]
         public void NDPagePrevLocal() {
             NDMode = (NDMode)((int)NDMode - 1);
         }
 
+        [PublicAPI]
         public void NDPageChangeLocal() {
             Debug.Log("OnNDPageChange");
-            // for one deriction
+            // for one direction
             NDMode = (NDMode)(((int)NDMode + 1) % 5);
         }
 
@@ -284,26 +286,32 @@ namespace A320VAU.ND {
         }
 
         // For TouchSwitch Event
+        [PublicAPI]
         public void ToggleVisibilityTypeCSTR() {
             ToggleVisibilityType(EFISVisibilityType.CSTR);
         }
 
+        [PublicAPI]
         public void ToggleVisibilityTypeWPT() {
             ToggleVisibilityType(EFISVisibilityType.WPT);
         }
 
+        [PublicAPI]
         public void ToggleVisibilityTypeVORD() {
             ToggleVisibilityType(EFISVisibilityType.VORDME);
         }
 
+        [PublicAPI]
         public void ToggleVisibilityTypeNDB() {
             ToggleVisibilityType(EFISVisibilityType.NDB);
         }
 
+        [PublicAPI]
         public void ToggleVisibilityTypeAPPT() {
             ToggleVisibilityType(EFISVisibilityType.APPT);
         }
 
+        [PublicAPI]
         private void ToggleVisibilityType(EFISVisibilityType type) {
             SetVisibilityType(_efisVisibilityType == type ? EFISVisibilityType.NONE : type);
         }
