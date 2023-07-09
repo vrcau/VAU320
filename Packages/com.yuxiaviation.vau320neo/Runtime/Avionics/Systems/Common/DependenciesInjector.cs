@@ -1,4 +1,5 @@
-﻿using A320VAU.Avionics;
+﻿using System;
+using A320VAU.Avionics;
 using A320VAU.Brake;
 using A320VAU.DFUNC;
 using A320VAU.ECAM;
@@ -71,6 +72,69 @@ namespace A320VAU.Common {
         public static DependenciesInjector GetInstance(UdonSharpBehaviour behaviour) {
             return behaviour.GetComponentInParent<DependenciesInjector>();
         }
+
+        private void Awake() => Setup();
+
+        internal void Setup() {
+            saccEntity = GetComponentInChildren<SaccEntity>(true);
+            saccAirVehicle = GetComponentInChildren<SaccAirVehicle>(true);
+
+            flightData = GetComponentInChildren<YFI_FlightDataInterface>(true);
+            apu = GetComponentInChildren<SFEXT_AuxiliaryPowerUnit>(true);
+            flaps = GetComponentInChildren<DFUNC_AdvancedFlaps>(true);
+
+            brake = GetComponentInChildren<DFUNC_a320_Brake>(true);
+            landingLight = GetComponentInChildren<DFUNC_a320_LandingLight>(true);
+            canopy = GetComponentInChildren<DFUNC_Canopy>(true);
+
+            gpws = GetComponentInChildren<GPWS_OWML>(true);
+            radioAltimeter = GetComponentInChildren<RadioAltimeter.RadioAltimeter>(true);
+
+            equipmentData = GetComponentInChildren<ECAMDataInterface>(true);
+
+            fmgc = GetComponentInChildren<FMGC.FMGC>(true);
+
+            airbusAvionicsTheme = GetComponentInChildren<AirbusAvionicsTheme>(true);
+
+            // Worlds
+            navaidDatabase = GetNavaidDatabase();
+
+            // Engines
+            var engines = GetComponentsInChildren<SFEXT_a320_AdvancedEngine>(true);
+            foreach (var engine in engines)
+                if (engine.gameObject.name == engine1Name)
+                    engine1 = engine;
+                else if (engine.gameObject.name == engine2Name) engine2 = engine;
+
+            // Gears
+            gear = GetComponentInChildren<DFUNC_Gear>(true);
+            var gears = GetComponentsInChildren<SFEXT_a320_AdvancedGear>(true);
+            foreach (var gear in gears)
+                if (gear.gameObject.name == leftLadingGearName)
+                    leftLadingGear = gear;
+                else if (gear.gameObject.name == rightLadingGearName)
+                    rightLadingGear = gear;
+                else if (gear.gameObject.name == frontLadingGearName) frontLadingGear = gear;
+            
+        #if !COMPILER_UDONSHARP && UNITY_EDITOR
+            EditorUtility.SetDirty(this);
+        #endif
+        }
+        
+        private static NavaidDatabase GetNavaidDatabase() {
+            var navaidDatabaseObject = GameObject.Find(nameof(NavaidDatabase));
+            if (navaidDatabaseObject == null) {
+                Debug.LogError("Can't find NavaidDatabase GameObject: NavaidDatabase");
+                return null;
+            }
+
+            var navaidDatabase = navaidDatabaseObject.GetComponent<NavaidDatabase>();
+            if (navaidDatabase == null)
+                Debug.LogError($"Can't find NavaidDatabase Component on GameObject: {navaidDatabaseObject.name}",
+                    navaidDatabaseObject);
+
+            return navaidDatabase;
+        }
     }
 
 #if !COMPILER_UDONSHARP && UNITY_EDITOR
@@ -83,46 +147,7 @@ namespace A320VAU.Common {
             if (injector == null) return;
 
             base.OnInspectorGUI();
-            if (GUILayout.Button("Setup")) Setup(injector);
-        }
-
-        private static void Setup(DependenciesInjector injector) {
-            injector.saccEntity = injector.GetComponentInChildren<SaccEntity>(true);
-            injector.saccAirVehicle = injector.GetComponentInChildren<SaccAirVehicle>(true);
-
-            injector.flightData = injector.GetComponentInChildren<YFI_FlightDataInterface>(true);
-            injector.apu = injector.GetComponentInChildren<SFEXT_AuxiliaryPowerUnit>(true);
-            injector.flaps = injector.GetComponentInChildren<DFUNC_AdvancedFlaps>(true);
-
-            injector.brake = injector.GetComponentInChildren<DFUNC_a320_Brake>(true);
-            injector.landingLight = injector.GetComponentInChildren<DFUNC_a320_LandingLight>(true);
-            injector.canopy = injector.GetComponentInChildren<DFUNC_Canopy>(true);
-
-            injector.gpws = injector.GetComponentInChildren<GPWS_OWML>(true);
-            injector.radioAltimeter = injector.GetComponentInChildren<RadioAltimeter.RadioAltimeter>(true);
-
-            injector.equipmentData = injector.GetComponentInChildren<ECAMDataInterface>(true);
-
-            injector.fmgc = injector.GetComponentInChildren<FMGC.FMGC>(true);
-
-            injector.airbusAvionicsTheme = injector.GetComponentInChildren<AirbusAvionicsTheme>(true);
-
-            // Engines
-            var engines = injector.GetComponentsInChildren<SFEXT_a320_AdvancedEngine>(true);
-            foreach (var engine in engines)
-                if (engine.gameObject.name == injector.engine1Name)
-                    injector.engine1 = engine;
-                else if (engine.gameObject.name == injector.engine2Name) injector.engine2 = engine;
-
-            // Gears
-            injector.gear = injector.GetComponentInChildren<DFUNC_Gear>(true);
-            var gears = injector.GetComponentsInChildren<SFEXT_a320_AdvancedGear>(true);
-            foreach (var gear in gears)
-                if (gear.gameObject.name == injector.leftLadingGearName)
-                    injector.leftLadingGear = gear;
-                else if (gear.gameObject.name == injector.rightLadingGearName)
-                    injector.rightLadingGear = gear;
-                else if (gear.gameObject.name == injector.frontLadingGearName) injector.frontLadingGear = gear;
+            if (GUILayout.Button("Setup")) injector.Setup();
         }
     }
 #endif
