@@ -2528,22 +2528,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 7004343545175485341}
-  FlightData: {fileID: 0}
-  GPWSController: {fileID: 0}
-  FCU: {fileID: 0}
-  Flaps: {fileID: 0}
-  Gear: {fileID: 0}
-  IndicatorAnimator: {fileID: 3153789670935563633}
-  MAXSPEED: 600
-  MAXPITCH: 90
-  MAXBANK: 180
-  MAXALT: 99990
-  MAXRHE: 600
-  altbybit: 1
-  HDGoffset: 0
-  MAXVS: 6000
-  MAXSLIPANGLE: 40
-  MAXTRACKPITCH: 70
+  flightDirectionIndicator: {fileID: 0}
+  landingSystemIndicator: {fileID: 0}
   VSbackground: {fileID: 6924686126374162417}
   VSText: {fileID: 5030881273890965475}
   RadioHeightText: {fileID: 2200053033432345715}
@@ -2567,8 +2553,17 @@ MonoBehaviour:
   enableOnGround:
   - {fileID: 5437888068520422175}
   - {fileID: 1544908153842870692}
-  flightDirectionIndicator: {fileID: 0}
-  landingSystemIndicator: {fileID: 0}
+  IndicatorAnimator: {fileID: 3153789670935563633}
+  MAXSPEED: 600
+  MAXPITCH: 90
+  MAXBANK: 180
+  MAXALT: 99990
+  MAXRHE: 600
+  altbybit: 1
+  HDGoffset: 190
+  MAXVS: 6000
+  MAXSLIPANGLE: 40
+  MAXTRACKPITCH: 70
   VMO: 350
   VLE: 280
   VSWCONF0: 145
@@ -2625,7 +2620,6 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 4738326445552911994}
-  navSelector: {fileID: 0}
   NaviInfo: {fileID: 6815132088737575305}
   updateIntervalFrames: 10
 --- !u!114 &4738326445552911994
