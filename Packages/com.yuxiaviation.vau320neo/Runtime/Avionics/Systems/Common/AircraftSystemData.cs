@@ -50,16 +50,20 @@ namespace Avionics.Systems.Common {
     #endregion
 
     #region Gears
-        [PublicAPI] public bool IsGearsDown => Mathf.Approximately(LeftLandingGear.targetPosition, 1f) &&
+        [PublicAPI] public bool IsGearsTargetDown => Mathf.Approximately(LeftLandingGear.targetPosition, 1f) &&
                                                Mathf.Approximately(CenterLandingGear.targetPosition, 1f) &&
                                                Mathf.Approximately(RightLandingGear.targetPosition, 1f);
+
+        [PublicAPI] public bool IsGearsUp => Mathf.Approximately(LeftLandingGear.position, 0f) &&
+                                             Mathf.Approximately(CenterLandingGear.position, 0f) &&
+                                             Mathf.Approximately(RightLandingGear.position, 0f);
 
         [PublicAPI] public bool IsGearsInTransition =>
             Mathf.Approximately(LeftLandingGear.position, LeftLandingGear.targetPosition) &&
             Mathf.Approximately(CenterLandingGear.position, CenterLandingGear.targetPosition) &&
             Mathf.Approximately(RightLandingGear.position, RightLandingGear.targetPosition);
 
-        [PublicAPI] public bool IsGearsDownLock => IsGearsDown && !IsGearsInTransition;
+        [PublicAPI] public bool IsGearsDownLock => IsGearsTargetDown && !IsGearsInTransition;
     #endregion
 
         [PublicAPI] public bool isCabinDoorOpen => Canopy.CanopyOpen;
