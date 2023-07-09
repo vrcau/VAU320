@@ -242,7 +242,7 @@ MonoBehaviour:
       Data: 15|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.ECAM.ECAMDisplay, com.yuxiaviation.vau320neo
+      Data: A320VAU.Common.ECAMDisplay, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -752,7 +752,7 @@ MonoBehaviour:
       Data: 45|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.ECAM.ECAMDataInterface, com.yuxiaviation.vau320neo
+      Data: Avionics.Systems.Common.AircraftSystemData, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 

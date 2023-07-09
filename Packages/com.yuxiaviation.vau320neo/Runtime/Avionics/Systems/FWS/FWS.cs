@@ -1,6 +1,6 @@
 ﻿using A320VAU.Avionics;
 using A320VAU.Common;
-using A320VAU.ECAM;
+using Avionics.Systems.Common;
 using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
@@ -141,7 +141,7 @@ namespace A320VAU.FWS {
 
         [HideInInspector] public SaccEntity saccEntity;
         [HideInInspector] public YFI_FlightDataInterface flightData;
-        public ECAMDataInterface equipmentData;
+        public AircraftSystemData equipmentData;
         [HideInInspector] public GPWS_OWML gpws; //as sound source
         [HideInInspector] public RadioAltimeter.RadioAltimeter radioAltimeter;
 
@@ -228,7 +228,7 @@ namespace A320VAU.FWS {
                 gpws.PlayOneShot(altitudeCallouts[altitudeCalloutIndex]);
 
                 // RETARD
-                if (altitudeCalloutIndex == 10 && ECAMController.AdvancedData.ThrottleLevelerR != 0.375f)
+                if (altitudeCalloutIndex == 10 && !Mathf.Approximately(ECAMController.AdvancedData.engine1ThrottleLeveler, 0.375f))
                     SendCustomEventDelayedSeconds(nameof(CalloutRetard), 1);
 
                 _lastCallout = Time.time;

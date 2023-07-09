@@ -1,8 +1,7 @@
-using UdonSharp;
 using UnityEngine;
 
 namespace A320VAU.FWS {
-    public partial class FWSWarningData : UdonSharpBehaviour {
+    public partial class FWSWarningData {
         private FWSWarningMessageData FLAPS_NOT_IN_TAKEOFF_CONFIG;
         private FWSWarningMessageData PARK_BRAKE_ON;
 
@@ -12,12 +11,12 @@ namespace A320VAU.FWS {
         }
 
         private void MonitorConfig() {
-            if (Mathf.Approximately(FWS.equipmentData.ThrottleLevelerL, 1) &&
-                Mathf.Approximately(FWS.equipmentData.ThrottleLevelerR, 1) &&
+            if ((Mathf.Approximately(FWS.equipmentData.engine1ThrottleLeveler, 1f) ||
+                  Mathf.Approximately(FWS.equipmentData.engine2ThrottleLeveler, 1f)) &&
                 FWS.saccAirVehicle.Taxiing) {
                 SetWarnVisible(ref FLAPS_NOT_IN_TAKEOFF_CONFIG.isVisable,
-                    !(FWS.equipmentData.Flap.detentIndex == 1 || FWS.equipmentData.Flap.detentIndex == 2), true);
-                SetWarnVisible(ref PARK_BRAKE_ON.isVisable, FWS.equipmentData.Brake.ParkBreakSet, true);
+                    !(FWS.equipmentData.flapCurrentIndex == 1 || FWS.equipmentData.flapCurrentIndex == 2), true);
+                SetWarnVisible(ref PARK_BRAKE_ON.isVisable, FWS.equipmentData.isParkBreakSet, true);
             }
             else {
                 SetWarnVisible(ref FLAPS_NOT_IN_TAKEOFF_CONFIG.isVisable, false, true);

@@ -10,16 +10,16 @@
         }
 
         private void MonitorSpeed() {
-            var VFE = (int)FWS.equipmentData.Flap.targetSpeedLimit;
+            var VFE = (int)FWS.equipmentData.flapTargetSpeedLimit;
 
-            if (VFE < (int)FWS.equipmentData.Flap.speedLimit)
-                VFE = (int)FWS.equipmentData.Flap.speedLimit;
+            if (VFE < (int)FWS.equipmentData.flapCurrentSpeedLimit)
+                VFE = (int)FWS.equipmentData.flapCurrentSpeedLimit;
 
             var VMAX = VMO;
             if (VFE < VMAX)
-                VMAX = (int)FWS.equipmentData.Flap.targetSpeedLimit;
+                VMAX = (int)FWS.equipmentData.flapTargetSpeedLimit;
 
-            if (FWS.equipmentData.GearNose.position != 0 && VLE < VMAX)
+            if (FWS.equipmentData.IsGearsDown && VLE < VMAX)
                 VMAX = VLE;
 
             SetWarnVisible(ref OVERSPEED.isVisable, FWS.flightData.groundSpeed > VMAX + 4f, true);

@@ -21,7 +21,7 @@ MonoBehaviour:
   compiledVersion: 2
   behaviourSyncMode: 2
   hasInteractEvent: 0
-  scriptID: 2872680020494833390
+  scriptID: -5253762820923532616
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
@@ -278,7 +278,7 @@ MonoBehaviour:
       Data: 15|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.ECAM.ECAMDataInterface, com.yuxiaviation.vau320neo
+      Data: Avionics.Systems.Common.AircraftSystemData, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
@@ -2082,7 +2082,7 @@ MonoBehaviour:
       Data: 103|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.ECAM.ECAMPage, com.yuxiaviation.vau320neo
+      Data: A320VAU.Common.ECAMPage, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 

@@ -1,5 +1,5 @@
 ﻿using A320VAU.Common;
-using A320VAU.ECAM;
+using Avionics.Systems.Common;
 using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
@@ -9,7 +9,7 @@ namespace A320VAU.PFD {
     public class FMAController : UdonSharpBehaviour {
         public SaccEntity SaccEntity;
         public SaccAirVehicle SaccAirVehicle;
-        public ECAMDataInterface FlightData;
+        public AircraftSystemData FlightData;
         public DFUNC_Cruise DFUNC_Cruise;
         public DFUNC_AltHold DFUNC_AltHold;
 
@@ -40,7 +40,7 @@ namespace A320VAU.PFD {
         }
 
         public void LateUpdate() {
-            ManThrType = FlightData.ThrottleLevelerR == 1f ? ManThrType.TOGA : ManThrType.None;
+            ManThrType = Mathf.Approximately(FlightData.engine1ThrottleLeveler, 1f) ? ManThrType.TOGA : ManThrType.None;
             if ((bool)DFUNC_AltHold.GetProgramVariable("AltHold")) {
                 VerticalActiveMode = "ALT";
                 LateralActiveMode = "HDG";
