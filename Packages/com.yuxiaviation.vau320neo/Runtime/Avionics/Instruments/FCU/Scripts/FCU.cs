@@ -1,4 +1,5 @@
 ﻿using System;
+using A320VAU.Common;
 using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
@@ -6,17 +7,23 @@ using UnityEngine.UI;
 
 namespace A320VAU.FCU {
     public class FCU : UdonSharpBehaviour {
-        public DFUNC_Cruise DFUNC_Cruise;
-        public DFUNC_AltHold DFUNC_AltHold;
+        private DFUNC_AltHold _altHoldDFunc;
 
-        private void LateUpdate() {
-            autoPilot1Switch.SetActive(DFUNC_AltHold.AltHold);
-            autoThrustSwitch.SetActive(DFUNC_Cruise.Cruise);
-            TargetSpeed = Convert.ToInt32(DFUNC_Cruise.SetSpeed * 1.9438445f);
+        private DFUNC_Cruise _cruiseDFunc;
+        private DependenciesInjector _injector;
+
+        private void Start() {
+            _injector = DependenciesInjector.GetInstance(this);
+            _cruiseDFunc = _injector.cruise;
+            _altHoldDFunc = _injector.altHold;
+
+            UpdateFCUMode();
         }
 
-        public void OnEnable() {
-            UpdateFCUMode();
+        private void LateUpdate() {
+            autoPilot1Switch.SetActive(_altHoldDFunc.AltHold);
+            autoThrustSwitch.SetActive(_cruiseDFunc.Cruise);
+            TargetSpeed = Convert.ToInt32(_cruiseDFunc.SetSpeed * 1.9438445f);
         }
 
         private void UpdateFCUMode() {

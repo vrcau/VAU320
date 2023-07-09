@@ -7,9 +7,9 @@ namespace A320VAU.Common {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class SystemEventBus : UdonSharpBehaviour {
         private DependenciesInjector _injector;
-        
-        private SaccEntity _saccEntity;
         private UdonSharpBehaviour[] _receivers = { };
+
+        private SaccEntity _saccEntity;
 
         private void Start() {
             _injector = DependenciesInjector.GetInstance(this);
@@ -20,7 +20,7 @@ namespace A320VAU.Common {
         public void RegisterSaccEvent(UdonSharpBehaviour behaviour) {
             _saccEntity.ExtensionUdonBehaviours = _saccEntity.ExtensionUdonBehaviours.Add(behaviour);
         }
-        
+
         [PublicAPI]
         public void Register(UdonSharpBehaviour behaviour) {
             _receivers = _receivers.Add(behaviour);
@@ -28,12 +28,12 @@ namespace A320VAU.Common {
 
         [PublicAPI]
         public void SendEvent(string eventName) {
-            foreach (var receiver in _receivers) {
-                receiver.SendCustomEvent(eventName);
-            }
+            foreach (var receiver in _receivers) receiver.SendCustomEvent(eventName);
         }
 
         [PublicAPI]
-        public void SendEventToSacc(string eventName) => _saccEntity.SendEventToExtensions(eventName);
+        public void SendEventToSacc(string eventName) {
+            _saccEntity.SendEventToExtensions(eventName);
+        }
     }
 }

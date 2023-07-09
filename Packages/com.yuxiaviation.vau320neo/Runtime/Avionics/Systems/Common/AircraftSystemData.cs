@@ -23,47 +23,23 @@ namespace Avionics.Systems.Common {
          */
 
         private DependenciesInjector _dependenciesInjector;
+        private SFEXT_AuxiliaryPowerUnit APU;
+        private DFUNC_a320_Brake Brake;
+
+        private DFUNC_Canopy Canopy;
+        private SFEXT_a320_AdvancedGear CenterLandingGear;
 
         private SFEXT_a320_AdvancedEngine EngineL;
         private SFEXT_a320_AdvancedEngine EngineR;
 
         private DFUNC_AdvancedFlaps Flap;
-        private SFEXT_AuxiliaryPowerUnit APU;
 
         private SFEXT_a320_AdvancedGear LeftLandingGear;
         private SFEXT_a320_AdvancedGear RightLandingGear;
-        private SFEXT_a320_AdvancedGear CenterLandingGear;
-        private DFUNC_a320_Brake Brake;
-
-        private DFUNC_Canopy Canopy;
-
-        //synced targetAngle actuatorBroken _wingBroken
-
-    #region Flaps
-        [PublicAPI] public float flapAngle => Flap.angle / Flap.maxAngle;
-        [PublicAPI] public int flapCurrentIndex => Flap.detentIndex;
-        [PublicAPI] public int flapTargetIndex => Flap.targetDetentIndex;
-        [PublicAPI] public bool flapInPosition => Mathf.Approximately(Flap.angle, Flap.targetAngle);
-
-        [PublicAPI] public float flapCurrentSpeedLimit => Flap.speedLimit;
-        [PublicAPI] public float flapTargetSpeedLimit => Flap.targetSpeedLimit;
-    #endregion
-
-    #region Gears
-        [PublicAPI] public bool IsGearsDown => Mathf.Approximately(LeftLandingGear.targetPosition, 1f) &&
-                                               Mathf.Approximately(CenterLandingGear.targetPosition, 1f) &&
-                                               Mathf.Approximately(RightLandingGear.targetPosition, 1f);
-
-        [PublicAPI] public bool IsGearsInTransition =>
-            Mathf.Approximately(LeftLandingGear.position, LeftLandingGear.targetPosition) &&
-            Mathf.Approximately(CenterLandingGear.position, CenterLandingGear.targetPosition) &&
-            Mathf.Approximately(RightLandingGear.position, RightLandingGear.targetPosition);
-
-        [PublicAPI] public bool IsGearsDownLock => IsGearsDown && !IsGearsInTransition;
-    #endregion
 
         [PublicAPI] public bool isCabinDoorOpen => Canopy.CanopyOpen;
         [PublicAPI] public bool isParkBreakSet => Brake.ParkBreakSet;
+
         [PublicAPI] public bool isAPURunning =>
             //get => APU.started;
             Mathf.Approximately(APU.apuAudioSource.volume, 1.0f);
@@ -73,57 +49,6 @@ namespace Avionics.Systems.Common {
 
         [PublicAPI] public bool isBothThrottleLevelerIdle =>
             isEngine1ThrottleLevelerIdle && isEngine2ThrottleLevelerIdle;
-        
-    #region ENG1 Params
-        [PublicAPI] public bool isEngine1Avail => EngineL.n1 > 0.9f * EngineL.idleN1;
-        [PublicAPI] public float engine1n1 => EngineL.n1 / EngineL.takeOffN1;
-        [PublicAPI] public float engine1n2 => EngineL.n2 / EngineL.takeOffN2;
-        [PublicAPI] public float engine1EGT => EngineL.egt;
-        [PublicAPI] public float engine1fuelFlow => Mathf.Round(EngineL.ff / 20) * 20;
-
-        [PublicAPI] public bool isEngine1Starting => EngineL.starter;
-        [PublicAPI] public bool isEngine1Reversing => EngineL.reversing; //判断反推：reversing
-        [PublicAPI] public float engine1ThrottleLeveler => EngineL.throttleLeveler;
-
-        [PublicAPI] public bool isEngine1ThrottleLevelerIdle =>
-            Mathf.Approximately(engine1ThrottleLeveler, EngineL.idlePoint);
-
-        [PublicAPI] public float engine1TargetN1 =>
-            !isEngine1Reversing
-                ? (engine1ThrottleLeveler - EngineL.idlePoint) / (1 - EngineL.idlePoint)
-                : (EngineL.idlePoint - engine1ThrottleLeveler) / (1 - EngineL.idlePoint);
-
-        [PublicAPI] public bool isEngine1Running => EngineL.fuel && EngineL.n1 > 0.63f * EngineL.idleN1 && !EngineL.stall;
-
-        [PublicAPI] public bool isEngine1Stall => EngineL.stall;
-        [PublicAPI] public bool isEngine1Fire => EngineL.fire;
-        [PublicAPI] public bool isEngine1Fuel => EngineL.fuel;
-    #endregion
-
-    #region ENG2 params
-        [PublicAPI] public bool isEngine2Avail => EngineR.n1 > 0.9f * EngineR.idleN1;
-        [PublicAPI] public float engine2n1 => EngineR.n1 / EngineR.takeOffN1;
-        [PublicAPI] public float engine2n2 => EngineR.n2 / EngineR.takeOffN2;
-        [PublicAPI] public float engine2EGT => EngineR.egt;
-        [PublicAPI] public float engine2fuelFlow => Mathf.Round(EngineR.ff / 20) * 20;
-
-        [PublicAPI] public bool isEngine2Starting => EngineR.starter;
-        [PublicAPI] public bool isEngine2Reversing => EngineR.reversing; //判断反推：reversing
-        [PublicAPI] public float engine2ThrottleLeveler => EngineR.throttleLeveler;
-        [PublicAPI] public bool isEngine2ThrottleLevelerIdle =>
-            Mathf.Approximately(engine2ThrottleLeveler, EngineR.idlePoint);
-
-        [PublicAPI] public float engine2TargetN1 =>
-            !isEngine2Reversing
-                ? (engine2ThrottleLeveler - EngineR.idlePoint) / (1 - EngineR.idlePoint)
-                : (EngineR.idlePoint - engine2ThrottleLeveler) / (1 - EngineR.idlePoint);
-
-        [PublicAPI] public bool isEngine2Running => EngineR.fuel && EngineR.n1 > 0.63f * EngineR.idleN1 && !EngineR.stall;
-
-        [PublicAPI] public bool isEngine2Stall => EngineR.stall;
-        [PublicAPI] public bool isEngine2Fire => EngineR.fire;
-        [PublicAPI] public bool isEngine2Fuel => EngineR.fuel;
-    #endregion
 
         private void Start() {
             _dependenciesInjector = DependenciesInjector.GetInstance(this);
@@ -142,5 +67,96 @@ namespace Avionics.Systems.Common {
 
             Canopy = _dependenciesInjector.canopy;
         }
+
+        //synced targetAngle actuatorBroken _wingBroken
+
+    #region Flaps
+
+        [PublicAPI] public float flapAngle => Flap.angle / Flap.maxAngle;
+        [PublicAPI] public int flapCurrentIndex => Flap.detentIndex;
+        [PublicAPI] public int flapTargetIndex => Flap.targetDetentIndex;
+        [PublicAPI] public bool flapInPosition => Mathf.Approximately(Flap.angle, Flap.targetAngle);
+
+        [PublicAPI] public float flapCurrentSpeedLimit => Flap.speedLimit;
+        [PublicAPI] public float flapTargetSpeedLimit => Flap.targetSpeedLimit;
+
+    #endregion
+
+    #region Gears
+
+        [PublicAPI] public bool IsGearsTargetDown => Mathf.Approximately(LeftLandingGear.targetPosition, 1f) &&
+                                                     Mathf.Approximately(CenterLandingGear.targetPosition, 1f) &&
+                                                     Mathf.Approximately(RightLandingGear.targetPosition, 1f);
+
+        [PublicAPI] public bool IsGearsUp => Mathf.Approximately(LeftLandingGear.position, 0f) &&
+                                             Mathf.Approximately(CenterLandingGear.position, 0f) &&
+                                             Mathf.Approximately(RightLandingGear.position, 0f);
+
+        [PublicAPI] public bool IsGearsInTransition =>
+            Mathf.Approximately(LeftLandingGear.position, LeftLandingGear.targetPosition) &&
+            Mathf.Approximately(CenterLandingGear.position, CenterLandingGear.targetPosition) &&
+            Mathf.Approximately(RightLandingGear.position, RightLandingGear.targetPosition);
+
+        [PublicAPI] public bool IsGearsDownLock => IsGearsTargetDown && !IsGearsInTransition;
+
+    #endregion
+
+    #region ENG1 Params
+
+        [PublicAPI] public bool isEngine1Avail => EngineL.n1 > 0.9f * EngineL.idleN1;
+        [PublicAPI] public float engine1n1 => EngineL.n1 / EngineL.takeOffN1;
+        [PublicAPI] public float engine1n2 => EngineL.n2 / EngineL.takeOffN2;
+        [PublicAPI] public float engine1EGT => EngineL.egt;
+        [PublicAPI] public float engine1fuelFlow => Mathf.Round(EngineL.ff / 20) * 20;
+
+        [PublicAPI] public bool isEngine1Starting => EngineL.starter;
+        [PublicAPI] public bool isEngine1Reversing => EngineL.reversing; //判断反推：reversing
+        [PublicAPI] public float engine1ThrottleLeveler => EngineL.throttleLeveler;
+
+        [PublicAPI] public bool isEngine1ThrottleLevelerIdle =>
+            Mathf.Approximately(engine1ThrottleLeveler, EngineL.idlePoint);
+
+        [PublicAPI] public float engine1TargetN1 =>
+            !isEngine1Reversing
+                ? (engine1ThrottleLeveler - EngineL.idlePoint) / (1 - EngineL.idlePoint)
+                : (EngineL.idlePoint - engine1ThrottleLeveler) / (1 - EngineL.idlePoint);
+
+        [PublicAPI] public bool isEngine1Running =>
+            EngineL.fuel && EngineL.n1 > 0.63f * EngineL.idleN1 && !EngineL.stall;
+
+        [PublicAPI] public bool isEngine1Stall => EngineL.stall;
+        [PublicAPI] public bool isEngine1Fire => EngineL.fire;
+        [PublicAPI] public bool isEngine1Fuel => EngineL.fuel;
+
+    #endregion
+
+    #region ENG2 params
+
+        [PublicAPI] public bool isEngine2Avail => EngineR.n1 > 0.9f * EngineR.idleN1;
+        [PublicAPI] public float engine2n1 => EngineR.n1 / EngineR.takeOffN1;
+        [PublicAPI] public float engine2n2 => EngineR.n2 / EngineR.takeOffN2;
+        [PublicAPI] public float engine2EGT => EngineR.egt;
+        [PublicAPI] public float engine2fuelFlow => Mathf.Round(EngineR.ff / 20) * 20;
+
+        [PublicAPI] public bool isEngine2Starting => EngineR.starter;
+        [PublicAPI] public bool isEngine2Reversing => EngineR.reversing; //判断反推：reversing
+        [PublicAPI] public float engine2ThrottleLeveler => EngineR.throttleLeveler;
+
+        [PublicAPI] public bool isEngine2ThrottleLevelerIdle =>
+            Mathf.Approximately(engine2ThrottleLeveler, EngineR.idlePoint);
+
+        [PublicAPI] public float engine2TargetN1 =>
+            !isEngine2Reversing
+                ? (engine2ThrottleLeveler - EngineR.idlePoint) / (1 - EngineR.idlePoint)
+                : (EngineR.idlePoint - engine2ThrottleLeveler) / (1 - EngineR.idlePoint);
+
+        [PublicAPI] public bool isEngine2Running =>
+            EngineR.fuel && EngineR.n1 > 0.63f * EngineR.idleN1 && !EngineR.stall;
+
+        [PublicAPI] public bool isEngine2Stall => EngineR.stall;
+        [PublicAPI] public bool isEngine2Fire => EngineR.fire;
+        [PublicAPI] public bool isEngine2Fuel => EngineR.fuel;
+
+    #endregion
     }
 }

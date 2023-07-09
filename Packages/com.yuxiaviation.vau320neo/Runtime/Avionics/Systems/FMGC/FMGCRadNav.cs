@@ -1,4 +1,5 @@
-﻿using UdonSharp;
+﻿using JetBrains.Annotations;
+using UdonSharp;
 using VirtualAviationJapan;
 
 namespace A320VAU.FMGC {
@@ -15,16 +16,19 @@ namespace A320VAU.FMGC {
 
         public NavSelector ADF;
 
+        [PublicAPI]
         public bool SetVORByName(int index, string identity) {
             var navaidIndex = fmgc.navaidDatabase._FindIndexByIdentity(identity);
             return navaidIndex != -1 && SetVORByIndex(index, navaidIndex);
         }
 
+        [PublicAPI]
         public bool SetVORByFrequency(int index, float frequency) {
             var navaidIndex = fmgc.navaidDatabase._FindIndexByFrequency(frequency);
             return navaidIndex != -1 && SetVORByIndex(index, navaidIndex);
         }
 
+        [PublicAPI]
         public void SetVORCourse(int index, int course) {
             switch (index) {
                 case 1:
@@ -36,6 +40,7 @@ namespace A320VAU.FMGC {
             }
         }
 
+        [PublicAPI]
         public bool SetVORByIndex(int index, int navaidIndex) {
             if (!fmgc.navaidDatabase._IsVOR(navaidIndex)) return false;
 
@@ -53,6 +58,7 @@ namespace A320VAU.FMGC {
             return true;
         }
 
+        [PublicAPI]
         public bool SetILSByName(string identity) {
             var navaidIndex = fmgc.navaidDatabase._FindIndexByIdentity(identity);
             if (navaidIndex == -1 || !fmgc.navaidDatabase._IsILS(navaidIndex)) return false;
@@ -61,6 +67,7 @@ namespace A320VAU.FMGC {
             return true;
         }
 
+        [PublicAPI]
         public bool SetILSByFrequency(float frequency) {
             var navaidIndex = fmgc.navaidDatabase._FindIndexByFrequency(frequency);
             if (!fmgc.navaidDatabase._IsILS(navaidIndex)) return false;
@@ -69,10 +76,12 @@ namespace A320VAU.FMGC {
             return true;
         }
 
+        [PublicAPI]
         public void SetILSCourse(int course) {
             ILS.Course = course;
         }
 
+        [PublicAPI]
         public bool SetADFByName(string identity) {
             var navaidIndex = fmgc.navaidDatabase._FindIndexByIdentity(identity);
             if (navaidIndex != -1 || !fmgc.navaidDatabase._IsNDB(navaidIndex)) return false;
@@ -81,6 +90,7 @@ namespace A320VAU.FMGC {
             return true;
         }
 
+        [PublicAPI]
         public bool SetADFByFrequency(float frequency) {
             var navaidIndex = fmgc.navaidDatabase._FindIndexByFrequency(frequency);
             if (!fmgc.navaidDatabase._IsNDB(navaidIndex)) return false;

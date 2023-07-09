@@ -12,7 +12,7 @@ namespace A320VAU.FWS {
 
         private void MonitorConfig() {
             if ((Mathf.Approximately(FWS.equipmentData.engine1ThrottleLeveler, 1f) ||
-                  Mathf.Approximately(FWS.equipmentData.engine2ThrottleLeveler, 1f)) &&
+                 Mathf.Approximately(FWS.equipmentData.engine2ThrottleLeveler, 1f)) &&
                 FWS.saccAirVehicle.Taxiing) {
                 SetWarnVisible(ref FLAPS_NOT_IN_TAKEOFF_CONFIG.isVisable,
                     !(FWS.equipmentData.flapCurrentIndex == 1 || FWS.equipmentData.flapCurrentIndex == 2), true);

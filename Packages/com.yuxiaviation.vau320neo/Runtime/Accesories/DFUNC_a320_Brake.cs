@@ -47,7 +47,7 @@ namespace A320VAU.Brake {
         [NonSerialized] public bool _DisableGroundBrake;
         private float AirbrakeLerper;
         private int BRAKE_STRING = Animator.StringToHash("brake");
-        [NonSerialized] [UdonSynced()] public float BrakeInput;
+        [NonSerialized] [UdonSynced] public float BrakeInput;
         private float BrakeStrength;
         private bool Braking;
         private bool BrakingLastFrame;
