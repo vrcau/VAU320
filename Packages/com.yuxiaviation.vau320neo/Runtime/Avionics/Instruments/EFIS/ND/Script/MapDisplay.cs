@@ -1,24 +1,26 @@
 ﻿using A320VAU.Common;
+using JetBrains.Annotations;
 using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
 using Varneon.VUdon.ArrayExtensions;
 using VirtualAviationJapan;
-using YuxiFlightInstruments.BasicFlightData;
 
 namespace A320VAU.ND.Pages {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     [DefaultExecutionOrder(1000)] // After Virtual-CNS NavaidDatabase
     public class MapDisplay : UdonSharpBehaviour {
-        private const float UPDATE_INTERVAL = 0.5f;
-        public YFI_FlightDataInterface flightData;
-        public SaccEntity saccEntity;
-
-        [Tooltip("nm")]
+        private SaccEntity _saccEntity;
+        
+        [PublicAPI] public EFISVisibilityType VisibilityType { get; private set; }
+        [PublicAPI] public int Range { get; private set; }
+        
+        [Tooltip("unit: nm")]
         public int defaultRange = 40;
-
         public EFISVisibilityType defaultVisibilityType = EFISVisibilityType.NONE;
+
+    #region UI Elements
         public int uiRadius = 180;
 
         // Templates
@@ -28,25 +30,27 @@ namespace A320VAU.ND.Pages {
             dmeOrTacanTemplate,
             waypointTemplate,
             airportTemplate;
+    #endregion
 
+        private GameObject[] _markers = { };
+        private float scale;
+        
+        // delay update
         private float _lastUpdate;
-        private GameObject[] _markers = new GameObject[0];
+        private const float UPDATE_INTERVAL = 0.5f;
 
+        private DependenciesInjector _injector;
         private NavaidDatabase _navaidDatabase;
         private float magneticDeclination;
 
-        private float scale;
-
-        public EFISVisibilityType VisibilityType { get; private set; }
-        public int Range { get; private set; }
-
         private void Start() {
-            if (flightData == null) flightData = GetComponentInParent<YFI_FlightDataInterface>();
-            if (saccEntity == null) saccEntity = GetComponentInParent<SaccEntity>();
-
-            _navaidDatabase = GetNavaidDatabase();
+            _injector = DependenciesInjector.GetInstance(this);
+            
+            _saccEntity = _injector.saccEntity;
+            _navaidDatabase = _injector.navaidDatabase;
+            
             if (_navaidDatabase == null) {
-                VLogger.Error("Can't get NavaidDatabase instance, Map unavailable", this);
+                Debug.LogError("Can't get NavaidDatabase instance, Map unavailable", this);
                 gameObject.SetActive(false);
                 return;
             }
@@ -59,7 +63,7 @@ namespace A320VAU.ND.Pages {
             if (Time.time - _lastUpdate < UPDATE_INTERVAL) return;
             _lastUpdate = Time.time;
 
-            var entityTransform = saccEntity.transform;
+            var entityTransform = _saccEntity.transform;
             var rotation =
                 Quaternion.AngleAxis(
                     Vector3.SignedAngle(Vector3.forward, Vector3.ProjectOnPlane(entityTransform.forward, Vector3.up),
@@ -141,34 +145,21 @@ namespace A320VAU.ND.Pages {
             return marker;
         }
 
-        private void UpdateMarkerRotations(GameObject[] markers, Quaternion rotation) {
+        private static void UpdateMarkerRotations(GameObject[] markers, Quaternion rotation) {
             foreach (var marker in markers) {
                 if (marker == null) continue;
                 marker.transform.localRotation = rotation;
             }
         }
 
+        [PublicAPI]
         public void SetRange(int range) {
             InstantiateMarkers(range, VisibilityType);
         }
 
+        [PublicAPI]
         public void SetVisibilityType(EFISVisibilityType visibilityType) {
             InstantiateMarkers(Range, visibilityType);
-        }
-
-        private NavaidDatabase GetNavaidDatabase() {
-            var navaidDatabaseObject = GameObject.Find(nameof(NavaidDatabase));
-            if (navaidDatabaseObject == null) {
-                VLogger.Warn("Can't find NavaidDatabase GameObject: NavaidDatabase");
-                return null;
-            }
-
-            var navaidDatabase = navaidDatabaseObject.GetComponent<NavaidDatabase>();
-            if (navaidDatabase == null)
-                VLogger.Warn($"Can't find NavaidDatabase Component on GameObject: {navaidDatabaseObject.name}",
-                    navaidDatabaseObject);
-
-            return navaidDatabase;
         }
     }
 
