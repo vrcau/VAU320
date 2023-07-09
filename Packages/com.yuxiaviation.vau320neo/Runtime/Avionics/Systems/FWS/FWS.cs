@@ -228,7 +228,7 @@ namespace A320VAU.FWS {
                 gpws.PlayOneShot(altitudeCallouts[altitudeCalloutIndex]);
 
                 // RETARD
-                if (altitudeCalloutIndex == 10 && !Mathf.Approximately(ECAMController.AdvancedData.engine1ThrottleLeveler, 0.375f))
+                if (altitudeCalloutIndex == 10 && !Mathf.Approximately(equipmentData.engine1ThrottleLeveler, 0.375f))
                     SendCustomEventDelayedSeconds(nameof(CalloutRetard), 1);
 
                 _lastCallout = Time.time;

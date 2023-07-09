@@ -52,6 +52,8 @@ namespace A320VAU.Common {
 
         public AirbusAvionicsTheme airbusAvionicsTheme;
 
+        public FWS.FWS fws;
+
         [Header("World")]
         public NavaidDatabase navaidDatabase;
 
@@ -96,6 +98,8 @@ namespace A320VAU.Common {
             fmgc = GetComponentInChildren<FMGC.FMGC>(true);
 
             airbusAvionicsTheme = GetComponentInChildren<AirbusAvionicsTheme>(true);
+
+            fws = GetComponentInChildren<FWS.FWS>(true);
 
             // Worlds
             navaidDatabase = GetNavaidDatabase();
