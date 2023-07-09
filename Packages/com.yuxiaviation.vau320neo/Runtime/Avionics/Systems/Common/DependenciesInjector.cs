@@ -42,6 +42,8 @@ namespace A320VAU.Common {
 
         public DFUNC_a320_LandingLight landingLight;
         public DFUNC_Canopy canopy;
+        public DFUNC_Cruise cruise;
+        public DFUNC_AltHold altHold;
 
         public GPWS_OWML gpws;
         public RadioAltimeter.RadioAltimeter radioAltimeter;
@@ -91,6 +93,8 @@ namespace A320VAU.Common {
             brake = GetComponentInChildren<DFUNC_a320_Brake>(true);
             landingLight = GetComponentInChildren<DFUNC_a320_LandingLight>(true);
             canopy = GetComponentInChildren<DFUNC_Canopy>(true);
+            cruise = GetComponentInChildren<DFUNC_Cruise>(true);
+            altHold = GetComponentInChildren<DFUNC_AltHold>(true);
 
             gpws = GetComponentInChildren<GPWS_OWML>(true);
             radioAltimeter = GetComponentInChildren<RadioAltimeter.RadioAltimeter>(true);

@@ -7,13 +7,19 @@ using UnityEngine.UI;
 
 namespace A320VAU.PFD {
     public class FMAController : UdonSharpBehaviour {
-        public SaccEntity SaccEntity;
-        public SaccAirVehicle SaccAirVehicle;
-        public AircraftSystemData FlightData;
-        public DFUNC_Cruise DFUNC_Cruise;
-        public DFUNC_AltHold DFUNC_AltHold;
+        private DependenciesInjector _injector;
+        
+        private AircraftSystemData _aircraftSystemData;
+        private DFUNC_Cruise _cruiseDFunc;
+        private DFUNC_AltHold _altHoldDFunc;
 
         private void Start() {
+            _injector = DependenciesInjector.GetInstance(this);
+
+            _aircraftSystemData = _injector.equipmentData;
+            _cruiseDFunc = _injector.cruise;
+            _altHoldDFunc = _injector.altHold;
+            
             AutoThrustModeText.text = "";
             ManThrText.text = "";
             AutoBrkArmModeText.text = "";
@@ -40,8 +46,8 @@ namespace A320VAU.PFD {
         }
 
         public void LateUpdate() {
-            ManThrType = Mathf.Approximately(FlightData.engine1ThrottleLeveler, 1f) ? ManThrType.TOGA : ManThrType.None;
-            if ((bool)DFUNC_AltHold.GetProgramVariable("AltHold")) {
+            ManThrType = Mathf.Approximately(_aircraftSystemData.engine1ThrottleLeveler, 1f) ? ManThrType.TOGA : ManThrType.None;
+            if ((bool)_altHoldDFunc.GetProgramVariable("AltHold")) {
                 VerticalActiveMode = "ALT";
                 LateralActiveMode = "HDG";
                 IsAutoPilot1Active = true;
@@ -52,7 +58,7 @@ namespace A320VAU.PFD {
                 IsAutoPilot1Active = false;
             }
 
-            if ((bool)DFUNC_Cruise.GetProgramVariable("Cruise")) {
+            if ((bool)_cruiseDFunc.GetProgramVariable("Cruise")) {
                 IsAutoThrustActive = true;
                 AutoThrustMode = "SPEED";
             }
@@ -130,18 +136,18 @@ namespace A320VAU.PFD {
             }
 
             if (ApproachMinimumType != ApproachMinimumType.None && ApproachMinimumHeight > 0) {
-                var approachMiniumTypeString = "";
+                var approachMinimumTypeString = "";
                 switch (ApproachMinimumType) {
                     case ApproachMinimumType.BARO:
-                        approachMiniumTypeString = "BARO";
+                        approachMinimumTypeString = "BARO";
                         break;
                     case ApproachMinimumType.RADIO:
-                        approachMiniumTypeString = "RADIO";
+                        approachMinimumTypeString = "RADIO";
                         break;
                 }
 
                 ApproachMinimumText.text =
-                    $"{approachMiniumTypeString} <color=#38FFFE>{ApproachMinimumHeight}</color>";
+                    $"{approachMinimumTypeString} <color=#38FFFE>{ApproachMinimumHeight}</color>";
             }
 
             if (ApproachAbility != ApproachAbility.None && (IsAutoPilot1Active || IsAutoPilot2Active)) {
