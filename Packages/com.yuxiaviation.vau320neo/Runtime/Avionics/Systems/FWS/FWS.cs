@@ -27,8 +27,11 @@ namespace A320VAU.FWS {
         private void LateUpdate() {
             var radioAltitude = radioAltimeter.radioAltitude;
 
-            UpdateMinimumCallout(radioAltitude);
-            UpdateAltitudeCallout(radioAltitude);
+            if (radioAltimeter.isAvailable) {
+                UpdateMinimumCallout(radioAltitude);
+                UpdateAltitudeCallout(radioAltitude);    
+            }
+            
             UpdateFWS();
         }
 
