@@ -1,4 +1,5 @@
-﻿using A320VAU.FWS;
+﻿using A320VAU.Common;
+using A320VAU.FWS;
 using Avionics.Systems.Common;
 using JetBrains.Annotations;
 using SaccFlightAndVehicles;
@@ -6,7 +7,7 @@ using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace A320VAU.Common {
+namespace A320VAU.ECAM {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class ECAMDisplay : UdonSharpBehaviour {
         // for warning text
@@ -355,6 +356,8 @@ namespace A320VAU.Common {
 
         private void ToPage(GameObject pageObject) {
             CurrentPageBehaviour = pageObject.GetComponent<ECAMPage>();
+            if (CurrentPageBehaviour) CurrentPageBehaviour.OnPageInit(this);
+            
             pageObject.SetActive(true);
         }
 
