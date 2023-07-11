@@ -78,7 +78,7 @@ namespace A320VAU.FWS {
 
             SetWarnVisible(ref LANDING_MEMO.isVisable,
                 !FWS.saccAirVehicle.Taxiing & (FWS.flightData.TAS > 80f) & (isEngine1Running | isEngine2Running) &
-                ((float)FWS.gpws.GetProgramVariable("radioAltitude") < 2000f));
+                (FWS.radioAltimeter.radioAltitude < 2000f));
 
             if (LANDING_MEMO.isVisable) {
                 // GEAR DN

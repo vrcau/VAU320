@@ -56,6 +56,8 @@ namespace A320VAU.Common {
 
         public FCU.FCU fcu;
 
+        public SystemEventBus systemEventBus;
+
         [Header("World")]
         public NavaidDatabase navaidDatabase;
 
@@ -108,6 +110,8 @@ namespace A320VAU.Common {
             fws = GetComponentInChildren<FWS.FWS>(true);
 
             fcu = GetComponentInChildren<FCU.FCU>(true);
+
+            systemEventBus = GetComponentInChildren<SystemEventBus>(true);
 
             // Worlds
             navaidDatabase = GetNavaidDatabase();

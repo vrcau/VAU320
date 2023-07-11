@@ -326,7 +326,7 @@ namespace A320VAU.PFD {
         }
 
         private void UpdateRadioHeight() {
-            if (RadioHeight > 2500f) {
+            if (!_radioAltimeter.isAvailable | RadioHeight > 2500f) {
                 RadioHeightText.gameObject.SetActive(false);
             }
             else {
@@ -345,12 +345,15 @@ namespace A320VAU.PFD {
             IndicatorAnimator.SetFloat(ROC_HASH, VerticalSpeedNormal);
             if (Mathf.Abs(verticalSpeed) > 200) {
                 VSbackground.SetActive(true);
-                if (Mathf.Abs(verticalSpeed) > 6000) VSText.color = new Color(0.91373f, 0.54901f, 0);
+                if (Mathf.Abs(verticalSpeed) > 6000)
+                    VSText.color = new Color(0.91373f, 0.54901f, 0);
                 else if (1000 < RadioHeight && RadioHeight < 2000 && Mathf.Abs(verticalSpeed) > 2000)
                     VSText.color = new Color(0.91373f, 0.54901f, 0);
                 else if (RadioHeight < 1200 && Mathf.Abs(verticalSpeed) > 1200)
                     VSText.color = new Color(0.91373f, 0.54901f, 0);
-                else VSText.color = new Color(0, 1, 0);
+                else
+                    VSText.color = new Color(0, 1, 0);
+
                 VSText.text = Mathf.Abs(verticalSpeed / 100).ToString("f0");
             }
             else {

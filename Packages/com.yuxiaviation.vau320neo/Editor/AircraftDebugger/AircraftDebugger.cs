@@ -199,13 +199,14 @@ namespace A320VAU.Editor.AircraftDebugger {
         }
 
         private void BypassDUsSelfTest() {
-            foreach (var du in _saccEntity.GetComponentsInChildren<DU>(true)) du.BypassSelftest();
+            foreach (var du in _saccEntity.GetComponentsInChildren<DU>(true))
+                UdonSharpEditorUtility.GetBackingUdonBehaviour(du).SendCustomEvent(nameof(DU.BypassSelftest));
         }
 
         private void SetEngineStarted(bool started = true) {
             if (!started) return;
             foreach (var engine in _saccEntity.GetComponentsInChildren<SFEXT_a320_AdvancedEngine>(true))
-                engine._InstantStart();
+                UdonSharpEditorUtility.GetBackingUdonBehaviour(engine).SendCustomEvent(nameof(SFEXT_a320_AdvancedEngine._InstantStart));
         }
     }
 
