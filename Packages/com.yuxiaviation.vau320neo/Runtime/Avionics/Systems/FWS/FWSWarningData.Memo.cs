@@ -11,7 +11,7 @@ namespace A320VAU.FWS {
         }
 
         private void MonitorMemo() {
-            SetWarnVisible(ref APU_BLEED.isVisable, FWS.equipmentData.isAPURunning);
+            SetWarnVisible(ref APU_BLEED.isVisable, FWS.equipmentData.isApuStarted);
             // APU BLEED will replace APU AVAIL if APU BLEED is on, but we don't have "APU BLEED" simulate.
             // SetWarnVisible(ref APU_AVAIL.IsVisable, FWS.equipmentData.IsAPURunning);
             SetWarnVisible(ref PARK_BRK.isVisable, FWS.equipmentData.isParkBreakSet);

@@ -32,7 +32,8 @@ namespace A320VAU.FWS {
         None = 0,
         Engine = 1,
         Bleed = 2,
-        Status = 3
+        Status = 3,
+        Apu = 4
     }
 
     public enum WarningStyle {
