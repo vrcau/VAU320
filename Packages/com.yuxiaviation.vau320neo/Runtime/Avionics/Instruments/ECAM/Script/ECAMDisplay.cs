@@ -124,9 +124,11 @@ namespace A320VAU.ECAM {
 
         public GameObject enginePage;
         public GameObject statusPage;
+        public GameObject apuPage;
 
         public GameObject enginePageIndicator;
         public GameObject statusPageIndicator;
+        public GameObject apuPageIndicator;
 
         [PublicAPI] public SystemPage CurrentPage { get; private set; }
         [PublicAPI] public ECAMPage CurrentPageBehaviour { get; private set; }
@@ -309,14 +311,11 @@ namespace A320VAU.ECAM {
     #region Button Functions
 
         [PublicAPI]
-        public void ToggleEnginePage() {
-            TogglePage(SystemPage.Engine);
-        }
-
+        public void ToggleEnginePage() => TogglePage(SystemPage.Status);
         [PublicAPI]
-        public void ToggleStatusPage() {
-            TogglePage(SystemPage.Status);
-        }
+        public void ToggleStatusPage() => TogglePage(SystemPage.Status);
+        [PublicAPI]
+        public void ToggleApuPage() => TogglePage(SystemPage.Apu);
 
     #endregion
 
@@ -351,6 +350,10 @@ namespace A320VAU.ECAM {
                     ToPage(statusPage);
                     statusPageIndicator.SetActive(true);
                     break;
+                case SystemPage.Apu:
+                    ToPage(apuPage);
+                    apuPageIndicator.SetActive(true);
+                    break;
             }
         }
 
@@ -364,11 +367,13 @@ namespace A320VAU.ECAM {
         private void ResetAllPages() {
             enginePageIndicator.SetActive(false);
             statusPageIndicator.SetActive(false);
+            apuPageIndicator.SetActive(false);
 
             CurrentPage = SystemPage.None;
 
             enginePage.SetActive(false);
             statusPage.SetActive(false);
+            apuPage.SetActive(false);
         }
 
     #endregion

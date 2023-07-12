@@ -40,9 +40,11 @@ namespace Avionics.Systems.Common {
         [PublicAPI] public bool isCabinDoorOpen => Canopy.CanopyOpen;
         [PublicAPI] public bool isParkBreakSet => Brake.ParkBreakSet;
 
-        [PublicAPI] public bool isAPURunning =>
-            //get => APU.started;
+        [PublicAPI] public bool isApuStarted =>
             Mathf.Approximately(APU.apuAudioSource.volume, 1.0f);
+
+        [PublicAPI] public bool isApuRunning =>
+            (bool)APU.GetProgramVariable("run");
 
         //synced float n1 n2 egt ect ff throttleLeveler 
         //synced bool reversing, starter, fuel，fire
