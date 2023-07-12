@@ -14,6 +14,8 @@ namespace A320VAU.MCDU {
         private NavSelector _vor1;
         private NavSelector _vor2;
 
+        private bool _initialized;
+
         private void Start() {
             _fmgc = DependenciesInjector.GetInstance(this).fmgc;
 
@@ -22,6 +24,8 @@ namespace A320VAU.MCDU {
             _vor2 = _fmgc.radNav.VOR2;
             _ils = _fmgc.radNav.ILS;
             _adf = _fmgc.radNav.ADF;
+
+            _initialized = true;
         }
 
         public override void OnPageInit(MCDU mcdu) {
@@ -37,6 +41,8 @@ namespace A320VAU.MCDU {
         }
 
         private void UpdateUI() {
+            if (!_initialized) return;
+            
             _mcdu.l1Label.text = "VOR1/FREQ";
             _mcdu.l1Text.text =
                 $"<color=#30FFFF>{_vor1.Identity ?? "[  ]"}/{(_vor1.Index != -1 ? _navaidDatabase.frequencies[_vor1.Index].ToString("F") : "[  . ]")}</color>";
