@@ -13,7 +13,8 @@
     "VirtualAviationJapan.Virtual-CNS",
     "Varneon.VUdon.ArrayExtensions.Runtime",
     "UdonSharp.Editor",
-    "VRC.Udon.Editor"
+    "VRC.Udon.Editor",
+    "com.vrcau.virtual-bridge-udon"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],
