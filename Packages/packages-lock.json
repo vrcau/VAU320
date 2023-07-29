@@ -1,11 +1,15 @@
 {
   "dependencies": {
     "com.nekometer.esnya.esnya-sf-addons": {
-      "version": "https://github.com/esnya/EsnyaSFAddons.git?path=/Packages/com.nekometer.esnya.esnya-sf-addons",
+      "version": "https://github.com/esnya/EsnyaSFAddons.git?path=Packages/com.nekometer.esnya.esnya-sf-addons",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
-      "hash": "13e02c6039e56019dbf8b409b51017e00d8cc1c1"
+      "dependencies": {
+        "com.nekometer.esnya.inari-udon": "9.1.0",
+        "com.unity.textmeshpro": "2.1.6",
+        "sh.orels.udontoolkit": "1.1.2"
+      },
+      "hash": "0b1edafa7d4d8eda2e1496763f9550b4ce76b97b"
     },
     "com.nekometer.esnya.inari-udon": {
       "version": "https://github.com/esnya/InariUdon.git?path=/Packages/com.nekometer.esnya.inari-udon",
@@ -196,6 +200,12 @@
       "source": "git",
       "dependencies": {},
       "hash": "095c6be506dfaefe5f99dff6c12ff63d5a1c8149"
+    },
+    "com.vrcau.virtual-bridge-udon": {
+      "version": "file:com.vrcau.virtual-bridge-udon",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.vrchat.base": {
       "version": "file:com.vrchat.base",

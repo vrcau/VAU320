@@ -8,6 +8,9 @@
     },
     "com.vrchat.core.vpm-resolver": {
       "version": "0.1.17"
+    },
+    "com.vrcau.virtual-bridge-udon": {
+      "version": "0.0.1"
     }
   },
   "locked": {
@@ -18,24 +21,30 @@
       }
     },
     "com.vrchat.worlds": {
-      "version": "3.2.1",
+      "version": "3.2.2-beta.1",
       "dependencies": {
-        "com.vrchat.base": "^3.2.1"
+        "com.vrchat.base": "3.2.2-beta.1"
       }
     },
     "com.vrchat.base": {
-      "version": "3.2.1",
+      "version": "3.2.2-beta.1",
       "dependencies": {}
     },
     "com.vrchat.clientsim": {
-      "version": "1.2.5",
+      "version": "1.2.6",
       "dependencies": {
         "com.vrchat.worlds": "^3.1.x"
       }
     },
     "com.vrchat.core.vpm-resolver": {
-      "version": "0.1.20",
+      "version": "0.1.21",
       "dependencies": {}
+    },
+    "com.vrcau.virtual-bridge-udon": {
+      "version": "0.0.1",
+      "dependencies": {
+        "com.vrchat.udonsharp": "1.1.8"
+      }
     }
   }
 }
