@@ -13,7 +13,7 @@ VAU320neo 是架由 VRChat 航空航天大学开发基于 Sacc 系统的 VRChat 
 > - 了解 VPM：https://vcc.docs.vrchat.com/vpm/
 > - 在我们的包浏览器查看更多安装选项：https://pkg.yuxiaviation.com/packages/com.yuxiaviation.vau320neo
 
-1. 导入 [SaccFlightAndVehicles v1.62](https://github.com/Sacchan-VRC/SaccFlightAndVehicles/releases/tag/1.62)
+1. 导入 [SaccFlightAndVehicles v1.64](https://github.com/Sacchan-VRC/SaccFlightAndVehicles/releases/tag/1.62)
 2. 安装以下依赖
     - [YuxiFlightInsturments](https://github.com/Heriyadi235/YuxiFlightInstrumentsforSF): Git URL: `https://github.com/Heriyadi235/YuxiFlightInstrumentsforSF.git?path=/Packages/com.yuxiaviation.yuxiflightinstruments`
     - [InariUdon](https://github.com/esnya/InariUdon.git): Git URL: `https://github.com/esnya/InariUdon.git?path=/Packages/com.nekometer.esnya.inari-udon`

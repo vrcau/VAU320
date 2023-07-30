@@ -13,7 +13,7 @@ You can learn more at [https://yuxiaviation.com/en/v320neo](https://yuxiaviation
 > - Learn more about VPM: https://vcc.docs.vrchat.com/vpm/
 > - See other import options on our package broswer: https://pkg.yuxiaviation.com/packages/com.yuxiaviation.vau320neo
 
-1. Import [SaccFlightAndVehicles v1.62](https://github.com/Sacchan-VRC/SaccFlightAndVehicles/releases/tag/1.64)
+1. Import [SaccFlightAndVehicles v1.64](https://github.com/Sacchan-VRC/SaccFlightAndVehicles/releases/tag/1.64)
 2. Install these follow git dependencies
     - [YuxiFlightInsturments](https://github.com/Heriyadi235/YuxiFlightInstrumentsforSF): Install using git url: `https://github.com/Heriyadi235/YuxiFlightInstrumentsforSF.git?path=/Packages/com.yuxiaviation.yuxiflightinstruments`
     - [InariUdon](https://github.com/esnya/InariUdon.git): Install using git url: `https://github.com/esnya/InariUdon.git?path=/Packages/com.nekometer.esnya.inari-udon`
