@@ -311,7 +311,7 @@ namespace A320VAU.ECAM {
     #region Button Functions
 
         [PublicAPI]
-        public void ToggleEnginePage() => TogglePage(SystemPage.Status);
+        public void ToggleEnginePage() => TogglePage(SystemPage.Engine);
         [PublicAPI]
         public void ToggleStatusPage() => TogglePage(SystemPage.Status);
         [PublicAPI]
