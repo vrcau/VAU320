@@ -20,6 +20,12 @@ TextureImporter:
   - first:
       213: 1798488054198730732
     second: PDF_FD_TRK
+  - first:
+      213: -2624305648986206840
+    second: PDF_PilotInput
+  - first:
+      213: 5356124908895064969
+    second: PDF_PilotInput_T
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -238,6 +244,48 @@ TextureImporter:
       bones: []
       spriteID: cef7c434b5385f810800000000000000
       internalID: 1798488054198730732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PDF_PilotInput
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 564
+        width: 212
+        height: 152
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88d402a9ae7949bd0800000000000000
+      internalID: -2624305648986206840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PDF_PilotInput_T
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 624
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 983df470a37c45a40800000000000000
+      internalID: 5356124908895064969
       vertices: []
       indices: 
       edges: []

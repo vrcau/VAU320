@@ -2,6 +2,7 @@
 using Avionics.Systems.Common;
 using EsnyaSFAddons.DFUNC;
 using JetBrains.Annotations;
+using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,6 +34,7 @@ namespace A320VAU.PFD {
             _aircraftSystemData = _injector.equipmentData;
             _fcu = _injector.fcu;
             _flaps = _injector.flaps;
+            _saccAirVehicle = _injector.saccAirVehicle;
 
             // Reset Flight Direction and Landing System
             flightDirectionIndicator.SetActive(isFlightDirectionOn);
@@ -74,12 +76,15 @@ namespace A320VAU.PFD {
 
         public GameObject[] enableOnGround;
 
+        public GameObject pilotInputDisplay;
+
     #endregion
 
     #region Aircraft Systems
 
         private DependenciesInjector _injector;
 
+        private SaccAirVehicle _saccAirVehicle;
         private YFI_FlightDataInterface _flightData;
         private RadioAltimeter.RadioAltimeter _radioAltimeter;
         private AircraftSystemData _aircraftSystemData;
@@ -149,6 +154,8 @@ namespace A320VAU.PFD {
         private readonly int VSW_HASH = Animator.StringToHash("VSWNormalize");
         private readonly int VFE_NEXT_HASH = Animator.StringToHash("VFENEXTNormalize");
         private readonly int VLS_HASH = Animator.StringToHash("VLSNormalize");
+        private readonly int INPUT_X_HASH = Animator.StringToHash("PilotInputX");
+        private readonly int INPUT_Y_HASH = Animator.StringToHash("PilotInputY");
 
     #endregion
 
@@ -180,6 +187,8 @@ namespace A320VAU.PFD {
             UpdateTrickPitch();
 
             UpdateMachNumber();
+
+            UpdatePilotInput();
         }
 
     #region Speed
@@ -384,6 +393,34 @@ namespace A320VAU.PFD {
         private void UpdateTrickPitch() {
             IndicatorAnimator.SetFloat(TRKPCH_HASH,
                 Mathf.Clamp01((_flightData.trackPitchAngle + MAXTRACKPITCH) / (MAXTRACKPITCH + MAXTRACKPITCH)));
+        }
+
+        private Vector3 ownerRotationInputs;
+
+        private void UpdatePilotInput() {
+            pilotInputDisplay.SetActive(_saccAirVehicle.Taxiing &&
+                                        (_aircraftSystemData.isEngine1Avail || _aircraftSystemData.isEngine2Avail));
+
+            if (!pilotInputDisplay.activeSelf) return;
+
+            var rotationInputs = _saccAirVehicle.RotationInputs;
+            if (_saccAirVehicle.IsOwner) {
+                if (_saccAirVehicle.InVR) {
+                    ownerRotationInputs = rotationInputs;
+                }
+                else {
+                    // prevent instant movement in desktop mode
+                    ownerRotationInputs = Vector3.MoveTowards(ownerRotationInputs, rotationInputs, 7 * Time.deltaTime);
+                }
+
+                IndicatorAnimator.SetFloat(INPUT_Y_HASH, ownerRotationInputs.x * 0.5f + 0.5f);
+                IndicatorAnimator.SetFloat(INPUT_X_HASH, ownerRotationInputs.z * 0.5f + 0.5f);
+                
+                return;
+            }
+
+            IndicatorAnimator.SetFloat(INPUT_Y_HASH, rotationInputs.x * 0.5f + 0.5f);
+            IndicatorAnimator.SetFloat(INPUT_X_HASH, rotationInputs.z * 0.5f + 0.5f);
         }
 
     #endregion
