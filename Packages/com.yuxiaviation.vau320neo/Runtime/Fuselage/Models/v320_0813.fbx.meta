@@ -1,0 +1,311 @@
+fileFormatVersion: 2
+guid: 1af5491fac4553b4485427da471eaff7
+ModelImporter:
+  serializedVersion: 19301
+  internalIDToNameTable:
+  - first:
+      74: 562872140007362462
+    second: Armature.001|Aileron
+  - first:
+      74: -8334623705787036005
+    second: Armature.001|CabinDoor
+  - first:
+      74: -8777661109784132681
+    second: Armature.001|CargoDoor
+  - first:
+      74: -4334575473459015793
+    second: Armature.001|EngineReactor
+  - first:
+      74: 7875284379551655385
+    second: Armature.001|Flap
+  - first:
+      74: -6051399425059436362
+    second: Armature.001|gear.n
+  - first:
+      74: 7471825290141250210
+    second: Armature.001|GearSuspension.l
+  - first:
+      74: -8618282295254551141
+    second: Armature.001|GearSuspension.r
+  - first:
+      74: -1950421440479484538
+    second: Armature.001|GearSuspenson.n
+  - first:
+      74: 7242802936866707231
+    second: Armature.001|LandingGear.l
+  - first:
+      74: -915822169153030648
+    second: Armature.001|LandingGear.r
+  - first:
+      74: -6382970456096470579
+    second: Armature.001|LandingLight
+  - first:
+      74: 3670535907258632074
+    second: Armature.001|Pitch
+  - first:
+      74: 1550519516814570639
+    second: Armature.001|Rubber
+  - first:
+      74: 8144467217490850323
+    second: Armature.001|slot
+  - first:
+      74: 4407223741487171719
+    second: Armature.001|spolier_inside.l
+  - first:
+      74: 3007173448289564389
+    second: Armature.001|spolier_inside.r
+  - first:
+      74: 8702694734990869230
+    second: Armature.001|spolier_outside.l
+  - first:
+      74: 3074883851086676452
+    second: Armature.001|spolier_outside.r
+  - first:
+      74: -1894095369416334192
+    second: Armature.001|TrimElevator
+  - first:
+      74: 3754898602393379045
+    second: Armature.001|wiper
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "ENGINES\u53F3"
+    second: {fileID: 2100000, guid: 2d2c16e82b7ff924a919877f7f2a3e57, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "ENGINES\u5DE6"
+    second: {fileID: 2100000, guid: f245cc1eaa2e60b4d9c20de6314477e5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: FUSELAGE
+    second: {fileID: 2100000, guid: ed06dfa7df2b9b74eb2c88f6a297f2fb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Interior
+    second: {fileID: 2100000, guid: bd072e37b80e9f245968f2f469c278f4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LandingGear_Others
+    second: {fileID: 2100000, guid: 38d4b61acde2d7c488adbbf5c10119b1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WINGS
+    second: {fileID: 2100000, guid: 49da1a8acc5fcd44b9b04a37f0501921, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u5730\u6BEF\u4E0E\u9A7E\u9A76\u8231\u540E\u90E8"
+    second: {fileID: 2100000, guid: d6b8b7baca711d84ba0a20aaf2881b5d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u6309\u94AE"
+    second: {fileID: 2100000, guid: b0fe36501fdf83645870077ec06c40f5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u6CB9\u95E8\u53F0"
+    second: {fileID: 2100000, guid: ff51225f968cc4349a8f06bdabb3ae77, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u7A97\u6846\u4E0E\u9876\u68DA"
+    second: {fileID: 2100000, guid: cb400e78097296444a60cff6fa731e26, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u9762\u677F\u53CA\u5EA7\u6905"
+    second: {fileID: 2100000, guid: c27bca2dbeca6b94a81953f3f6764f3b, type: 2}
+  materials:
+    materialImportMode: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths:
+    - Armature.001/HIPS/BASE_C
+    - Armature.001/HIPS/Cargo_door
+    - Armature.001/HIPS/C_DOOR_01_left
+    - Armature.001/HIPS/C_DOOR_01_right
+    - Armature.001/HIPS/C_DOOR_02_left
+    - Armature.001/HIPS/C_DOOR_02_right
+    - Armature.001
+    - Armature.001/HIPS
+    - Armature.001/HIPS/BASE_C/C_STEERING
+    - Armature.001/HIPS/BASE_C/C_STEERING/TORQUE_LINK_A
+    - Armature.001/HIPS/BASE_C/C_STEERING/TORQUE_LINK_A/TORQUE_LINK_B
+    - Armature.001/HIPS/BASE_C/C_STEERING/WHEELS_C
+    - Armature.001/HIPS/BASE_C/C_STEERING/WHEELS_C/WHEELS_ROT_C
+    - Armature.001/HIPS/BASE_C/DRAG_STRUT_A
+    - Armature.001/HIPS/BASE_C/DRAG_STRUT_A/DRAG_STRUT_B
+    - Armature.001/HIPS/Cargo_door/Cargo_hyd_A
+    - Armature.001/HIPS/Cargo_hyd_B
+    - Armature.001/HIPS/Langdinglight.l
+    - Armature.001/HIPS/Langdinglight.r
+    - Armature.001/HIPS/Passenger_door
+    - Armature.001/HIPS/Passenger_door_pivot
+    - Armature.001/HIPS/TAIL_RUDDER_C
+    - Armature.001/HIPS/WING_BONE_LEFT_00
+    - Armature.001/HIPS/WING_BONE_LEFT_00/Engine_PIVOT_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/Engine_PIVOT_left/REACTOR_BACK_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/Engine_PIVOT_left/REACTOR_PROP_STILL_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/FLAPSFAIRING_04_LEFT_1
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WHEEL_BASE_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WHEEL_BASE_left/gear_bone01_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WHEEL_BASE_left/gear_bone01_left/gear_bone02_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WHEEL_BASE_left/WHEEL_ARM02_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WHEEL_BASE_left/WHEEL_ARM02_left/WHEEL_ARM07_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WHEEL_BASE_left/WHEEL_HYDROLIC_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WHEEL_BASE_left/WHEEL_HYDROLIC_left/WHEEL_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_BONE_LEFT_01
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_BONE_LEFT_01/FLAPSFAIRING_05_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_BONE_LEFT_01/WING_BONE_LEFT_02
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_BONE_LEFT_01/WING_BONE_LEFT_02/FlapConntectingRod05_A.l
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_BONE_LEFT_01/WING_BONE_LEFT_02/FlapConntectingRod05_A.l/FlapConntectingRod05_B.l
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_BONE_LEFT_01/WING_BONE_LEFT_02/FlapConntectingRod06_A.l
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_BONE_LEFT_01/WING_BONE_LEFT_02/FlapConntectingRod06_A.l/FlapConntectingRod06_B.l
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_BONE_LEFT_01/WING_BONE_LEFT_02/FLAPSFAIRING_06_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_BONE_LEFT_01/WING_BONE_LEFT_02/WING_BONE_LEFT_03
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_BONE_LEFT_01/WING_BONE_LEFT_02/WING_BONE_LEFT_03/WING_AILERON_1_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_BONE_LEFT_01/WING_BONE_LEFT_02/WING_SPOILER_2_2_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_BONE_LEFT_01/WING_FLAP_02_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_BONE_LEFT_01/WING_FLAPSKRUEGER_1_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_DOOR01_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_DOOR02_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_FLAP_01_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_FLAPSKRUEGER_0_left
+    - Armature.001/HIPS/WING_BONE_LEFT_00/WING_SPOILER_1_left
+    - Armature.001/HIPS/WING_BONE_RIGHT_00
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/Engine_PIVOT_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/Engine_PIVOT_right/REACTOR_BACK_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/Engine_PIVOT_right/REACTOR_PROP_STILL_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/FLAPSFAIRING_04_RIGHT_1
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WHEEL_BASE_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WHEEL_BASE_right/gear_bone01_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WHEEL_BASE_right/gear_bone01_right/gear_bone02_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WHEEL_BASE_right/WHEEL_ARM02_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WHEEL_BASE_right/WHEEL_ARM02_right/WHEEL_ARM07_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WHEEL_BASE_right/WHEEL_HYDROLIC_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WHEEL_BASE_right/WHEEL_HYDROLIC_right/WHEEL_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_BONE_RIGHT_01
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_BONE_RIGHT_01/FLAPSFAIRING_05_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_BONE_RIGHT_01/WING_BONE_RIGHT_02
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_BONE_RIGHT_01/WING_BONE_RIGHT_02/FlapConntectingRod05_A.r
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_BONE_RIGHT_01/WING_BONE_RIGHT_02/FlapConntectingRod05_A.r/FlapConntectingRod05_B.r
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_BONE_RIGHT_01/WING_BONE_RIGHT_02/FlapConntectingRod06_A.r
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_BONE_RIGHT_01/WING_BONE_RIGHT_02/FlapConntectingRod06_A.r/FlapConntectingRod06_B.r
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_BONE_RIGHT_01/WING_BONE_RIGHT_02/FLAPSFAIRING_06_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_BONE_RIGHT_01/WING_BONE_RIGHT_02/WING_BONE_RIGHT_03
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_BONE_RIGHT_01/WING_BONE_RIGHT_02/WING_BONE_RIGHT_03/WING_AILERON_1_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_BONE_RIGHT_01/WING_BONE_RIGHT_02/WING_SPOILER_2_2_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_BONE_RIGHT_01/WING_FLAP_02_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_BONE_RIGHT_01/WING_FLAPSKRUEGER_1_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_DOOR01_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_DOOR02_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_FLAP_01_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_FLAPSKRUEGER_0_right
+    - Armature.001/HIPS/WING_BONE_RIGHT_00/WING_SPOILER_1_right
+    - Armature.001/HIPS/WING_DOOR03_left
+    - Armature.001/HIPS/WING_DOOR03_right
+    - Armature.001/HIPS/WING_TAIL_ELEVATOR_TRIM_left
+    - Armature.001/HIPS/WING_TAIL_ELEVATOR_TRIM_left/WING_TAIL_ELEVATOR_left
+    - Armature.001/HIPS/WING_TAIL_ELEVATOR_TRIM_right
+    - Armature.001/HIPS/WING_TAIL_ELEVATOR_TRIM_right/WING_TAIL_ELEVATOR_right
+    - Armature.001/HIPS/Wiper_Base_l
+    - Armature.001/HIPS/Wiper_Base_l/Wiper_Wiper_l
+    - Armature.001/HIPS/Wiper_Base_r
+    - Armature.001/HIPS/Wiper_Base_r/Wiper_Wiper_r
+    - INTERIOR
+    - "\u540E\u95E8"
+    - "\u673A\u8EAB\u52A8\u6001"
+    - "\u673A\u8EAB\u9759\u6001"
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    skinWeightsMode: 1
+    maxBonesPerVertex: 1
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 50
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
