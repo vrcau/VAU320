@@ -1,5 +1,6 @@
 ﻿using A320VAU.Common;
 using A320VAU.FWS;
+using A320VAU.Utils;
 using Avionics.Systems.Common;
 using JetBrains.Annotations;
 using SaccFlightAndVehicles;
@@ -136,8 +137,13 @@ namespace A320VAU.ECAM {
     #endregion
 
     #region Update
+        
+        private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(30);
+        private float _lastUpdate;
 
         public void LateUpdate() {
+            if (!UpdateIntervalUtil.CanUpdate(ref _lastUpdate, UPDATE_INTERVAL)) return;
+            
             UpdateEngineStatus();
             UpdateFlapStatus();
 
@@ -176,6 +182,7 @@ namespace A320VAU.ECAM {
         }
 
         private void UpdateEngineStatus() {
+
             N1L.text = (_aircraftSystemData.engine1n1 * 100).ToString("F1");
             N2L.text = (_aircraftSystemData.engine1n2 * 100).ToString("F1");
             EGTL.text = _aircraftSystemData.engine1EGT.ToString("F0");

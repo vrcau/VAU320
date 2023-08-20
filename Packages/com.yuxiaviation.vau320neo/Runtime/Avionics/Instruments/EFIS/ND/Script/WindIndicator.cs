@@ -1,5 +1,6 @@
 ﻿using System;
 using A320VAU.Common;
+using A320VAU.Utils;
 using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
@@ -19,6 +20,9 @@ namespace A320VAU.ND {
         public Transform windDirectionIndicator;
         public Text windDirectionText;
         public Text windSpeedText;
+        
+        private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(10);
+        private float _lastUpdate;
 
         private void Start() {
             _dependenciesInjector = DependenciesInjector.GetInstance(this);
@@ -30,6 +34,8 @@ namespace A320VAU.ND {
         }
 
         private void LateUpdate() {
+            if (!UpdateIntervalUtil.CanUpdate(ref _lastUpdate, UPDATE_INTERVAL)) return;
+            
             // https://github.com/VirtualAviationJapan/Virtual-CNS/blob/master/Packages/jp.virtualaviation.virtual-cns/Instruments/Scripts/WindIndicator.cs
             var wind = _saccAirVehicle.Wind;
             var windSpeed = wind.magnitude;

@@ -1,4 +1,5 @@
 ﻿using System;
+using A320VAU.Utils;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 namespace A320VAU.Clock {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class Clock : UdonSharpBehaviour {
-        private const float UPDATE_INTERVAL = 0.5f;
+        private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromSeconds(1);
 
         [Header("Clock")]
         public Text hhmmText;
@@ -15,8 +16,7 @@ namespace A320VAU.Clock {
         private float _lastUpdate;
 
         private void Update() {
-            if (Time.time - _lastUpdate < 0.5f) return;
-            _lastUpdate = Time.time;
+            if (!UpdateIntervalUtil.CanUpdate(ref _lastUpdate, UPDATE_INTERVAL)) return;
 
             hhmmText.text = DateTime.UtcNow.ToShortTimeString();
             ssText.text = DateTime.UtcNow.Second.ToString("D2");

@@ -1,4 +1,5 @@
 ﻿using A320VAU.Common;
+using A320VAU.Utils;
 using Avionics.Systems.Common;
 using SaccFlightAndVehicles;
 using UdonSharp;
@@ -11,6 +12,9 @@ namespace A320VAU.PFD {
         private DFUNC_AltHold _altHoldDFunc;
         private DFUNC_Cruise _cruiseDFunc;
         private DependenciesInjector _injector;
+        
+        private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(30);
+        private float _lastUpdate;
 
         private void Start() {
             _injector = DependenciesInjector.GetInstance(this);
@@ -45,6 +49,8 @@ namespace A320VAU.PFD {
         }
 
         public void LateUpdate() {
+            if (!UpdateIntervalUtil.CanUpdate(ref _lastUpdate, UPDATE_INTERVAL)) return;
+        
             ManThrType = Mathf.Approximately(_aircraftSystemData.engine1ThrottleLeveler, 1f)
                 ? ManThrType.TOGA
                 : ManThrType.None;
