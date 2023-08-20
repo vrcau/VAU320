@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using A320VAU.Utils;
+using JetBrains.Annotations;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +7,8 @@ using UnityEngine.UI;
 namespace A320VAU.MCDU {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class MCDU : UdonSharpBehaviour {
-        private const float UPDATE_INTERVAL = 0.5f;
+        private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(5);
+        private float _lastUpdate;
 
         public MCDUPage DirPage;
         public MCDUPage ProgPage;
@@ -25,7 +27,6 @@ namespace A320VAU.MCDU {
         public string scratchpad;
 
         private bool _hasMessage;
-        private float _lastUpdate;
         private string _mcduMessage = "";
 
         [PublicAPI] public MCDUPage CurrentPage { get; private set; }
@@ -35,8 +36,7 @@ namespace A320VAU.MCDU {
         }
 
         private void LateUpdate() {
-            if (Time.time - UPDATE_INTERVAL < _lastUpdate) return;
-            _lastUpdate = Time.time;
+            if (!UpdateIntervalUtil.CanUpdate(ref _lastUpdate, UPDATE_INTERVAL)) return;
 
             if (CurrentPage != null)
                 CurrentPage.OnPageUpdate();

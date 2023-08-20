@@ -1,5 +1,6 @@
 ﻿using A320VAU.Common;
 using A320VAU.ND.Pages;
+using A320VAU.Utils;
 using JetBrains.Annotations;
 using UdonSharp;
 using UnityEngine;
@@ -10,7 +11,6 @@ using YuxiFlightInstruments.BasicFlightData;
 namespace A320VAU.ND {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class NDDisplay : UdonSharpBehaviour {
-        private const float UPDATE_INTERVAL = 0.5f;
         private const float MAX_SLIP_ANGLE = 50;
 
         public int MainDataSource = 1;
@@ -22,8 +22,6 @@ namespace A320VAU.ND {
         private FMGC.FMGC _fmgc;
 
         private DependenciesInjector _injector;
-
-        private float _lastUpdate;
 
         private MapDisplay[] _mapDisplays;
 
@@ -114,15 +112,17 @@ namespace A320VAU.ND {
 
     #region Update
 
+        private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(30);
+        private float _lastUpdate;
+        
         private void LateUpdate() {
+            if (!UpdateIntervalUtil.CanUpdate(ref _lastUpdate, UPDATE_INTERVAL)) return;
+            
             UpdateHeading();
             UpdateSlip();
             TASText.text = FlightData.TAS.ToString("f0");
             GSText.text = FlightData.groundSpeed.ToString("f0");
 
-            // 导航更新
-            if (Time.time - _lastUpdate < UPDATE_INTERVAL) return;
-            _lastUpdate = Time.time;
             UpdateNavigation();
         }
 

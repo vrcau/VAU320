@@ -1,4 +1,5 @@
 ﻿using A320VAU.Common;
+using A320VAU.Utils;
 using JetBrains.Annotations;
 using SaccFlightAndVehicles;
 using UdonSharp;
@@ -11,7 +12,8 @@ namespace A320VAU.ND.Pages {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     [DefaultExecutionOrder(1000)] // After Virtual-CNS NavaidDatabase
     public class MapDisplay : UdonSharpBehaviour {
-        private const float UPDATE_INTERVAL = 0.5f;
+        private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(10);
+        private float _lastUpdate;
 
         [Tooltip("unit: nm")]
         public int defaultRange = 40;
@@ -19,9 +21,6 @@ namespace A320VAU.ND.Pages {
         public EFISVisibilityType defaultVisibilityType = EFISVisibilityType.NONE;
 
         private DependenciesInjector _injector;
-
-        // delay update
-        private float _lastUpdate;
 
         private GameObject[] _markers = { };
         private NavaidDatabase _navaidDatabase;
@@ -49,8 +48,7 @@ namespace A320VAU.ND.Pages {
         }
 
         private void Update() {
-            if (Time.time - _lastUpdate < UPDATE_INTERVAL) return;
-            _lastUpdate = Time.time;
+            if (!UpdateIntervalUtil.CanUpdate(ref _lastUpdate, UPDATE_INTERVAL)) return;
 
             var entityTransform = _saccEntity.transform;
             var rotation =

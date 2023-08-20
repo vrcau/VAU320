@@ -1,5 +1,6 @@
 ﻿using System;
 using A320VAU.Common;
+using A320VAU.Utils;
 using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
@@ -11,6 +12,9 @@ namespace A320VAU.FCU {
 
         private DFUNC_Cruise _cruiseDFunc;
         private DependenciesInjector _injector;
+        
+        private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(5);
+        private float _lastUpdate;
 
         private void Start() {
             _injector = DependenciesInjector.GetInstance(this);
@@ -21,6 +25,8 @@ namespace A320VAU.FCU {
         }
 
         private void LateUpdate() {
+            if (!UpdateIntervalUtil.CanUpdate(ref _lastUpdate, UPDATE_INTERVAL)) return;
+            
             autoPilot1Switch.SetActive(_altHoldDFunc.AltHold);
             autoThrustSwitch.SetActive(_cruiseDFunc.Cruise);
             TargetSpeed = Convert.ToInt32(_cruiseDFunc.SetSpeed * 1.9438445f);

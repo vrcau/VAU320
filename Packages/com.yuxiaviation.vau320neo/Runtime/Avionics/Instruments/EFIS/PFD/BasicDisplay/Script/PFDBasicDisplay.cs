@@ -1,4 +1,5 @@
 ﻿using A320VAU.Common;
+using A320VAU.Utils;
 using Avionics.Systems.Common;
 using EsnyaSFAddons.DFUNC;
 using JetBrains.Annotations;
@@ -11,6 +12,9 @@ using YuxiFlightInstruments.BasicFlightData;
 namespace A320VAU.PFD {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class PFDBasicDisplay : UdonSharpBehaviour {
+        private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(30);
+        private float _lastUpdate;
+        
         [Header("EFIS Indicator")]
         public GameObject flightDirectionIndicator;
 
@@ -162,6 +166,8 @@ namespace A320VAU.PFD {
     #region Update
 
         private void LateUpdate() {
+            if (!UpdateIntervalUtil.CanUpdate(ref _lastUpdate, UPDATE_INTERVAL)) return;
+            
             //这里可以用来做仪表更新延迟之类的逻辑
             PitchAngle = _flightData.pitch;
             BankAngle = _flightData.bank;
