@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: WindIndicator
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: e7bd3a368a5b1e343879a1d83ff35dc6,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: b797b733a33faf54b97a1d13087cf7fc,
     type: 2}
   udonAssembly: 
   assemblyError: 
