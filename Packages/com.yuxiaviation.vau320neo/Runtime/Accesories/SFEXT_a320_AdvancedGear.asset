@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: SFEXT_a320_AdvancedGear
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 19895f2e79c6b5e4cb7c37436abcb02b,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 9a2cef1a61ea0d84492d03bbf597eb4a,
     type: 2}
   udonAssembly: 
   assemblyError: 

@@ -12,6 +12,11 @@ TagManager:
   - EnableInVehicle
   - LStickDisplayHighlighter
   - DFUNCP
+  - SFEXTP
+  - LStickDisplay
+  - RStickDisplay
+  - SwitchFunctionSound
+  - CenterOfMass
   layers:
   - Default
   - TransparentFX
@@ -42,7 +47,7 @@ TagManager:
   - AGMTargets
   - ReSupply
   - Racing
-  - 
+  - BoardingCollider
   - 
   - OnBoardVehicleLayer
   m_SortingLayers:

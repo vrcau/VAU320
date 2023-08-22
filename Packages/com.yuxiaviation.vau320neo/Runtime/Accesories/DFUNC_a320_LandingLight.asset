@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: DFUNC_a320_LandingLight
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 05a5cfa1fa7cee449b22f97e522352a9,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 30a42904f30f7f5468c018efb1a0d8b8,
     type: 2}
   udonAssembly: 
   assemblyError: 

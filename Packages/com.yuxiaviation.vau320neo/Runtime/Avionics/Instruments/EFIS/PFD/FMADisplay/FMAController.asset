@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: FMAController
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: bcdb6d15e91732e40a6cb7a7b02dadd2,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: f99e3aa13db5b1044940b96a4343261d,
     type: 2}
   udonAssembly: 
   assemblyError: 

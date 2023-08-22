@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: AircraftSystemData
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 838f4f3c09657da49953ee6c4fb2f9e8,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 737c8f07a55b14b43a917df4db98dc93,
     type: 2}
   udonAssembly: 
   assemblyError: 
