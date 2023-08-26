@@ -12,7 +12,7 @@ using YuxiFlightInstruments.BasicFlightData;
 namespace A320VAU.PFD {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class PFDBasicDisplay : UdonSharpBehaviour {
-        private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(30);
+        private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(20);
         private float _lastUpdate;
         
         [Header("EFIS Indicator")]
