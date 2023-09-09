@@ -155,7 +155,7 @@ namespace A320VAU.ECAM {
 
     #region Update
         
-        private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(30);
+        private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(10);
         private float _lastUpdate;
 
         public void LateUpdate() {

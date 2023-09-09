@@ -26,7 +26,7 @@ namespace A320VAU.PFD {
 
     #endregion
 
-        private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(30);
+        private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(20);
         private float _lastUpdate;
 
         [Header("EFIS Indicator")]
@@ -182,7 +182,7 @@ namespace A320VAU.PFD {
 
         private void LateUpdate() {
             if (!UpdateIntervalUtil.CanUpdate(ref _lastUpdate, UPDATE_INTERVAL)) return;
-
+            
             //这里可以用来做仪表更新延迟之类的逻辑
             PitchAngle = _flightData.pitch;
             BankAngle = _flightData.bank;
@@ -436,7 +436,7 @@ namespace A320VAU.PFD {
 
                 IndicatorAnimator.SetFloat(INPUT_Y_HASH, ownerRotationInputs.x * 0.5f + 0.5f);
                 IndicatorAnimator.SetFloat(INPUT_X_HASH, ownerRotationInputs.z * 0.5f + 0.5f);
-
+                
                 return;
             }
 
