@@ -28,6 +28,7 @@ namespace A320VAU.ND {
         private NavSelector _vor1;
         private NavSelector _vor2;
         private YFI_FlightDataInterface FlightData;
+        private SystemEventBus _eventBus;
 
         public NDMode NDMode {
             get => _ndMode;
@@ -44,6 +45,9 @@ namespace A320VAU.ND {
 
             _vor1 = _fmgc.radNav.VOR1;
             _vor2 = _fmgc.radNav.VOR2;
+            _eventBus = _injector.systemEventBus;
+
+            _eventBus.RegisterSaccEvent(this);
 
             NDModeChanged();
             _mapDisplays = GetComponentsInChildren<MapDisplay>(true);
@@ -51,6 +55,11 @@ namespace A320VAU.ND {
 
         private void OnEnable() {
             NDModeChanged();
+        }
+
+        public void SFEXT_O_RespawnButton() {
+            NDMode = NDMode.ARC;
+            SetVisibilityType(EFISVisibilityType.NONE);
         }
 
     #region Animation Hashs
