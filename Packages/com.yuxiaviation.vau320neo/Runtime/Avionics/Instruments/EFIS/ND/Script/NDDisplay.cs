@@ -9,7 +9,7 @@ using VirtualAviationJapan;
 using YuxiFlightInstruments.BasicFlightData;
 
 namespace A320VAU.ND {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class NDDisplay : UdonSharpBehaviour {
         private const float MAX_SLIP_ANGLE = 50;
 

@@ -10,7 +10,7 @@ using UnityEngine.UI;
 using YuxiFlightInstruments.BasicFlightData;
 
 namespace A320VAU.PFD {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class PFDBasicDisplay : UdonSharpBehaviour {
     #region Aircraft Systems
 
