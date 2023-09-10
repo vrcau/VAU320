@@ -6,6 +6,7 @@ using VRC.SDKBase;
 using VRC.Udon;
 
 namespace A320VAU.SFEXT {
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class SFEXT_a320_AdvancedFlapsKeyboardControl : UdonSharpBehaviour {
         public DFUNC_AdvancedFlaps advancedFlaps;
 
