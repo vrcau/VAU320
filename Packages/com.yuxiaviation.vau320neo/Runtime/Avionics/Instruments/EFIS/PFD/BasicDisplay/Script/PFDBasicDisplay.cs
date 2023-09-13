@@ -10,11 +10,25 @@ using UnityEngine.UI;
 using YuxiFlightInstruments.BasicFlightData;
 
 namespace A320VAU.PFD {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class PFDBasicDisplay : UdonSharpBehaviour {
+    #region Aircraft Systems
+
+        private DependenciesInjector _injector;
+
+        private SaccAirVehicle _saccAirVehicle;
+        private YFI_FlightDataInterface _flightData;
+        private RadioAltimeter.RadioAltimeter _radioAltimeter;
+        private AircraftSystemData _aircraftSystemData;
+        private FCU.FCU _fcu;
+        private DFUNC_AdvancedFlaps _flaps;
+        private SystemEventBus _eventBus;
+
+    #endregion
+
         private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(20);
         private float _lastUpdate;
-        
+
         [Header("EFIS Indicator")]
         public GameObject flightDirectionIndicator;
 
@@ -27,7 +41,7 @@ namespace A320VAU.PFD {
         private float PitchAngle;
         private float RadioHeight;
 
-        [PublicAPI] public bool isFlightDirectionOn { get; private set; }
+        [PublicAPI] public bool isFlightDirectionOn { get; private set; } = true;
         [PublicAPI] public bool isLandingSystemOn { get; private set; }
 
         private void Start() {
@@ -39,8 +53,22 @@ namespace A320VAU.PFD {
             _fcu = _injector.fcu;
             _flaps = _injector.flaps;
             _saccAirVehicle = _injector.saccAirVehicle;
+            _eventBus = _injector.systemEventBus;
+
+            _eventBus.RegisterSaccEvent(this);
 
             // Reset Flight Direction and Landing System
+            flightDirectionIndicator.SetActive(isFlightDirectionOn);
+            flightDirectionFail.SetActive(isFlightDirectionOn);
+
+            landingSystem.SetActive(isLandingSystemOn);
+            landingSystemIndicator.SetActive(isLandingSystemOn);
+        }
+
+        public void SFEXT_O_RespawnButton() {
+            isFlightDirectionOn = true;
+            isLandingSystemOn = false;
+
             flightDirectionIndicator.SetActive(isFlightDirectionOn);
             flightDirectionFail.SetActive(isFlightDirectionOn);
 
@@ -81,19 +109,6 @@ namespace A320VAU.PFD {
         public GameObject[] enableOnGround;
 
         public GameObject pilotInputDisplay;
-
-    #endregion
-
-    #region Aircraft Systems
-
-        private DependenciesInjector _injector;
-
-        private SaccAirVehicle _saccAirVehicle;
-        private YFI_FlightDataInterface _flightData;
-        private RadioAltimeter.RadioAltimeter _radioAltimeter;
-        private AircraftSystemData _aircraftSystemData;
-        private FCU.FCU _fcu;
-        private DFUNC_AdvancedFlaps _flaps;
 
     #endregion
 

@@ -1,4 +1,5 @@
-﻿using A320VAU.Utils;
+﻿using A320VAU.Common;
+using A320VAU.Utils;
 using JetBrains.Annotations;
 using UdonSharp;
 using UnityEngine;
@@ -7,6 +8,9 @@ using UnityEngine.UI;
 namespace A320VAU.MCDU {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class MCDU : UdonSharpBehaviour {
+        private SystemEventBus _eventBus;
+        private DependenciesInjector _injector;
+
         private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(5);
         private float _lastUpdate;
 
@@ -32,7 +36,18 @@ namespace A320VAU.MCDU {
         [PublicAPI] public MCDUPage CurrentPage { get; private set; }
 
         private void Start() {
+            _injector = DependenciesInjector.GetInstance(this);
+            _eventBus = _injector.systemEventBus;
+
+            _eventBus.RegisterSaccEvent(this);
+
             ToPage(McduMenuPage);
+        }
+
+
+        public void SFEXT_O_RespawnButton() {
+            ToPage(McduMenuPage);
+            ClearInput();
         }
 
         private void LateUpdate() {

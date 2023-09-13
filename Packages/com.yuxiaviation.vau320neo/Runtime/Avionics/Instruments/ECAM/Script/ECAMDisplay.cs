@@ -11,6 +11,19 @@ using UnityEngine.UI;
 namespace A320VAU.ECAM {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class ECAMDisplay : UdonSharpBehaviour {
+    #region Aircraft Systems
+
+        private DependenciesInjector _injector;
+
+        private SaccAirVehicle _airVehicle;
+        private SaccEntity _saccEntity;
+        private AircraftSystemData _aircraftSystemData;
+        private AirbusAvionicsTheme _airbusAvionicsTheme;
+        private FWS.FWS _fws;
+        private SystemEventBus _eventBus;
+
+    #endregion
+
         // for warning text
         private const int SingleLineMaxLength = 24;
 
@@ -33,7 +46,23 @@ namespace A320VAU.ECAM {
             _airbusAvionicsTheme = _injector.airbusAvionicsTheme;
             _aircraftSystemData = _injector.equipmentData;
             _fws = _injector.fws;
+            _eventBus = _injector.systemEventBus;
 
+            _eventBus.RegisterSaccEvent(this);
+
+            eng1AvailFlag.SetActive(false);
+            eng2AvailFlag.SetActive(false);
+            flapText.text = "0";
+
+            ResetAllPages();
+            ToPage(SystemPage.Status);
+
+            UpdateMemo();
+            UpdateEngineStatus();
+            UpdateFlapStatus(true);
+        }
+
+        public void SFEXT_O_RespawnButton() {
             eng1AvailFlag.SetActive(false);
             eng2AvailFlag.SetActive(false);
             flapText.text = "0";
@@ -64,18 +93,6 @@ namespace A320VAU.ECAM {
                     return AirbusAvionicsTheme.Green;
             }
         }
-
-    #endregion
-
-    #region Aircraft Systems
-
-        private DependenciesInjector _injector;
-
-        private SaccAirVehicle _airVehicle;
-        private SaccEntity _saccEntity;
-        private AircraftSystemData _aircraftSystemData;
-        private AirbusAvionicsTheme _airbusAvionicsTheme;
-        private FWS.FWS _fws;
 
     #endregion
 
