@@ -28,6 +28,11 @@ namespace A320VAU.Common {
 
         [PublicAPI]
         public void SendEvent(string eventName) {
+            foreach (var receiver in _receivers) receiver.SendCustomEvent("EventBus_" + eventName);
+        }
+
+        [PublicAPI]
+        public void SendEventWithOutPrefix(string eventName) {
             foreach (var receiver in _receivers) receiver.SendCustomEvent(eventName);
         }
 

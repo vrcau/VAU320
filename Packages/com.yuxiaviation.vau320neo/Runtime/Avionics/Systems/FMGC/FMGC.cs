@@ -7,7 +7,12 @@ namespace A320VAU.FMGC {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class FMGC : UdonSharpBehaviour {
         public NavaidDatabase navaidDatabase;
+
         public FMGCRadNav radNav;
+        public FMGCFlightPhase flightPhase;
+        public FMGCFlightPlan flightPlan;
+        public FMGCPerformance performance;
+
         private DependenciesInjector _injector;
 
         private void Start() {
@@ -19,6 +24,15 @@ namespace A320VAU.FMGC {
 
             radNav = GetComponentInChildren<FMGCRadNav>();
             radNav.fmgc = this;
+
+            flightPhase = GetComponentInChildren<FMGCFlightPhase>();
+            flightPhase.fmgc = this;
+
+            flightPlan = GetComponentInChildren<FMGCFlightPlan>();
+            flightPlan.fmgc = this;
+
+            performance = GetComponentInChildren<FMGCPerformance>();
+            performance.fmgc = this;
         }
     }
 }
