@@ -19,7 +19,7 @@ MonoBehaviour:
   sourceCsScript: {fileID: 11500000, guid: 7e376c3d493ec804297fd19887c78bf3, type: 3}
   scriptVersion: 2
   compiledVersion: 2
-  behaviourSyncMode: 0
+  behaviourSyncMode: 1
   hasInteractEvent: 0
   scriptID: -8011526331339342889
   serializationData:
@@ -176,7 +176,7 @@ MonoBehaviour:
       Data: 10|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: SaccFlightAndVehicles.DFUNC_Cruise, SaccFlightAndVehicles.Runtime
+      Data: A320VAU.DFUNC_a320_AutoThrust, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 

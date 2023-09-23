@@ -1,4 +1,5 @@
-﻿using A320VAU.Brake;
+﻿using System;
+using A320VAU.Brake;
 using A320VAU.Common;
 using A320VAU.SFEXT;
 using EsnyaSFAddons.DFUNC;
@@ -49,6 +50,8 @@ namespace Avionics.Systems.Common {
         //synced float n1 n2 egt ect ff throttleLeveler 
         //synced bool reversing, starter, fuel，fire
 
+        [PublicAPI] public ThrottleLevelerSlot throttleLevelerSlot => GetThrottleLevelerSlot();
+
         [PublicAPI] public bool isBothThrottleLevelerIdle =>
             isEngine1ThrottleLevelerIdle && isEngine2ThrottleLevelerIdle;
 
@@ -83,6 +86,85 @@ namespace Avionics.Systems.Common {
         [PublicAPI] public float flapTargetSpeedLimit => Flap.targetSpeedLimit;
 
     #endregion
+
+        public ThrottleLevelerSlot engine1ThrottleLevelerSlot =>
+            GetThrottleLevelerSlot(engine1ThrottleLeveler, isEngine1Reversing);
+
+        public ThrottleLevelerSlot engine2ThrottleLevelerSlot =>
+            GetThrottleLevelerSlot(engine2ThrottleLeveler, isEngine2Reversing);
+
+        public ThrottleLevelerSlot GetThrottleLevelerSlot(float throttleLevelerInput, bool isEngineReversing) {
+            if (isEngineReversing) {
+                if (throttleLevelerInput < 0.4f && throttleLevelerInput > 0.36f) {
+                    return ThrottleLevelerSlot.IDLERevers;
+                }
+
+                if (throttleLevelerInput == 0f)
+                    return ThrottleLevelerSlot.MaxRevers;
+
+                return ThrottleLevelerSlot.Revers;
+            }
+
+            if (throttleLevelerInput < 0.98f && throttleLevelerInput > 0.93f) {
+                return ThrottleLevelerSlot.FlexMct;
+            }
+
+            if (throttleLevelerInput > 0.86f && throttleLevelerInput < 0.93f) {
+                return ThrottleLevelerSlot.CLB;
+            }
+
+            if (throttleLevelerInput < 0.88f && throttleLevelerInput > 0.375f) {
+                return ThrottleLevelerSlot.Manuel;
+            }
+
+            if (Mathf.Approximately(throttleLevelerInput, 1)) {
+                return ThrottleLevelerSlot.TOGA;
+            }
+
+            if (Mathf.Approximately(throttleLevelerInput, 0.375f)) {
+                return ThrottleLevelerSlot.IDLE;
+            }
+
+            return ThrottleLevelerSlot.Manuel;
+        }
+
+        private ThrottleLevelerSlot GetThrottleLevelerSlot() {
+            if (isEngine1Reversing || isEngine2Reversing) {
+                if ((engine1ThrottleLeveler < 0.4f && engine1ThrottleLeveler > 0.36f) ||
+                    (engine2ThrottleLeveler < 0.4f && engine2ThrottleLeveler > 0.36f)) {
+                    return ThrottleLevelerSlot.IDLERevers;
+                }
+
+                if (engine1ThrottleLeveler == 0f || engine2ThrottleLeveler == 0f)
+                    return ThrottleLevelerSlot.MaxRevers;
+
+                return ThrottleLevelerSlot.Revers;
+            }
+
+            if ((engine1ThrottleLeveler < 0.98f && engine1ThrottleLeveler > 0.93f) ||
+                (engine2ThrottleLeveler < 0.98f && engine2ThrottleLeveler > 0.93f)) {
+                return ThrottleLevelerSlot.FlexMct;
+            }
+
+            if ((engine1ThrottleLeveler > 0.86f && engine1ThrottleLeveler < 0.93f) ||
+                (engine2ThrottleLeveler > 0.86f && engine2ThrottleLeveler < 0.93f)) {
+                return ThrottleLevelerSlot.CLB;
+            }
+
+            if ((engine1ThrottleLeveler < 0.88f && engine1ThrottleLeveler > 0.375f) || (engine2ThrottleLeveler < 0.88f && engine2ThrottleLeveler > 0.375f)) {
+                return ThrottleLevelerSlot.Manuel;
+            }
+
+            if (Mathf.Approximately(engine1ThrottleLeveler, 1) || Mathf.Approximately(engine2ThrottleLeveler, 1)) {
+                return ThrottleLevelerSlot.TOGA;
+            }
+
+            if (Mathf.Approximately(engine1ThrottleLeveler, 0.375f) || Mathf.Approximately(engine2ThrottleLeveler, 0.375f)) {
+                return ThrottleLevelerSlot.IDLE;
+            }
+
+            return ThrottleLevelerSlot.Manuel;
+        }
 
     #region Gears
 
@@ -160,5 +242,16 @@ namespace Avionics.Systems.Common {
         [PublicAPI] public bool isEngine2Fuel => EngineR.fuel;
 
     #endregion
+    }
+
+    public enum ThrottleLevelerSlot {
+        TOGA,
+        FlexMct,
+        CLB,
+        Manuel,
+        IDLE,
+        IDLERevers,
+        Revers,
+        MaxRevers
     }
 }

@@ -19,7 +19,7 @@ namespace A320VAU.FMGC {
         public int engineOutAccelerateAltitude = 1500;
 
         public int flexTemperature;
-        public int takeoffFlapSetting = 1;
+        public int takeoffFlapSetting = 2;
 
         public int vapp = 132;
 

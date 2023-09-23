@@ -10,7 +10,7 @@ namespace A320VAU.FCU {
     public class FCU : UdonSharpBehaviour {
         private DFUNC_AltHold _altHoldDFunc;
 
-        private DFUNC_Cruise _cruiseDFunc;
+        private DFUNC_a320_AutoThrust _cruiseDFunc;
         private DependenciesInjector _injector;
         
         private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(5);
@@ -18,7 +18,7 @@ namespace A320VAU.FCU {
 
         private void Start() {
             _injector = DependenciesInjector.GetInstance(this);
-            _cruiseDFunc = _injector.cruise;
+            _cruiseDFunc = _injector.autoThrust;
             _altHoldDFunc = _injector.altHold;
 
             UpdateFCUMode();

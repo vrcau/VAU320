@@ -9,6 +9,7 @@ using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VirtualAviationJapan;
 using YuxiFlightInstruments.BasicFlightData;
 #if !COMPILER_UDONSHARP && UNITY_EDITOR
@@ -40,7 +41,7 @@ namespace A320VAU.Common {
 
         public DFUNC_a320_LandingLight landingLight;
         public DFUNC_Canopy canopy;
-        public DFUNC_Cruise cruise;
+        public DFUNC_a320_AutoThrust autoThrust;
         public DFUNC_AltHold altHold;
 
         public GPWS_OWML gpws;
@@ -95,7 +96,7 @@ namespace A320VAU.Common {
             brake = GetComponentInChildren<DFUNC_a320_Brake>(true);
             landingLight = GetComponentInChildren<DFUNC_a320_LandingLight>(true);
             canopy = GetComponentInChildren<DFUNC_Canopy>(true);
-            cruise = GetComponentInChildren<DFUNC_Cruise>(true);
+            autoThrust = GetComponentInChildren<DFUNC_a320_AutoThrust>(true);
             altHold = GetComponentInChildren<DFUNC_AltHold>(true);
 
             gpws = GetComponentInChildren<GPWS_OWML>(true);
