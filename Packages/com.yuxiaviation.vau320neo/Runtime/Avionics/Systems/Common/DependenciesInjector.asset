@@ -803,19 +803,19 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: cruise
+      Data: autoThrust
     - Name: $v
       Entry: 7
       Data: 43|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: cruise
+      Data: autoThrust
     - Name: <UserType>k__BackingField
       Entry: 7
       Data: 44|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: SaccFlightAndVehicles.DFUNC_Cruise, SaccFlightAndVehicles.Runtime
+      Data: A320VAU.DFUNC_a320_AutoThrust, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 

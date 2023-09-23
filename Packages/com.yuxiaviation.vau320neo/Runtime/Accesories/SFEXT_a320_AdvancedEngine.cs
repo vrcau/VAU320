@@ -20,6 +20,9 @@ namespace A320VAU.SFEXT {
         public float randomRange = 0.2f;
         public float wheelWakeUpTorque = 1.0e-36f;
 
+        public bool isAutoThrustActive;
+        public float autoThrustInput;
+
     #region SFEXT Core
 
         private bool initialized, isOwner, isPilot, hasPilot, isPassenger;
@@ -326,6 +329,8 @@ namespace A320VAU.SFEXT {
             oilTempurature = externalTempurature;
             oilPressure = 1100;
             ff = 0;
+            isAutoThrustActive = false;
+            autoThrustInput = 0f;
 
             if (vehicleAnimator) {
                 vehicleAnimator.SetBool("reverse", false);
@@ -339,15 +344,19 @@ namespace A320VAU.SFEXT {
             vehicleRigidbody.AddForceAtPosition(transform.forward * thrust, transform.position, ForceMode.Force);
         }
 
-        private void Power_OwnerUpdate(float deltaTime) {
+        private float Power_GetThrottleInput() {
+            if (isAutoThrustActive)
+                return autoThrustInput;
+
             var reverserInterlocked = reversing && reverserPosition < 0.5f;
 
+            var input = 0f;
             if (reversing) {
                 throttleLeveler = Mathf.Clamp(airVehicle.ThrottleInput, 0, idlePoint + 0.02f);
                 airVehicle.ThrottleInput = throttleLeveler;
                 airVehicle.PlayerThrottle = airVehicle.ThrottleInput;
-                throttleInput = airVehicle.ThrottleOverridden > 0 && Input.GetAxis(gripAxis) < 0.75f &&
-                                airVehicle.ThrottleInput > idlePoint + 0.02f
+                input = airVehicle.ThrottleOverridden > 0 && Input.GetAxis(gripAxis) < 0.75f &&
+                        airVehicle.ThrottleInput > idlePoint + 0.02f
                     ? 0f
                     : idlePoint - airVehicle.ThrottleInput;
             }
@@ -355,12 +364,18 @@ namespace A320VAU.SFEXT {
                 throttleLeveler = Mathf.Clamp(airVehicle.ThrottleInput, idlePoint, 1);
                 airVehicle.ThrottleInput = throttleLeveler;
                 airVehicle.PlayerThrottle = airVehicle.ThrottleInput;
-                throttleInput = airVehicle.ThrottleOverridden > 0 && Input.GetAxis(gripAxis) < 0.75f
+                input = airVehicle.ThrottleOverridden > 0 && Input.GetAxis(gripAxis) < 0.75f
                     ? (airVehicle.ThrottleOverride - idlePoint) / (1 - idlePoint)
                     : (airVehicle.ThrottleInput - idlePoint) / (1 - idlePoint);
             }
 
-            throttleInput = reverserInterlocked ? 0.0f : throttleInput;
+            input = reverserInterlocked ? 0.0f : input;
+
+            return input;
+        }
+
+        private void Power_OwnerUpdate(float deltaTime) {
+            throttleInput = Power_GetThrottleInput();
             throttleLeveler = airVehicle.ThrottleInput;
             //throttleInput = reverserInterlocked ? 0.0f : (airVehicle.ThrottleOverridden > 0 && Input.GetAxis(gripAxis) < 0.75f ? airVehicle.ThrottleOverride : airVehicle.ThrottleInput);
 

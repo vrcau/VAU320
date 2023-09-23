@@ -122,7 +122,7 @@ MonoBehaviour:
       Data: 7|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: SaccFlightAndVehicles.DFUNC_Cruise, SaccFlightAndVehicles.Runtime
+      Data: A320VAU.DFUNC_a320_AutoThrust, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
