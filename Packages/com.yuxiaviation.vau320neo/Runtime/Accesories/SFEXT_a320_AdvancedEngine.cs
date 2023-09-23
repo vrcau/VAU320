@@ -345,12 +345,9 @@ namespace A320VAU.SFEXT {
         }
 
         private float Power_GetThrottleInput() {
-            if (isAutoThrustActive)
-                return autoThrustInput;
-
             var reverserInterlocked = reversing && reverserPosition < 0.5f;
 
-            var input = 0f;
+            float input;
             if (reversing) {
                 throttleLeveler = Mathf.Clamp(airVehicle.ThrottleInput, 0, idlePoint + 0.02f);
                 airVehicle.ThrottleInput = throttleLeveler;
@@ -367,6 +364,10 @@ namespace A320VAU.SFEXT {
                 input = airVehicle.ThrottleOverridden > 0 && Input.GetAxis(gripAxis) < 0.75f
                     ? (airVehicle.ThrottleOverride - idlePoint) / (1 - idlePoint)
                     : (airVehicle.ThrottleInput - idlePoint) / (1 - idlePoint);
+            }
+
+            if (isAutoThrustActive && autoThrustInput <= input) {
+                return autoThrustInput;
             }
 
             input = reverserInterlocked ? 0.0f : input;
