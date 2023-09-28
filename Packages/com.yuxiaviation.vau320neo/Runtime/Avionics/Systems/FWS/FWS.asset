@@ -806,7 +806,7 @@ MonoBehaviour:
       Data: 48|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: A320VAU.Avionics.GPWS_OWML, com.yuxiaviation.vau320neo
+      Data: A320VAU.Avionics.GPWS, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 

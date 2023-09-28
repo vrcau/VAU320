@@ -82,7 +82,7 @@ namespace A320VAU.FWS {
 
             if (LANDING_MEMO.isVisable) {
                 // GEAR DN
-                if (FWS.equipmentData.IsGearsTargetDown) {
+                if (FWS.equipmentData.isGearsTargetDown) {
                     SetWarnVisible(ref LANDING_MEMO.MessageLine[0].isMessageVisible, false);
                     SetWarnVisible(ref LANDING_MEMO.MessageLine[1].isMessageVisible, false);
                     SetWarnVisible(ref LANDING_MEMO.MessageLine[2].isMessageVisible, true);

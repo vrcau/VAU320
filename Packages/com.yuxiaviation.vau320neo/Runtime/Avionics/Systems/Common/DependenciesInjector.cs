@@ -44,7 +44,7 @@ namespace A320VAU.Common {
         public DFUNC_a320_AutoThrust autoThrust;
         public DFUNC_AltHold altHold;
 
-        public GPWS_OWML gpws;
+        public GPWS gpws;
         public RadioAltimeter.RadioAltimeter radioAltimeter;
 
         public AircraftSystemData equipmentData;

@@ -38,6 +38,8 @@ namespace Avionics.Systems.Common {
         private SFEXT_a320_AdvancedGear LeftLandingGear;
         private SFEXT_a320_AdvancedGear RightLandingGear;
 
+        private SaccAirVehicle _saccAirVehicle;
+
         [PublicAPI] public bool isCabinDoorOpen => Canopy.CanopyOpen;
         [PublicAPI] public bool isParkBreakSet => Brake.ParkBreakSet;
 
@@ -71,6 +73,8 @@ namespace Avionics.Systems.Common {
             Brake = _dependenciesInjector.brake;
 
             Canopy = _dependenciesInjector.canopy;
+
+            _saccAirVehicle = _dependenciesInjector.saccAirVehicle;
         }
 
         //synced targetAngle actuatorBroken _wingBroken
@@ -168,20 +172,22 @@ namespace Avionics.Systems.Common {
 
     #region Gears
 
-        [PublicAPI] public bool IsGearsTargetDown => Mathf.Approximately(LeftLandingGear.targetPosition, 1f) &&
+        [PublicAPI] public bool isGearsTargetDown => Mathf.Approximately(LeftLandingGear.targetPosition, 1f) &&
                                                      Mathf.Approximately(CenterLandingGear.targetPosition, 1f) &&
                                                      Mathf.Approximately(RightLandingGear.targetPosition, 1f);
 
-        [PublicAPI] public bool IsGearsUp => Mathf.Approximately(LeftLandingGear.position, 0f) &&
+        [PublicAPI] public bool isGearsUp => Mathf.Approximately(LeftLandingGear.position, 0f) &&
                                              Mathf.Approximately(CenterLandingGear.position, 0f) &&
                                              Mathf.Approximately(RightLandingGear.position, 0f);
 
-        [PublicAPI] public bool IsGearsInTransition =>
+        [PublicAPI] public bool isGearsInTransition =>
             Mathf.Approximately(LeftLandingGear.position, LeftLandingGear.targetPosition) &&
             Mathf.Approximately(CenterLandingGear.position, CenterLandingGear.targetPosition) &&
             Mathf.Approximately(RightLandingGear.position, RightLandingGear.targetPosition);
 
-        [PublicAPI] public bool IsGearsDownLock => IsGearsTargetDown && !IsGearsInTransition;
+        [PublicAPI] public bool isGearsDownLock => isGearsTargetDown && !isGearsInTransition;
+
+        [PublicAPI] public bool isAircraftGrounded => _saccAirVehicle.Taxiing;
 
     #endregion
 

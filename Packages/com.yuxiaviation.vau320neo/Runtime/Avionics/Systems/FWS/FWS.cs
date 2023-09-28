@@ -146,7 +146,7 @@ namespace A320VAU.FWS {
         [HideInInspector] public SaccEntity saccEntity;
         [HideInInspector] public YFI_FlightDataInterface flightData;
         public AircraftSystemData equipmentData;
-        [HideInInspector] public GPWS_OWML gpws; //as sound source
+        [HideInInspector] public GPWS gpws; //as sound source
         [HideInInspector] public RadioAltimeter.RadioAltimeter radioAltimeter;
 
     #endregion

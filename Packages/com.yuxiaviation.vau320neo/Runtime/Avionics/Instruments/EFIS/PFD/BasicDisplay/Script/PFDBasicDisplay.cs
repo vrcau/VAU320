@@ -264,7 +264,7 @@ namespace A320VAU.PFD {
             if (_aircraftSystemData.flapCurrentSpeedLimit < VMAX)
                 VMAX = (int)_flaps.speedLimit;
 
-            if (!_aircraftSystemData.IsGearsUp && VLE < VMAX)
+            if (!_aircraftSystemData.isGearsUp && VLE < VMAX)
                 VMAX = VLE;
 
             IndicatorAnimator.SetFloat(VMAX_HASH, VMAX / 360f);
