@@ -10,6 +10,21 @@ using YuxiFlightInstruments.BasicFlightData;
 namespace A320VAU.FWS {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class FWS : UdonSharpBehaviour {
+    #region Aircraft Systems
+
+        [Header("Aircraft Systems")]
+        [HideInInspector]
+        public SaccAirVehicle saccAirVehicle;
+
+        [HideInInspector] public SaccEntity saccEntity;
+        [HideInInspector] public YFI_FlightDataInterface flightData;
+        public AircraftSystemData equipmentData;
+        [HideInInspector] public RadioAltimeter.RadioAltimeter radioAltimeter;
+
+    #endregion
+
+        public AudioSource audioSource;
+
         private const float FWS_UPDATE_INTERVAL = 0.1f;
         private float _lastFwsUpdate;
 
@@ -18,7 +33,6 @@ namespace A320VAU.FWS {
             saccAirVehicle = injector.saccAirVehicle;
             saccEntity = injector.saccEntity;
             flightData = injector.flightData;
-            gpws = injector.gpws;
             radioAltimeter = injector.radioAltimeter;
 
             fwsWarningMessageDatas = GetComponentsInChildren<FWSWarningMessageData>();
@@ -73,7 +87,7 @@ namespace A320VAU.FWS {
         #region Warning Light & Sound
 
             if (hasMasterWarning) {
-                gpws.audioSource.Play();
+                audioSource.Play();
 
                 MasterWarningLightCAPT.SetActive(true);
                 MasterWarningLightFO.SetActive(true);
@@ -83,10 +97,10 @@ namespace A320VAU.FWS {
             else if (hasMasterCaution) {
                 MasterCautionLightCAPT.SetActive(true);
                 MasterCautionLightFO.SetActive(true);
-                gpws.PlayOneShot(Caution);
+                audioSource.PlayOneShot(Caution);
             }
             else {
-                gpws.audioSource.Stop();
+                audioSource.Stop();
                 MasterWarningLightCAPT.SetActive(false);
                 MasterWarningLightFO.SetActive(false);
                 MasterCautionLightCAPT.SetActive(false);
@@ -101,7 +115,7 @@ namespace A320VAU.FWS {
 
         // ReSharper disable once UnusedMember.Global
         public void CancleWarning() {
-            gpws.audioSource.Stop();
+            audioSource.Stop();
             MasterWarningLightCAPT.SetActive(false);
             MasterWarningLightFO.SetActive(false);
             MasterCautionLightCAPT.SetActive(false);
@@ -134,20 +148,6 @@ namespace A320VAU.FWS {
         public GameObject MasterWarningLightFO;
         public GameObject MasterCautionLightCAPT;
         public GameObject MasterCautionLightFO;
-
-    #endregion
-
-    #region Aircraft Systems
-
-        [Header("Aircraft Systems")]
-        [HideInInspector]
-        public SaccAirVehicle saccAirVehicle;
-
-        [HideInInspector] public SaccEntity saccEntity;
-        [HideInInspector] public YFI_FlightDataInterface flightData;
-        public AircraftSystemData equipmentData;
-        [HideInInspector] public GPWS gpws; //as sound source
-        [HideInInspector] public RadioAltimeter.RadioAltimeter radioAltimeter;
 
     #endregion
 
@@ -201,11 +201,11 @@ namespace A320VAU.FWS {
         }
 
         private void CalloutHundredAbove() {
-            gpws.PlayOneShot(hundredAboveCallout);
+            audioSource.PlayOneShot(hundredAboveCallout);
         }
 
         private void CalloutMinimum() {
-            gpws.PlayOneShot(mininmumCallout);
+            audioSource.PlayOneShot(mininmumCallout);
         }
 
         private int GetMinimumCalloutIndex(float radioAltitude) {
@@ -220,7 +220,7 @@ namespace A320VAU.FWS {
     #region Altitude Callout
 
         private void CalloutRetard() {
-            gpws.PlayOneShot(retardCallout);
+            audioSource.PlayOneShot(retardCallout);
         }
 
         private float _lastCallout;
@@ -229,7 +229,7 @@ namespace A320VAU.FWS {
             var altitudeCalloutIndex = GetAltitudeCalloutIndex(radioAltitude);
 
             if (_lastAltitudeCalloutIndex != -1 && altitudeCalloutIndex > _lastAltitudeCalloutIndex) {
-                gpws.PlayOneShot(altitudeCallouts[altitudeCalloutIndex]);
+                audioSource.PlayOneShot(altitudeCallouts[altitudeCalloutIndex]);
 
                 // RETARD
                 if (altitudeCalloutIndex == 10 && !Mathf.Approximately(equipmentData.engine1ThrottleLeveler, 0.375f))
@@ -250,7 +250,7 @@ namespace A320VAU.FWS {
                             ||
                             (radioAltitude < 50f && diff > 4f + lastCalloutLength)
                         ) && Mathf.Abs(radioAltitude - altitudeCalloutIndexs[altitudeCalloutIndex]) < 10) {
-                        gpws.PlayOneShot(altitudeCallouts[altitudeCalloutIndex]);
+                        audioSource.PlayOneShot(altitudeCallouts[altitudeCalloutIndex]);
                         _lastCallout = Time.time;
                     }
                 }
