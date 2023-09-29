@@ -26,6 +26,8 @@ namespace A320VAU.Common {
 
         public YFI_FlightDataInterface flightData;
 
+        public ADIRU.ADIRU adiru;
+
         public SFEXT_a320_AdvancedEngine engine1;
         public SFEXT_a320_AdvancedEngine engine2;
 
@@ -44,7 +46,7 @@ namespace A320VAU.Common {
         public DFUNC_a320_AutoThrust autoThrust;
         public DFUNC_AltHold altHold;
 
-        public GPWS_OWML gpws;
+        public GPWS gpws;
         public RadioAltimeter.RadioAltimeter radioAltimeter;
 
         public AircraftSystemData equipmentData;
@@ -99,7 +101,7 @@ namespace A320VAU.Common {
             autoThrust = GetComponentInChildren<DFUNC_a320_AutoThrust>(true);
             altHold = GetComponentInChildren<DFUNC_AltHold>(true);
 
-            gpws = GetComponentInChildren<GPWS_OWML>(true);
+            gpws = GetComponentInChildren<GPWS>(true);
             radioAltimeter = GetComponentInChildren<RadioAltimeter.RadioAltimeter>(true);
 
             equipmentData = GetComponentInChildren<AircraftSystemData>(true);

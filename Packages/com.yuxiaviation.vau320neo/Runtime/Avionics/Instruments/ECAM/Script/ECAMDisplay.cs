@@ -3,10 +3,10 @@ using A320VAU.FWS;
 using A320VAU.Utils;
 using Avionics.Systems.Common;
 using JetBrains.Annotations;
-using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
+using YuxiFlightInstruments.BasicFlightData;
 
 namespace A320VAU.ECAM {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
@@ -15,8 +15,7 @@ namespace A320VAU.ECAM {
 
         private DependenciesInjector _injector;
 
-        private SaccAirVehicle _airVehicle;
-        private SaccEntity _saccEntity;
+        private ADIRU.ADIRU _adiru;
         private AircraftSystemData _aircraftSystemData;
         private AirbusAvionicsTheme _airbusAvionicsTheme;
         private FWS.FWS _fws;
@@ -41,8 +40,7 @@ namespace A320VAU.ECAM {
         private void Start() {
             _injector = DependenciesInjector.GetInstance(this);
 
-            _airVehicle = _injector.saccAirVehicle;
-            _saccEntity = _injector.saccEntity;
+            _adiru = _injector.adiru;
             _airbusAvionicsTheme = _injector.airbusAvionicsTheme;
             _aircraftSystemData = _injector.equipmentData;
             _fws = _injector.fws;
@@ -180,7 +178,7 @@ namespace A320VAU.ECAM {
                         flapText.text = "0";
                         break;
                     case 1:
-                        flapText.text = _airVehicle.AirSpeed < 51.44f ? "1+F" : "1";
+                        flapText.text = _adiru.adr.instrumentAirSpeed < 210f ? "1+F" : "1";
                         break;
                     case 2:
                         flapText.text = "2";
@@ -217,13 +215,11 @@ namespace A320VAU.ECAM {
             if (_aircraftSystemData.isEngine1Running) {
                 if (!_isEngine1RunningLastFrame) {
                     eng1AvailFlag.SetActive(true);
-                    _saccEntity.SendEventToExtensions("SFEXT_G_SFEXT_G_EngineStarted");
                 }
 
                 if (_aircraftSystemData.isEngine1Avail) eng1AvailFlag.SetActive(false);
             }
             else {
-                if (_isEngine1RunningLastFrame) _saccEntity.SendEventToExtensions("SFEXT_G_EngineShutDown");
                 eng1AvailFlag.SetActive(false);
             }
 
@@ -247,13 +243,11 @@ namespace A320VAU.ECAM {
             if (_aircraftSystemData.isEngine2Running) {
                 if (!_isEngine2RunningLastFrame) {
                     eng2AvailFlag.SetActive(true);
-                    _saccEntity.SendEventToExtensions("SFEXT_G_SFEXT_G_EngineStarted");
                 }
 
                 if (_aircraftSystemData.isEngine2Avail) eng2AvailFlag.SetActive(false);
             }
             else {
-                if (_isEngine2RunningLastFrame) _saccEntity.SendEventToExtensions("SFEXT_G_EngineShutDown");
                 eng2AvailFlag.SetActive(false);
             }
 

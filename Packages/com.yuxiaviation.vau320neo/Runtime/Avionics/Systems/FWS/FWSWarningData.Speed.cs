@@ -19,14 +19,14 @@
             if (VFE < VMAX)
                 VMAX = (int)FWS.equipmentData.flapTargetSpeedLimit;
 
-            if (FWS.equipmentData.IsGearsTargetDown && VLE < VMAX)
+            if (FWS.equipmentData.isGearsTargetDown && VLE < VMAX)
                 VMAX = VLE;
 
-            SetWarnVisible(ref OVERSPEED.isVisable, FWS.flightData.groundSpeed > VMAX + 4f, true);
+            SetWarnVisible(ref OVERSPEED.isVisable, FWS.adiru.adr.instrumentAirSpeed > VMAX + 4f, true);
             if (OVERSPEED.isVisable) {
-                SetWarnVisible(ref OVERSPEED.MessageLine[0].isMessageVisible, FWS.flightData.groundSpeed > VMO);
-                SetWarnVisible(ref OVERSPEED.MessageLine[1].isMessageVisible, FWS.flightData.groundSpeed > VLE);
-                SetWarnVisible(ref OVERSPEED.MessageLine[2].isMessageVisible, FWS.flightData.groundSpeed > VFE);
+                SetWarnVisible(ref OVERSPEED.MessageLine[0].isMessageVisible, FWS.adiru.adr.instrumentAirSpeed > VMO);
+                SetWarnVisible(ref OVERSPEED.MessageLine[1].isMessageVisible, FWS.adiru.adr.instrumentAirSpeed > VLE);
+                SetWarnVisible(ref OVERSPEED.MessageLine[2].isMessageVisible, FWS.adiru.adr.instrumentAirSpeed > VFE);
 
                 OVERSPEED.MessageLine[2].MessageText = $" -VFE................{VFE}";
             }

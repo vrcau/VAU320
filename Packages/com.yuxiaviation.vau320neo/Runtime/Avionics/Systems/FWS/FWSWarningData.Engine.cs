@@ -69,7 +69,7 @@
         #region DUAL ENGINE FAIL
 
             SetWarnVisible(ref DUAL_ENGINE_FAULT.isVisable,
-                !FWS.saccAirVehicle.Taxiing && !FWS.equipmentData.isEngine1Running &&
+                !FWS.equipmentData.isAircraftGrounded && !FWS.equipmentData.isEngine1Running &&
                 !FWS.equipmentData.isEngine2Running, true);
             if (DUAL_ENGINE_FAULT.isVisable) {
                 SetWarnVisible(ref DUAL_ENGINE_FAULT.MessageLine[0].isMessageVisible, true);
@@ -105,7 +105,7 @@
         #region ENGINE FAIL
 
             SetWarnVisible(ref ENGINE1_FAIL.isVisable,
-                !FWS.saccAirVehicle.Taxiing && !FWS.equipmentData.isEngine1Running, true);
+                !FWS.equipmentData.isAircraftGrounded && !FWS.equipmentData.isEngine1Running, true);
             if (ENGINE1_FAIL.isVisable) {
                 SetWarnVisible(ref ENGINE1_FAIL.MessageLine[0].isMessageVisible, true);
                 SetWarnVisible(ref ENGINE1_FAIL.MessageLine[1].isMessageVisible,
@@ -119,7 +119,7 @@
             }
 
             SetWarnVisible(ref ENGINE2_FAIL.isVisable,
-                !FWS.saccAirVehicle.Taxiing && !FWS.equipmentData.isEngine2Running, true);
+                !FWS.equipmentData.isAircraftGrounded && !FWS.equipmentData.isEngine2Running, true);
             if (ENGINE2_FAIL.isVisable) {
                 SetWarnVisible(ref ENGINE2_FAIL.MessageLine[0].isMessageVisible, true);
                 SetWarnVisible(ref ENGINE2_FAIL.MessageLine[1].isMessageVisible,

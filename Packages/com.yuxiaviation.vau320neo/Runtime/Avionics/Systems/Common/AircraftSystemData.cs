@@ -38,22 +38,7 @@ namespace Avionics.Systems.Common {
         private SFEXT_a320_AdvancedGear LeftLandingGear;
         private SFEXT_a320_AdvancedGear RightLandingGear;
 
-        [PublicAPI] public bool isCabinDoorOpen => Canopy.CanopyOpen;
-        [PublicAPI] public bool isParkBreakSet => Brake.ParkBreakSet;
-
-        [PublicAPI] public bool isApuStarted =>
-            Mathf.Approximately(APU.apuAudioSource.volume, 1.0f);
-
-        [PublicAPI] public bool isApuRunning =>
-            (bool)APU.GetProgramVariable("run");
-
-        //synced float n1 n2 egt ect ff throttleLeveler 
-        //synced bool reversing, starter, fuel，fire
-
-        [PublicAPI] public ThrottleLevelerSlot throttleLevelerSlot => GetThrottleLevelerSlot();
-
-        [PublicAPI] public bool isBothThrottleLevelerIdle =>
-            isEngine1ThrottleLevelerIdle && isEngine2ThrottleLevelerIdle;
+        private SaccAirVehicle _saccAirVehicle;
 
         private void Start() {
             _dependenciesInjector = DependenciesInjector.GetInstance(this);
@@ -71,7 +56,32 @@ namespace Avionics.Systems.Common {
             Brake = _dependenciesInjector.brake;
 
             Canopy = _dependenciesInjector.canopy;
+
+            _saccAirVehicle = _dependenciesInjector.saccAirVehicle;
         }
+
+        [PublicAPI] public bool isCabinDoorOpen => Canopy.CanopyOpen;
+        [PublicAPI] public bool isParkBreakSet => Brake.ParkBreakSet;
+
+        [PublicAPI] public bool isApuStarted =>
+            Mathf.Approximately(APU.apuAudioSource.volume, 1.0f);
+
+        [PublicAPI] public bool isApuRunning =>
+            (bool)APU.GetProgramVariable("run");
+
+        //synced float n1 n2 egt ect ff throttleLeveler
+        //synced bool reversing, starter, fuel，fire
+
+        [PublicAPI] public bool isTakeoffThrustSet => IsTakeoffThrustSet();
+
+        [PublicAPI] public ThrottleLevelerSlot throttleLevelerSlot => GetThrottleLevelerSlot();
+
+        [PublicAPI] public bool isBothThrottleLevelerIdle =>
+            isEngine1ThrottleLevelerIdle && isEngine2ThrottleLevelerIdle;
+
+        public bool isOwner => _saccAirVehicle.IsOwner;
+
+        public Vector3 pilotInput => _saccAirVehicle.RotationInputs;
 
         //synced targetAngle actuatorBroken _wingBroken
 
@@ -92,6 +102,13 @@ namespace Avionics.Systems.Common {
 
         public ThrottleLevelerSlot engine2ThrottleLevelerSlot =>
             GetThrottleLevelerSlot(engine2ThrottleLeveler, isEngine2Reversing);
+
+        private bool IsTakeoffThrustSet() {
+            return engine1ThrottleLevelerSlot == ThrottleLevelerSlot.FlexMct ||
+                   engine1ThrottleLevelerSlot == ThrottleLevelerSlot.TOGA ||
+                   engine2ThrottleLevelerSlot == ThrottleLevelerSlot.FlexMct ||
+                   engine2ThrottleLevelerSlot == ThrottleLevelerSlot.TOGA;
+        }
 
         public ThrottleLevelerSlot GetThrottleLevelerSlot(float throttleLevelerInput, bool isEngineReversing) {
             if (isEngineReversing) {
@@ -151,7 +168,8 @@ namespace Avionics.Systems.Common {
                 return ThrottleLevelerSlot.CLB;
             }
 
-            if ((engine1ThrottleLeveler < 0.88f && engine1ThrottleLeveler > 0.375f) || (engine2ThrottleLeveler < 0.88f && engine2ThrottleLeveler > 0.375f)) {
+            if ((engine1ThrottleLeveler < 0.88f && engine1ThrottleLeveler > 0.375f) ||
+                (engine2ThrottleLeveler < 0.88f && engine2ThrottleLeveler > 0.375f)) {
                 return ThrottleLevelerSlot.Manuel;
             }
 
@@ -159,7 +177,8 @@ namespace Avionics.Systems.Common {
                 return ThrottleLevelerSlot.TOGA;
             }
 
-            if (Mathf.Approximately(engine1ThrottleLeveler, 0.375f) || Mathf.Approximately(engine2ThrottleLeveler, 0.375f)) {
+            if (Mathf.Approximately(engine1ThrottleLeveler, 0.375f) ||
+                Mathf.Approximately(engine2ThrottleLeveler, 0.375f)) {
                 return ThrottleLevelerSlot.IDLE;
             }
 
@@ -168,20 +187,22 @@ namespace Avionics.Systems.Common {
 
     #region Gears
 
-        [PublicAPI] public bool IsGearsTargetDown => Mathf.Approximately(LeftLandingGear.targetPosition, 1f) &&
+        [PublicAPI] public bool isGearsTargetDown => Mathf.Approximately(LeftLandingGear.targetPosition, 1f) &&
                                                      Mathf.Approximately(CenterLandingGear.targetPosition, 1f) &&
                                                      Mathf.Approximately(RightLandingGear.targetPosition, 1f);
 
-        [PublicAPI] public bool IsGearsUp => Mathf.Approximately(LeftLandingGear.position, 0f) &&
+        [PublicAPI] public bool isGearsUp => Mathf.Approximately(LeftLandingGear.position, 0f) &&
                                              Mathf.Approximately(CenterLandingGear.position, 0f) &&
                                              Mathf.Approximately(RightLandingGear.position, 0f);
 
-        [PublicAPI] public bool IsGearsInTransition =>
+        [PublicAPI] public bool isGearsInTransition =>
             Mathf.Approximately(LeftLandingGear.position, LeftLandingGear.targetPosition) &&
             Mathf.Approximately(CenterLandingGear.position, CenterLandingGear.targetPosition) &&
             Mathf.Approximately(RightLandingGear.position, RightLandingGear.targetPosition);
 
-        [PublicAPI] public bool IsGearsDownLock => IsGearsTargetDown && !IsGearsInTransition;
+        [PublicAPI] public bool isGearsDownLock => isGearsTargetDown && !isGearsInTransition;
+
+        [PublicAPI] public bool isAircraftGrounded => _saccAirVehicle.Taxiing;
 
     #endregion
 
