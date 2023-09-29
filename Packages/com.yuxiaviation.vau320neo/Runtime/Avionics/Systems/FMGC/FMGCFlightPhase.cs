@@ -12,7 +12,7 @@ namespace A320VAU.FMGC {
 
         private DependenciesInjector _injector;
         private AircraftSystemData _aircraftSystemData;
-        private YFI_FlightDataInterface _flightData;
+        private ADIRU.ADIRU _adirud;
         private SystemEventBus _eventBus;
 
         public KeyCode activeApproachKey = KeyCode.Alpha9;
@@ -41,7 +41,7 @@ namespace A320VAU.FMGC {
         private void Start() {
             _injector = DependenciesInjector.GetInstance(this);
             _aircraftSystemData = _injector.equipmentData;
-            _flightData = _injector.flightData;
+            _adirud = _injector.adiru;
             _eventBus = _injector.systemEventBus;
         }
 
@@ -102,22 +102,22 @@ namespace A320VAU.FMGC {
                     }
                     break;
                 case FlightPhase.Takeoff:
-                    if (_flightData.altitude >= accelerateAltitude) {
+                    if (_adirud.adr.pressureAltitude >= accelerateAltitude) {
                         CurrentFlightPhase = FlightPhase.Climb;
                     }
 
                     break;
                 case FlightPhase.Climb:
-                    if (Mathf.Approximately(_flightData.altitude, fmgc.flightPlan.cruiseAltitude) ||
-                        _flightData.altitude >= fmgc.flightPlan.cruiseAltitude) {
+                    if (Mathf.Approximately(_adirud.adr.pressureAltitude, fmgc.flightPlan.cruiseAltitude) ||
+                        _adirud.adr.pressureAltitude >= fmgc.flightPlan.cruiseAltitude) {
                         CurrentFlightPhase = FlightPhase.Cruise;
                     }
 
                     break;
                 case FlightPhase.Cruise:
                     // We don't have managed descent or selected descent for now
-                    if (_flightData.altitude < fmgc.flightPlan.cruiseAltitude - 100f &&
-                        _flightData.verticalSpeed < -500f) {
+                    if (_adirud.adr.pressureAltitude < fmgc.flightPlan.cruiseAltitude - 100f &&
+                        _adirud.adr.verticalSpeed < -500f) {
                         CurrentFlightPhase = FlightPhase.Descent;
                     }
                     break;

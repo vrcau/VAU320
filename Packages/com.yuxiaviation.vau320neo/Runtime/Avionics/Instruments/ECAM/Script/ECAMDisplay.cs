@@ -15,7 +15,7 @@ namespace A320VAU.ECAM {
 
         private DependenciesInjector _injector;
 
-        private YFI_FlightDataInterface _flightDataInterface;
+        private ADIRU.ADIRU _adiru;
         private AircraftSystemData _aircraftSystemData;
         private AirbusAvionicsTheme _airbusAvionicsTheme;
         private FWS.FWS _fws;
@@ -40,7 +40,7 @@ namespace A320VAU.ECAM {
         private void Start() {
             _injector = DependenciesInjector.GetInstance(this);
 
-            _flightDataInterface = _injector.flightData;
+            _adiru = _injector.adiru;
             _airbusAvionicsTheme = _injector.airbusAvionicsTheme;
             _aircraftSystemData = _injector.equipmentData;
             _fws = _injector.fws;
@@ -178,7 +178,7 @@ namespace A320VAU.ECAM {
                         flapText.text = "0";
                         break;
                     case 1:
-                        flapText.text = _flightDataInterface.groundSpeed < 210f ? "1+F" : "1";
+                        flapText.text = _adiru.adr.instrumentAirSpeed < 210f ? "1+F" : "1";
                         break;
                     case 2:
                         flapText.text = "2";
