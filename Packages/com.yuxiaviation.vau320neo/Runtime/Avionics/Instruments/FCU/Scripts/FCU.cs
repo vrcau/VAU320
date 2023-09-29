@@ -28,7 +28,7 @@ namespace A320VAU.FCU {
             if (!UpdateIntervalUtil.CanUpdate(ref _lastUpdate, UPDATE_INTERVAL)) return;
             
             autoPilot1Switch.SetActive(_altHoldDFunc.AltHold);
-            autoThrustSwitch.SetActive(_cruiseDFunc.Cruise);
+            autoThrustSwitch.SetActive(_cruiseDFunc.Cruise || _cruiseDFunc.isAutoThrustArm);
             TargetSpeed = Convert.ToInt32(_cruiseDFunc.SetSpeed * 1.9438445f);
         }
 
