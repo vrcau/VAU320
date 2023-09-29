@@ -3,11 +3,10 @@ using A320VAU.Utils;
 using Avionics.Systems.Common;
 using EsnyaSFAddons.DFUNC;
 using JetBrains.Annotations;
-using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
-using YuxiFlightInstruments.BasicFlightData;
+using VRC.SDKBase;
 
 namespace A320VAU.PFD {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
@@ -16,8 +15,7 @@ namespace A320VAU.PFD {
 
         private DependenciesInjector _injector;
 
-        private SaccAirVehicle _saccAirVehicle;
-        private YFI_FlightDataInterface _flightData;
+        private ADIRU.ADIRU _adiru;
         private RadioAltimeter.RadioAltimeter _radioAltimeter;
         private AircraftSystemData _aircraftSystemData;
         private FCU.FCU _fcu;
@@ -25,6 +23,8 @@ namespace A320VAU.PFD {
         private SystemEventBus _eventBus;
 
     #endregion
+
+        private VRCPlayerApi _localPlayer;
 
         private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(20);
         private float _lastUpdate;
@@ -36,7 +36,6 @@ namespace A320VAU.PFD {
 
         private float _altitude;
         private float BankAngle;
-        private float HeadingAngle;
 
         private float PitchAngle;
         private float RadioHeight;
@@ -47,15 +46,16 @@ namespace A320VAU.PFD {
         private void Start() {
             _injector = DependenciesInjector.GetInstance(this);
 
-            _flightData = _injector.flightData;
+            _adiru = _injector.adiru;
             _radioAltimeter = _injector.radioAltimeter;
             _aircraftSystemData = _injector.equipmentData;
             _fcu = _injector.fcu;
             _flaps = _injector.flaps;
-            _saccAirVehicle = _injector.saccAirVehicle;
             _eventBus = _injector.systemEventBus;
 
             _eventBus.RegisterSaccEvent(this);
+
+            _localPlayer = Networking.LocalPlayer;
 
             // Reset Flight Direction and Landing System
             flightDirectionIndicator.SetActive(isFlightDirectionOn);
@@ -184,9 +184,8 @@ namespace A320VAU.PFD {
             if (!UpdateIntervalUtil.CanUpdate(ref _lastUpdate, UPDATE_INTERVAL)) return;
             
             //这里可以用来做仪表更新延迟之类的逻辑
-            PitchAngle = _flightData.pitch;
-            BankAngle = _flightData.bank;
-            HeadingAngle = _flightData.magneticHeading;
+            PitchAngle = _adiru.irs.pitch;
+            BankAngle = _adiru.irs.bank;
             RadioHeight = _radioAltimeter.radioAltitude;
             //AirSpeed
             UpdateAirspeed();
@@ -233,10 +232,10 @@ namespace A320VAU.PFD {
         public int GreenDotSpeed = 195;
 
         private void UpdateAirspeed() {
-            foreach (var item in disableOnGround) item.SetActive(!_flightData.SAVControl.Taxiing);
-            foreach (var item in enableOnGround) item.SetActive(_flightData.SAVControl.Taxiing);
+            foreach (var item in disableOnGround) item.SetActive(!_aircraftSystemData.isAircraftGrounded);
+            foreach (var item in enableOnGround) item.SetActive(_aircraftSystemData.isAircraftGrounded);
 
-            IndicatorAnimator.SetFloat(AIRSPEED_HASH, _flightData.TAS / MAXSPEED);
+            IndicatorAnimator.SetFloat(AIRSPEED_HASH, _adiru.adr.instrumentAirSpeed / MAXSPEED);
 
         #region Target Speed
 
@@ -247,10 +246,10 @@ namespace A320VAU.PFD {
 
             TargetSpeedBottom.SetActive(false);
             TargetSpeedTop.SetActive(false);
-            if (_flightData.TAS - _fcu.TargetSpeed > 45)
+            if (_adiru.adr.instrumentAirSpeed - _fcu.TargetSpeed > 45)
                 TargetSpeedBottom.SetActive(true);
 
-            if (_fcu.TargetSpeed - _flightData.TAS > 45)
+            if (_fcu.TargetSpeed - _adiru.adr.instrumentAirSpeed > 45)
                 TargetSpeedTop.SetActive(true);
 
         #endregion
@@ -330,9 +329,9 @@ namespace A320VAU.PFD {
         }
 
         private void UpdateMachNumber() {
-            if (_flightData.mach > 0.5f) {
+            if (_adiru.adr.mach > 0.5f) {
                 MachNumberText.gameObject.SetActive(true);
-                MachNumberText.text = "." + (_flightData.mach * 100).ToString("f0");
+                MachNumberText.text = "." + (_adiru.adr.mach * 100).ToString("f0");
             }
             else {
                 MachNumberText.gameObject.SetActive(false);
@@ -345,7 +344,7 @@ namespace A320VAU.PFD {
 
         private void UpdateAltitude() {
             //默认都会写Altitude
-            _altitude = _flightData.altitude;
+            _altitude = _adiru.adr.pressureAltitude;
             IndicatorAnimator.SetFloat(ALT_HASH, _altitude / MAXALT);
 
             if (!altbybit) return;
@@ -370,8 +369,8 @@ namespace A320VAU.PFD {
     #endregion
 
         private void UpdateVerticalSpeed() {
-            var verticalSpeed = _flightData.verticalSpeed;
-            var VerticalSpeedNormal = Remap01(_flightData.verticalSpeed, -MAXVS, MAXVS);
+            var verticalSpeed = _adiru.adr.verticalSpeed;
+            var VerticalSpeedNormal = Remap01(_adiru.adr.verticalSpeed, -MAXVS, MAXVS);
             IndicatorAnimator.SetFloat(ROC_HASH, VerticalSpeedNormal);
             if (Mathf.Abs(verticalSpeed) > 200) {
                 VSbackground.SetActive(true);
@@ -392,7 +391,7 @@ namespace A320VAU.PFD {
         }
 
         private void UpdateHeading() {
-            IndicatorAnimator.SetFloat(HEADING_HASH, (HeadingAngle - HDGoffset + 360) % 360 / 360f);
+            IndicatorAnimator.SetFloat(HEADING_HASH, (_adiru.irs.heading - HDGoffset + 360) % 360 / 360f);
         }
 
         private void UpdatePitch() {
@@ -408,25 +407,25 @@ namespace A320VAU.PFD {
 
         private void UpdateSlip() {
             IndicatorAnimator.SetFloat(SLIP_ANGLE_HASH,
-                Mathf.Clamp01((_flightData.SlipAngle + MAXSLIPANGLE) / (MAXSLIPANGLE + MAXSLIPANGLE)));
+                Mathf.Clamp01((_adiru.irs.trackSlipAngle + MAXSLIPANGLE) / (MAXSLIPANGLE + MAXSLIPANGLE)));
         }
 
         private void UpdateTrickPitch() {
             IndicatorAnimator.SetFloat(TRKPCH_HASH,
-                Mathf.Clamp01((_flightData.trackPitchAngle + MAXTRACKPITCH) / (MAXTRACKPITCH + MAXTRACKPITCH)));
+                Mathf.Clamp01((_adiru.irs.trackPitchAngle + MAXTRACKPITCH) / (MAXTRACKPITCH + MAXTRACKPITCH)));
         }
 
         private Vector3 ownerRotationInputs;
 
         private void UpdatePilotInput() {
-            pilotInputDisplay.SetActive(_saccAirVehicle.Taxiing &&
+            pilotInputDisplay.SetActive(_aircraftSystemData.isAircraftGrounded &&
                                         (_aircraftSystemData.isEngine1Avail || _aircraftSystemData.isEngine2Avail));
 
             if (!pilotInputDisplay.activeSelf) return;
 
-            var rotationInputs = _saccAirVehicle.RotationInputs;
-            if (_saccAirVehicle.IsOwner) {
-                if (_saccAirVehicle.InVR) {
+            var rotationInputs = _aircraftSystemData.pilotInput;
+            if (_aircraftSystemData.isOwner) {
+                if (_localPlayer.IsUserInVR()) {
                     ownerRotationInputs = rotationInputs;
                 }
                 else {

@@ -1,5 +1,4 @@
-﻿using System;
-using A320VAU.Common;
+﻿using A320VAU.Common;
 using UdonSharp;
 using YuxiFlightInstruments.BasicFlightData;
 
@@ -17,6 +16,8 @@ namespace A320VAU.ADIRU {
 
         public float angleOfAttack { get; private set; } = 0;
 
+        public float verticalSpeed { get; private set; } = 0f;
+
         // TODO: Temperature
 
         private void Start() {
@@ -33,6 +34,8 @@ namespace A320VAU.ADIRU {
             mach = _flightDataInterface.mach;
 
             angleOfAttack = _flightDataInterface.angleOfAttack;
+
+            verticalSpeed = _flightDataInterface.verticalSpeed;
         }
     }
 }

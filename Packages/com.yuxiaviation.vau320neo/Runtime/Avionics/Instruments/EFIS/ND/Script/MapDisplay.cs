@@ -1,7 +1,6 @@
 ﻿using A320VAU.Common;
 using A320VAU.Utils;
 using JetBrains.Annotations;
-using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,10 +20,10 @@ namespace A320VAU.ND.Pages {
         public EFISVisibilityType defaultVisibilityType = EFISVisibilityType.NONE;
 
         private DependenciesInjector _injector;
+        private ADIRU.ADIRU _adiru; // Temp workaround
 
         private GameObject[] _markers = { };
         private NavaidDatabase _navaidDatabase;
-        private SaccEntity _saccEntity;
         private float magneticDeclination;
         private float scale;
 
@@ -34,8 +33,8 @@ namespace A320VAU.ND.Pages {
         private void Start() {
             _injector = DependenciesInjector.GetInstance(this);
 
-            _saccEntity = _injector.saccEntity;
             _navaidDatabase = _injector.navaidDatabase;
+            _adiru = _injector.adiru;
 
             if (_navaidDatabase == null) {
                 Debug.LogError("Can't get NavaidDatabase instance, Map unavailable", this);
@@ -50,17 +49,17 @@ namespace A320VAU.ND.Pages {
         private void Update() {
             if (!UpdateIntervalUtil.CanUpdate(ref _lastUpdate, UPDATE_INTERVAL)) return;
 
-            var entityTransform = _saccEntity.transform;
+            var entityTransform = _adiru.irs.position;
             var rotation =
                 Quaternion.AngleAxis(
-                    Vector3.SignedAngle(Vector3.forward, Vector3.ProjectOnPlane(entityTransform.forward, Vector3.up),
+                    Vector3.SignedAngle(Vector3.forward, Vector3.ProjectOnPlane(entityTransform, Vector3.up),
                         Vector3.up) + magneticDeclination, Vector3.forward);
             transform.localRotation = rotation;
 
             var inverseRotation = Quaternion.Inverse(rotation);
 
-            var position = -entityTransform.position * scale;
-            transform.localPosition = rotation * (Vector3.right * position.x + Vector3.up * position.z);
+            var position = -entityTransform * scale;
+            transform.localPosition = rotation * (Vector3.right * position.x + Vector3.up * position.y);
 
             UpdateMarkerRotations(_markers, inverseRotation);
         }

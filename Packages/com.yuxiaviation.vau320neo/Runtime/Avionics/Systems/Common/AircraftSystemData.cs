@@ -40,23 +40,6 @@ namespace Avionics.Systems.Common {
 
         private SaccAirVehicle _saccAirVehicle;
 
-        [PublicAPI] public bool isCabinDoorOpen => Canopy.CanopyOpen;
-        [PublicAPI] public bool isParkBreakSet => Brake.ParkBreakSet;
-
-        [PublicAPI] public bool isApuStarted =>
-            Mathf.Approximately(APU.apuAudioSource.volume, 1.0f);
-
-        [PublicAPI] public bool isApuRunning =>
-            (bool)APU.GetProgramVariable("run");
-
-        //synced float n1 n2 egt ect ff throttleLeveler 
-        //synced bool reversing, starter, fuel，fire
-
-        [PublicAPI] public ThrottleLevelerSlot throttleLevelerSlot => GetThrottleLevelerSlot();
-
-        [PublicAPI] public bool isBothThrottleLevelerIdle =>
-            isEngine1ThrottleLevelerIdle && isEngine2ThrottleLevelerIdle;
-
         private void Start() {
             _dependenciesInjector = DependenciesInjector.GetInstance(this);
 
@@ -77,6 +60,29 @@ namespace Avionics.Systems.Common {
             _saccAirVehicle = _dependenciesInjector.saccAirVehicle;
         }
 
+        [PublicAPI] public bool isCabinDoorOpen => Canopy.CanopyOpen;
+        [PublicAPI] public bool isParkBreakSet => Brake.ParkBreakSet;
+
+        [PublicAPI] public bool isApuStarted =>
+            Mathf.Approximately(APU.apuAudioSource.volume, 1.0f);
+
+        [PublicAPI] public bool isApuRunning =>
+            (bool)APU.GetProgramVariable("run");
+
+        //synced float n1 n2 egt ect ff throttleLeveler
+        //synced bool reversing, starter, fuel，fire
+
+        [PublicAPI] public bool isTakeoffThrustSet => IsTakeoffThrustSet();
+
+        [PublicAPI] public ThrottleLevelerSlot throttleLevelerSlot => GetThrottleLevelerSlot();
+
+        [PublicAPI] public bool isBothThrottleLevelerIdle =>
+            isEngine1ThrottleLevelerIdle && isEngine2ThrottleLevelerIdle;
+
+        public bool isOwner => _saccAirVehicle.IsOwner;
+
+        public Vector3 pilotInput => _saccAirVehicle.RotationInputs;
+
         //synced targetAngle actuatorBroken _wingBroken
 
     #region Flaps
@@ -96,6 +102,13 @@ namespace Avionics.Systems.Common {
 
         public ThrottleLevelerSlot engine2ThrottleLevelerSlot =>
             GetThrottleLevelerSlot(engine2ThrottleLeveler, isEngine2Reversing);
+
+        private bool IsTakeoffThrustSet() {
+            return engine1ThrottleLevelerSlot == ThrottleLevelerSlot.FlexMct ||
+                   engine1ThrottleLevelerSlot == ThrottleLevelerSlot.TOGA ||
+                   engine2ThrottleLevelerSlot == ThrottleLevelerSlot.FlexMct ||
+                   engine2ThrottleLevelerSlot == ThrottleLevelerSlot.TOGA;
+        }
 
         public ThrottleLevelerSlot GetThrottleLevelerSlot(float throttleLevelerInput, bool isEngineReversing) {
             if (isEngineReversing) {
@@ -155,7 +168,8 @@ namespace Avionics.Systems.Common {
                 return ThrottleLevelerSlot.CLB;
             }
 
-            if ((engine1ThrottleLeveler < 0.88f && engine1ThrottleLeveler > 0.375f) || (engine2ThrottleLeveler < 0.88f && engine2ThrottleLeveler > 0.375f)) {
+            if ((engine1ThrottleLeveler < 0.88f && engine1ThrottleLeveler > 0.375f) ||
+                (engine2ThrottleLeveler < 0.88f && engine2ThrottleLeveler > 0.375f)) {
                 return ThrottleLevelerSlot.Manuel;
             }
 
@@ -163,7 +177,8 @@ namespace Avionics.Systems.Common {
                 return ThrottleLevelerSlot.TOGA;
             }
 
-            if (Mathf.Approximately(engine1ThrottleLeveler, 0.375f) || Mathf.Approximately(engine2ThrottleLeveler, 0.375f)) {
+            if (Mathf.Approximately(engine1ThrottleLeveler, 0.375f) ||
+                Mathf.Approximately(engine2ThrottleLeveler, 0.375f)) {
                 return ThrottleLevelerSlot.IDLE;
             }
 

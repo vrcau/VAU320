@@ -18,7 +18,7 @@ namespace A320VAU.FWS {
         #region Takeoff Memo
 
             SetWarnVisible(ref TAKEOFF_MEMO.isVisable,
-                FWS.saccAirVehicle.Taxiing && !Mathf.Approximately(FWS.saccAirVehicle.ThrottleInput, 1) &&
+                FWS.equipmentData.isAircraftGrounded && !FWS.equipmentData.isTakeoffThrustSet &&
                 (isEngine1Running || isEngine2Running), true);
             if (TAKEOFF_MEMO.isVisable) {
                 // AUTO BRK MAX
@@ -77,7 +77,7 @@ namespace A320VAU.FWS {
         #region Landing Memo
 
             SetWarnVisible(ref LANDING_MEMO.isVisable,
-                !FWS.saccAirVehicle.Taxiing & (FWS.flightData.TAS > 80f) & (isEngine1Running | isEngine2Running) &
+                !FWS.equipmentData.isAircraftGrounded & (FWS.adiru.adr.instrumentAirSpeed > 80f) & (isEngine1Running | isEngine2Running) &
                 (FWS.radioAltimeter.radioAltitude < 2000f));
 
             if (LANDING_MEMO.isVisable) {

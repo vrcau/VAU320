@@ -3,7 +3,6 @@ using Avionics.Systems.Common;
 using EsnyaSFAddons.DFUNC;
 using UdonSharp;
 using UnityEngine;
-using YuxiFlightInstruments.BasicFlightData;
 
 namespace A320VAU.Avionics {
     //[RequireComponent(typeof(AudioSource))]
@@ -73,7 +72,7 @@ namespace A320VAU.Avionics {
         public float initialClimbThreshold = 1333;
         public float smoothing = 1.0f;
 
-        private YFI_FlightDataInterface _flightData;
+        private ADIRU.ADIRU _adiru;
         private RadioAltimeter.RadioAltimeter _radioAltimeter;
         private DFUNC_AdvancedFlaps advancedFlaps;
 
@@ -93,7 +92,7 @@ namespace A320VAU.Avionics {
             _aircraftSystemData = injector.equipmentData;
 
             advancedFlaps = injector.flaps;
-            _flightData = injector.flightData;
+            _adiru = injector.adiru;
             _radioAltimeter = injector.radioAltimeter;
 
             audioSource = GetComponent<AudioSource>();
@@ -104,11 +103,11 @@ namespace A320VAU.Avionics {
             var smoothingT = deltaTime / smoothing;
 
             radioAltitude = Mathf.Lerp(radioAltitude, GetRadioAltitude(), smoothingT);
-            barometlicAltitude = Mathf.Lerp(barometlicAltitude, _flightData.altitude, smoothingT);
+            barometlicAltitude = Mathf.Lerp(barometlicAltitude, _adiru.adr.pressureAltitude, smoothingT);
             var barometricDecendRate = -(barometlicAltitude - prevBarometlicAltitude) / Time.deltaTime * 60;
             prevBarometlicAltitude = barometlicAltitude;
 
-            var airspeed = _flightData.TAS;
+            var airspeed = _adiru.adr.instrumentAirSpeed;
 
             var advancedFlapsDown = advancedFlaps && advancedFlaps.targetAngle > 0;
             var anyFlapsDown = !advancedFlaps || advancedFlapsDown;

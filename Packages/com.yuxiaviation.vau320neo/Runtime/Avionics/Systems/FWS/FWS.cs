@@ -1,24 +1,16 @@
-﻿using A320VAU.Avionics;
-using A320VAU.Common;
+﻿using A320VAU.Common;
 using A320VAU.ECAM;
 using Avionics.Systems.Common;
-using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
-using YuxiFlightInstruments.BasicFlightData;
 
 namespace A320VAU.FWS {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class FWS : UdonSharpBehaviour {
     #region Aircraft Systems
 
-        [Header("Aircraft Systems")]
-        [HideInInspector]
-        public SaccAirVehicle saccAirVehicle;
-
-        [HideInInspector] public SaccEntity saccEntity;
-        [HideInInspector] public YFI_FlightDataInterface flightData;
-        public AircraftSystemData equipmentData;
+        [HideInInspector] public ADIRU.ADIRU adiru;
+        [HideInInspector] public AircraftSystemData equipmentData;
         [HideInInspector] public RadioAltimeter.RadioAltimeter radioAltimeter;
 
     #endregion
@@ -30,9 +22,7 @@ namespace A320VAU.FWS {
 
         private void Start() {
             var injector = DependenciesInjector.GetInstance(this);
-            saccAirVehicle = injector.saccAirVehicle;
-            saccEntity = injector.saccEntity;
-            flightData = injector.flightData;
+            adiru = injector.adiru;
             radioAltimeter = injector.radioAltimeter;
 
             fwsWarningMessageDatas = GetComponentsInChildren<FWSWarningMessageData>();
@@ -244,7 +234,7 @@ namespace A320VAU.FWS {
                 // Repeat when after 11s (>50ft) / 4s (<50ft)
                 var diff = Time.time - _lastCallout;
                 var lastCalloutLength = altitudeCallouts[_lastAltitudeCalloutIndex].length;
-                if (!saccAirVehicle.Taxiing) {
+                if (!equipmentData.isAircraftGrounded) {
                     if (altitudeCalloutIndex != -1 && (
                             (radioAltitude > 50f && diff > 11f + lastCalloutLength)
                             ||

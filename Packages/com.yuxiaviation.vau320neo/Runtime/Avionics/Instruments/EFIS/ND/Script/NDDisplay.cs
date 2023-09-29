@@ -6,7 +6,6 @@ using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
 using VirtualAviationJapan;
-using YuxiFlightInstruments.BasicFlightData;
 
 namespace A320VAU.ND {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
@@ -27,7 +26,7 @@ namespace A320VAU.ND {
 
         private NavSelector _vor1;
         private NavSelector _vor2;
-        private YFI_FlightDataInterface FlightData;
+        private ADIRU.ADIRU _adiru;
         private SystemEventBus _eventBus;
 
         public NDMode NDMode {
@@ -40,7 +39,7 @@ namespace A320VAU.ND {
 
         private void Start() {
             _injector = DependenciesInjector.GetInstance(this);
-            FlightData = _injector.flightData;
+            _adiru = _injector.adiru;
             _fmgc = _injector.fmgc;
 
             _vor1 = _fmgc.radNav.VOR1;
@@ -129,20 +128,19 @@ namespace A320VAU.ND {
             
             UpdateHeading();
             UpdateSlip();
-            TASText.text = FlightData.TAS.ToString("f0");
-            GSText.text = FlightData.groundSpeed.ToString("f0");
+            TASText.text = _adiru.adr.trueAirSpeed.ToString("f0");
+            GSText.text = _adiru.irs.groundSpeed.ToString("f0");
 
             UpdateNavigation();
         }
 
         private void UpdateHeading() {
-            var HeadingAngle = FlightData.magneticHeading;
-            IndicatorAnimator.SetFloat(HEADING_HASH, HeadingAngle / 360f);
+            IndicatorAnimator.SetFloat(HEADING_HASH, _adiru.irs.heading / 360f);
         }
 
         private void UpdateSlip() {
             IndicatorAnimator.SetFloat(SLIP_ANGLE_HASH,
-                Mathf.Clamp01((FlightData.SlipAngle + MAX_SLIP_ANGLE) / (MAX_SLIP_ANGLE + MAX_SLIP_ANGLE)));
+                Mathf.Clamp01((_adiru.irs.trackSlipAngle + MAX_SLIP_ANGLE) / (MAX_SLIP_ANGLE + MAX_SLIP_ANGLE)));
         }
 
     #region Navaid

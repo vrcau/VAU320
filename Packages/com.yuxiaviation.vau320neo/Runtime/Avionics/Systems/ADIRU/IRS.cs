@@ -1,5 +1,4 @@
-﻿using System;
-using A320VAU.Common;
+﻿using A320VAU.Common;
 using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
