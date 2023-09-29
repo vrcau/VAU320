@@ -1,4 +1,6 @@
 using System;
+using A320VAU.Common;
+using Avionics.Systems.Common;
 using EsnyaSFAddons.SFEXT;
 using SaccFlightAndVehicles;
 using UdonSharp;
@@ -23,12 +25,32 @@ namespace A320VAU.SFEXT {
         public bool isAutoThrustActive;
         public float autoThrustInput;
 
+        private DependenciesInjector _injector;
+        private AircraftSystemData _aircraftSystemData;
+
+        public AudioSource throttleLevelerAudioSource;
+        public AudioClip togaClip;
+        public AudioClip togaReleaseClip;
+        public AudioClip mctFlexClip;
+        public AudioClip clbClip;
+        public AudioClip idleClip;
+        public AudioClip revOnClip;
+        public AudioClip revUnlockClip;
+        public AudioClip revOffClip;
+        public AudioClip revIdleClip;
+        public AudioClip revMaxClip;
+
+        private ThrottleLevelerSlot _lastThrottleLevelerSlot;
+
     #region SFEXT Core
 
         private bool initialized, isOwner, isPilot, hasPilot, isPassenger;
         private SaccAirVehicle airVehicle;
 
         public void SFEXT_L_EntityStart() {
+            _injector = DependenciesInjector.GetInstance(this);
+            _aircraftSystemData = _injector.equipmentData;
+
             var entity = GetComponentInParent<SaccEntity>();
             airVehicle = entity.GetComponentInChildren<SaccAirVehicle>();
 
@@ -477,6 +499,54 @@ namespace A320VAU.SFEXT {
         }
 
         private void Sound_Update(float deltaTime) {
+            var currentThrottleLevelerSlot = _aircraftSystemData.throttleLevelerSlot;
+
+            if (currentThrottleLevelerSlot != _lastThrottleLevelerSlot) {
+                Networking.LocalPlayer.PlayHapticEventInHand(VRC_Pickup.PickupHand.Left, 0.2f, 0.5f, 0.1f);
+
+                if ((_lastThrottleLevelerSlot != ThrottleLevelerSlot.Revers ||
+                     _lastThrottleLevelerSlot != ThrottleLevelerSlot.IDLERevers) &&
+                    (currentThrottleLevelerSlot == ThrottleLevelerSlot.IDLERevers ||
+                     currentThrottleLevelerSlot == ThrottleLevelerSlot.Revers)) {
+                    throttleLevelerAudioSource.PlayOneShot(revOnClip);
+                }
+                else if (currentThrottleLevelerSlot != ThrottleLevelerSlot.TOGA &&
+                         _lastThrottleLevelerSlot == ThrottleLevelerSlot.TOGA) {
+                    throttleLevelerAudioSource.PlayOneShot(togaReleaseClip);
+                }
+                else {
+                    switch (currentThrottleLevelerSlot) {
+                        case ThrottleLevelerSlot.TOGA:
+                            throttleLevelerAudioSource.PlayOneShot(togaClip);
+                            break;
+                        case ThrottleLevelerSlot.CLB:
+                            throttleLevelerAudioSource.PlayOneShot(clbClip);
+                            break;
+                        case ThrottleLevelerSlot.FlexMct:
+                            throttleLevelerAudioSource.PlayOneShot(mctFlexClip);
+                            break;
+                        case ThrottleLevelerSlot.IDLE:
+                            throttleLevelerAudioSource.PlayOneShot(idleClip);
+                            break;
+                        case ThrottleLevelerSlot.IDLERevers:
+                            throttleLevelerAudioSource.PlayOneShot(idleClip);
+                            break;
+                        case ThrottleLevelerSlot.MaxRevers:
+                            throttleLevelerAudioSource.PlayOneShot(revMaxClip);
+                            break;
+                        default:
+                            throttleLevelerAudioSource.PlayOneShot(revIdleClip);
+                            break;
+                    }
+
+                    if (currentThrottleLevelerSlot == ThrottleLevelerSlot.TOGA) {
+                        throttleLevelerAudioSource.PlayOneShot(togaClip);
+                    }
+                }
+
+                _lastThrottleLevelerSlot = currentThrottleLevelerSlot;
+            }
+
             var isInside = (isPilot || isPassenger) && soundController.AllDoorsClosed;
             var doppler = isInside ? 1.0f : Mathf.Min(soundController.Doppler, 2.25f);
             var silent = soundController.silent;

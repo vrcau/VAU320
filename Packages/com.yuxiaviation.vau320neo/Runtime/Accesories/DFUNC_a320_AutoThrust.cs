@@ -20,6 +20,8 @@ namespace A320VAU {
 
         private VRCPlayerApi localPlayer;
 
+        public bool isAutoThrustArm { get; private set; }
+
         [Tooltip("Object enabled when function is active (used on MFD)")]
         public GameObject Dial_Funcon;
 
@@ -36,7 +38,7 @@ namespace A320VAU {
 
         private float CruiseTemp;
         private float SpeedZeroPoint;
-        [NonSerialized] public float SetSpeed;
+        [NonSerialized] public float SetSpeed = 83.3328f;
 
         [NonSerialized] public bool Cruise;
         private bool func_active;
@@ -50,7 +52,6 @@ namespace A320VAU {
         private Transform ControlsRoot;
 
         public void SFEXT_L_EntityStart() {
-
             _injector = DependenciesInjector.GetInstance(this);
             _aircraftSystemData = _injector.equipmentData;
             _saccAirVehicle = _injector.saccAirVehicle;
@@ -117,21 +118,54 @@ namespace A320VAU {
             Selected = false;
         }
 
-        public void SFEXT_G_Explode() => SetCruiseOff();
+        public void SFEXT_G_Explode() {
+            isAutoThrustArm = false;
+            SetCruiseOff();
+        }
+
         public void SFEXT_G_TouchDown() => SetCruiseOff();
 
         private void LateUpdate() {
-            if (_aircraftSystemData.throttleLevelerSlot == ThrottleLevelerSlot.TOGA ||
-                _aircraftSystemData.throttleLevelerSlot == ThrottleLevelerSlot.IDLE ||
-                _aircraftSystemData.throttleLevelerSlot == ThrottleLevelerSlot.FlexMct) {
+            if (_aircraftSystemData.isAircraftGrounded) {
+                if ((_aircraftSystemData.throttleLevelerSlot == ThrottleLevelerSlot.TOGA ||
+                     _aircraftSystemData.throttleLevelerSlot == ThrottleLevelerSlot.FlexMct)
+                    &&
+                    (_aircraftSystemData.isEngine1Running || _aircraftSystemData.isEngine2Running)) {
+                    isAutoThrustArm = true;
 
-                SetCruiseOff();
-                return;
+                    if (Cruise)
+                        SetCruiseOff();
+                }
+            }
+            else {
+                if ((_aircraftSystemData.throttleLevelerSlot != ThrottleLevelerSlot.CLB ||
+                     _aircraftSystemData.throttleLevelerSlot != ThrottleLevelerSlot.Manuel) && Cruise) {
+                    isAutoThrustArm = true;
+
+                    if (Cruise)
+                        SetCruiseOff();
+                }
+            }
+
+            if (_aircraftSystemData.throttleLevelerSlot == ThrottleLevelerSlot.IDLE) {
+                isAutoThrustArm = false;
+
+                if (Cruise)
+                    SetCruiseOff();
             }
 
             if (!EngineOn) {
-                SetCruiseOff();
-                return;
+                isAutoThrustArm = false;
+
+                if (Cruise)
+                    SetCruiseOff();
+            }
+
+            if ((_aircraftSystemData.throttleLevelerSlot == ThrottleLevelerSlot.CLB ||
+                 _aircraftSystemData.throttleLevelerSlot == ThrottleLevelerSlot.Manuel) && isAutoThrustArm &&
+                !_aircraftSystemData.isAircraftGrounded) {
+                SetCruiseOn();
+                isAutoThrustArm = false;
             }
 
             if (InVR) {
@@ -155,7 +189,7 @@ namespace A320VAU {
                         if (!TriggerLastFrame) {
                             if (!Cruise) {
                                 if (!_saccAirVehicle.Taxiing && !InReverse) {
-                                    SetCruiseOn();
+                                    isAutoThrustArm = true;
                                 }
                             }
 
@@ -199,12 +233,11 @@ namespace A320VAU {
         }
 
         public void KeyboardInput() {
-            if (!Cruise) {
-                if (!_saccAirVehicle.Taxiing && !InReverse) {
-                    SetCruiseOn();
-                }
+            if (!(isAutoThrustArm || Cruise)) {
+                isAutoThrustArm = true;
             }
             else {
+                isAutoThrustArm = false;
                 SetCruiseOff();
             }
         }
@@ -216,16 +249,12 @@ namespace A320VAU {
 
             if (Piloting) {
                 func_active = true;
-                if (!InVR) {
-                    gameObject.SetActive(true);
-                }
             }
 
             foreach (var engine in engines) {
                 engine.isAutoThrustActive = true;
             }
 
-            SetSpeed = _saccAirVehicle.AirSpeed;
             Cruise = true;
             if (Dial_Funcon) {
                 Dial_Funcon.SetActive(true);
@@ -241,9 +270,6 @@ namespace A320VAU {
 
             if (Piloting) {
                 func_active = false;
-                if (!InVR) {
-                    gameObject.SetActive(false);
-                }
             }
 
             foreach (var engine in engines) {

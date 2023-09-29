@@ -51,11 +51,20 @@ namespace A320VAU.PFD {
 
         public void LateUpdate() {
             if (!UpdateIntervalUtil.CanUpdate(ref _lastUpdate, UPDATE_INTERVAL)) return;
-        
-            ManThrType = Mathf.Approximately(_aircraftSystemData.engine1ThrottleLeveler, 1f)
-                ? ManThrType.TOGA
-                : ManThrType.None;
-            if ((bool)_altHoldDFunc.GetProgramVariable("AltHold")) {
+
+            switch (_aircraftSystemData.throttleLevelerSlot) {
+                case ThrottleLevelerSlot.TOGA:
+                    ManThrType = ManThrType.TOGA;
+                    break;
+                case ThrottleLevelerSlot.FlexMct:
+                    ManThrType = ManThrType.MCT;
+                    break;
+                default:
+                    ManThrType = ManThrType.None;
+                    break;
+            }
+
+            if (_altHoldDFunc.AltHold) {
                 VerticalActiveMode = "ALT";
                 LateralActiveMode = "HDG";
                 IsAutoPilot1Active = true;
@@ -66,9 +75,16 @@ namespace A320VAU.PFD {
                 IsAutoPilot1Active = false;
             }
 
-            if ((bool)_cruiseDFunc.GetProgramVariable("Cruise")) {
+            if (_cruiseDFunc.Cruise || _cruiseDFunc.isAutoThrustArm) {
                 IsAutoThrustActive = true;
-                AutoThrustMode = "SPEED";
+                IsAutoThrustArm = _cruiseDFunc.isAutoThrustArm;
+
+                if (_cruiseDFunc.Cruise) {
+                    AutoThrustMode = "SPEED";
+                }
+                else {
+                    AutoThrustMode = "";
+                }
             }
             else {
                 IsAutoThrustActive = false;
