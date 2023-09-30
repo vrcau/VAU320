@@ -258,6 +258,7 @@ namespace A320VAU.ECAM {
             var rightMemoText = "";
             var leftMemoText = "";
             var hasWarning = false;
+            var hasMemoDisplayed = false;
             foreach (var memo in _fws.fwsWarningMessageDatas)
                 if (memo.isVisable)
                     switch (memo.Type) {
@@ -271,7 +272,7 @@ namespace A320VAU.ECAM {
                             switch (memo.Zone) {
                                 // Left of the ECAM
                                 case DisplayZone.Left:
-                                    if (!hasWarning)
+                                    if (!hasWarning && !hasMemoDisplayed)
                                         leftMemoText +=
                                             $"<color={GetColorHexByWarningColor(memo.TitleColor)}>{memo.WarningTitle}</color>\n";
                                     break;
@@ -291,8 +292,10 @@ namespace A320VAU.ECAM {
                         // Config Memo (Like T.O CONFIG, LDG CONFIG MEMO) and Primary System failure (Like ENG1 FIRE)
                         default:
                             if (memo.Type != WarningType.ConfigMemo) hasWarning = true;
-                            // Do not show Config Memo when already a System Failure Warning visable
+                            // Do not show Config Memo when already a System Failure Warning visible
                             if (!((memo.Type == WarningType.ConfigMemo) & hasWarning)) {
+                                hasMemoDisplayed = true;
+
                                 leftMemoText +=
                                     $"<color={GetColorHexByWarningColor(memo.TitleColor)}>{memo.WarningGroup} {memo.WarningTitle}</color>";
                                 // Config Memo don't require title warp
