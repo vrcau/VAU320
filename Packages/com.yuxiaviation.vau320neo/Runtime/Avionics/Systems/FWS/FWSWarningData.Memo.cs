@@ -3,11 +3,15 @@ namespace A320VAU.FWS {
         private FWSWarningMessageData APU_AVAIL;
         private FWSWarningMessageData APU_BLEED;
         private FWSWarningMessageData PARK_BRK;
+        private FWSWarningMessageData SEAT_BELTS;
+        private FWSWarningMessageData NO_SMOKING;
 
         private void SetupMemo() {
             APU_BLEED = GetWarningMessageData(nameof(APU_BLEED));
             PARK_BRK = GetWarningMessageData(nameof(PARK_BRK));
             APU_AVAIL = GetWarningMessageData(nameof(APU_AVAIL));
+            SEAT_BELTS = GetWarningMessageData(nameof(SEAT_BELTS));
+            NO_SMOKING = GetWarningMessageData(nameof(NO_SMOKING));
         }
 
         private void MonitorMemo() {
@@ -15,6 +19,8 @@ namespace A320VAU.FWS {
             // APU BLEED will replace APU AVAIL if APU BLEED is on, but we don't have "APU BLEED" simulate.
             // SetWarnVisible(ref APU_AVAIL.IsVisable, FWS.equipmentData.IsAPURunning);
             SetWarnVisible(ref PARK_BRK.isVisable, FWS.equipmentData.isParkBreakSet);
+            SetWarnVisible(ref SEAT_BELTS.isVisable, true);
+            SetWarnVisible(ref NO_SMOKING.isVisable, true);
         }
     }
 }
