@@ -34,9 +34,9 @@ namespace A320VAU.FWS {
 
             if (radioAltimeter.isAvailable) {
                 UpdateMinimumCallout(radioAltitude);
-                UpdateAltitudeCallout(radioAltitude);    
+                UpdateAltitudeCallout(radioAltitude);
             }
-            
+
             UpdateFWS();
         }
 
@@ -175,45 +175,68 @@ namespace A320VAU.FWS {
         private void UpdateMinimumCallout(float radioAltitude) {
             var minimumCalloutIndex = GetMinimumCalloutIndex(radioAltitude);
 
-            if (_lastMinimumCalloutIndex != -1 && minimumCalloutIndex > _lastMinimumCalloutIndex)
+            if (_lastMinimumCalloutIndex != -1 && minimumCalloutIndex > _lastMinimumCalloutIndex) {
                 switch (minimumCalloutIndex) {
                     // HUNDRED ABOVE
-                    case 0:
+                    case 1:
                         SendCustomEventDelayedSeconds(nameof(CalloutHundredAbove), 1);
                         break;
                     // MINIMUM
-                    case 1:
+                    case 2:
                         SendCustomEventDelayedSeconds(nameof(CalloutMinimum), 1);
                         break;
                 }
+            }
 
             _lastMinimumCalloutIndex = minimumCalloutIndex;
         }
 
-        private void CalloutHundredAbove() {
+        public void CalloutHundredAbove() {
             audioSource.PlayOneShot(hundredAboveCallout);
         }
 
-        private void CalloutMinimum() {
+        public void CalloutMinimum() {
             audioSource.PlayOneShot(mininmumCallout);
         }
 
         private int GetMinimumCalloutIndex(float radioAltitude) {
-            if (radioAltitude < decisionHeight) return 1;
-            if (radioAltitude < decisionHeight + 100f) return 0;
+            if (radioAltitude < decisionHeight) return 2;
+            if (radioAltitude < decisionHeight + 100f) return 1;
 
-            return -1;
+            return 0;
         }
 
     #endregion
 
     #region Altitude Callout
 
-        private void CalloutRetard() {
-            audioSource.PlayOneShot(retardCallout);
+        public void CalloutRetard() {
+            _isRetardCalloutActive = true;
+
+            var radioAltitude = radioAltimeter.radioAltitude;
+
+            if (Time.time - _lastCalloutRetard < 0.5f)
+                return;
+
+            // RETARD
+            if (radioAltitude < 20f &&
+                equipmentData.throttleLevelerSlot != ThrottleLevelerSlot.IDLE) {
+
+                audioSource.PlayOneShot(retardCallout);
+
+                SendCustomEventDelayedSeconds(nameof(CalloutRetard), 1);
+                _lastCalloutRetard = Time.time;
+            }
+            else {
+                _isRetardCalloutActive = false;
+            }
         }
 
         private float _lastCallout;
+
+        private bool _isRetardCalloutActive;
+
+        private float _lastCalloutRetard;
 
         private void UpdateAltitudeCallout(float radioAltitude) {
             var altitudeCalloutIndex = GetAltitudeCalloutIndex(radioAltitude);
@@ -222,8 +245,9 @@ namespace A320VAU.FWS {
                 audioSource.PlayOneShot(altitudeCallouts[altitudeCalloutIndex]);
 
                 // RETARD
-                if (altitudeCalloutIndex == 10 && !Mathf.Approximately(equipmentData.engine1ThrottleLeveler, 0.375f))
+                if (!_isRetardCalloutActive && altitudeCalloutIndex >= 10) {
                     SendCustomEventDelayedSeconds(nameof(CalloutRetard), 1);
+                }
 
                 _lastCallout = Time.time;
             }
