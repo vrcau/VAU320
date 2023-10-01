@@ -18,7 +18,7 @@ VAU320neo 是架由 VRChat 航空航天大学开发基于 Sacc 系统的 VRChat 
     - [YuxiFlightInsturments](https://github.com/Heriyadi235/YuxiFlightInstrumentsforSF): Git URL: `https://github.com/Heriyadi235/YuxiFlightInstrumentsforSF.git?path=/Packages/com.yuxiaviation.yuxiflightinstruments`
     - [InariUdon](https://github.com/esnya/InariUdon.git): Git URL: `https://github.com/esnya/InariUdon.git?path=/Packages/com.nekometer.esnya.inari-udon`
     - [EsnyaSFAddons](https://github.com/Esnya/EsnyaSFAddons): Git URL: `https://github.com/esnya/EsnyaSFAddons.git?path=/Packages/com.nekometer.esnya.esnya-sf-addons`
-    - [UdonRadioCommunications & UdonRadioCommunications SaccFlight Integrations](https://github.com/esnya/UdonRadioCommunications): Git URL: `https://github.com/esnya/UdonRadioCommunications.git?path=/Packages/com.nekometer.esnya.udon-radio-communications` & `https://github.com/esnya/UdonRadioCommunications.git?path=/Packages/com.nekometer.esnya.udon-radio-communications-sf`
+    - [UdonRadioCommunications](https://github.com/esnya/UdonRadioCommunications): Git URL: `https://github.com/esnya/UdonRadioCommunications.git?path=/Packages/com.nekometer.esnya.udon-radio-communications`
     - [UdonToolkit](https://github.com/orels1/UdonToolkit): Git URL: `https://github.com/orels1/UdonToolkit.git`
     - [VUdon-ArrayExtensions](https://github.com/Varneon/VUdon-ArrayExtensions): Git URL: `https://github.com/Varneon/VUdon-ArrayExtensions.git?path=/Packages/com.varneon.vudon.array-extensions`
     - [Virtual-CNS](https://github.com/VirtualAviationJapan/Virtual-CNS): Git URL: `https://github.com/VirtualAviationJapan/Virtual-CNS.git?pth=/Packages/jp.virtualaviation.virtual-cns`
