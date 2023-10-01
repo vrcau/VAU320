@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
-using VirtualAviationJapan;
+using VirtualCNS;
 
 namespace A320VAU.ND {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]

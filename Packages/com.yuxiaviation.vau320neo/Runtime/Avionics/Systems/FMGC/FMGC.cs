@@ -1,7 +1,7 @@
 ﻿using A320VAU.Common;
 using UdonSharp;
 using UnityEngine;
-using VirtualAviationJapan;
+using VirtualCNS;
 
 namespace A320VAU.FMGC {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
