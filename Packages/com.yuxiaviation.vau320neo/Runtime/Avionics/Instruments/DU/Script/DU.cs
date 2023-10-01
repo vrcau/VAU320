@@ -18,6 +18,8 @@ namespace A320VAU.PFD {
         private bool _inSelfTest;
         private bool _isSelfTestCompleted;
 
+        private bool _byPassSelfTest;
+
         private void Start() {
             _injector = DependenciesInjector.GetInstance(this);
             _eventBus = _injector.systemEventBus;
@@ -29,7 +31,7 @@ namespace A320VAU.PFD {
         public void SFEXT_O_RespawnButton() => InitDU();
 
         private void OnEnable() {
-            if (_isSelfTestCompleted | _inSelfTest) return;
+            if (_isSelfTestCompleted | _inSelfTest | _byPassSelfTest) return;
             InitDU();
 
             PowerPage.SetActive(!_isSelfTestCompleted);
@@ -40,7 +42,7 @@ namespace A320VAU.PFD {
         }
 
         public void StartFlash() {
-            if (_isSelfTestCompleted | !_inSelfTest) return;
+            if (_isSelfTestCompleted | !_inSelfTest | _byPassSelfTest) return;
 
             Debug.Log("DU Start Flash");
             PowerFlashCover.SetActive(true);
@@ -48,7 +50,7 @@ namespace A320VAU.PFD {
         }
 
         public void EndFlash() {
-            if (_isSelfTestCompleted | !_inSelfTest) return;
+            if (_isSelfTestCompleted | !_inSelfTest | _byPassSelfTest) return;
 
             PowerFlashCover.SetActive(false);
             var selfTestStartDelay = Random.Range(1f, 2f);
@@ -56,7 +58,7 @@ namespace A320VAU.PFD {
         }
 
         public void StartSelftest() {
-            if (_isSelfTestCompleted | !_inSelfTest) return;
+            if (_isSelfTestCompleted | !_inSelfTest | _byPassSelfTest) return;
 
             Debug.Log("DU Start Selftest");
             PowerPage.SetActive(false);

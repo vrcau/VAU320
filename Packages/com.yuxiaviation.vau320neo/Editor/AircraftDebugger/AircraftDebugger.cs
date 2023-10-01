@@ -79,7 +79,7 @@ namespace A320VAU.Editor.AircraftDebugger {
             if (electricalBus == null) return;
 
             if (isBatteryOn != electricalBus.batteryOn)
-                electricalBus.OnToggleBattery();
+                electricalBus.SendCustomEvent(nameof(YFI_ElectricalBus.OnToggleBattery));
         }
 
         private void UpdateDebugger() {
