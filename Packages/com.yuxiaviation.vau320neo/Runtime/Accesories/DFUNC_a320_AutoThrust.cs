@@ -51,7 +51,7 @@ namespace A320VAU {
 
         private Transform ControlsRoot;
 
-        public void SFEXT_L_EntityStart() {
+        private void Init() {
             _injector = DependenciesInjector.GetInstance(this);
             _aircraftSystemData = _injector.equipmentData;
             _saccAirVehicle = _injector.saccAirVehicle;
@@ -61,6 +61,14 @@ namespace A320VAU {
             if (localPlayer != null) {
                 InVR = localPlayer.IsUserInVR();
             }
+        }
+
+        private void Start() {
+            Init();
+        }
+
+        public void SFEXT_L_EntityStart() {
+            Init();
 
             ControlsRoot = _saccAirVehicle.ControlsRoot;
             if (Dial_Funcon) Dial_Funcon.SetActive(false);
@@ -126,6 +134,9 @@ namespace A320VAU {
         public void SFEXT_G_TouchDown() => SetCruiseOff();
 
         private void LateUpdate() {
+            if (!_aircraftSystemData)
+                return; // Temp workaround
+
             if (_aircraftSystemData.isAircraftGrounded) {
                 if ((_aircraftSystemData.throttleLevelerSlot == ThrottleLevelerSlot.TOGA ||
                      _aircraftSystemData.throttleLevelerSlot == ThrottleLevelerSlot.FlexMct)
