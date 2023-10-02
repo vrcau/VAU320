@@ -1,7 +1,7 @@
 {
   "name": "com.yuxiaviation.vau320neo",
   "displayName": "VAU v320neo",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Powerd By SaccFlightAndVehicles, Simple simulation of A320neo.",
   "gitDependencies": {
     "jp.virtualaviation.virtual-cns": "https://github.com/VirtualAviationJapan/Virtual-CNS.git?path=/Packages/jp.virtualaviation.virtual-cns",
