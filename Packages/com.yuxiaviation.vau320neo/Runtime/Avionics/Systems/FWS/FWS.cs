@@ -220,7 +220,7 @@ namespace A320VAU.FWS {
 
             // RETARD
             if (radioAltitude < 20f &&
-                equipmentData.throttleLevelerSlot != ThrottleLevelerSlot.IDLE) {
+                (int)equipmentData.throttleLevelerSlot < (int)ThrottleLevelerSlot.IDLE) {
 
                 audioSource.PlayOneShot(retardCallout);
 
