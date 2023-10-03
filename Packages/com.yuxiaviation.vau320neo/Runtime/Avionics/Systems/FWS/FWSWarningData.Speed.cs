@@ -22,8 +22,8 @@
             if (FWS.equipmentData.isGearsTargetDown && VLE < VMAX)
                 VMAX = VLE;
 
-            SetWarnVisible(ref OVERSPEED.isVisable, FWS.adiru.adr.instrumentAirSpeed > VMAX + 4f, true);
-            if (OVERSPEED.isVisable) {
+            SetWarnVisible(ref OVERSPEED.isVisible, FWS.adiru.adr.instrumentAirSpeed > VMAX + 4f, true);
+            if (OVERSPEED.isVisible) {
                 SetWarnVisible(ref OVERSPEED.MessageLine[0].isMessageVisible, FWS.adiru.adr.instrumentAirSpeed > VMO);
                 SetWarnVisible(ref OVERSPEED.MessageLine[1].isMessageVisible, FWS.adiru.adr.instrumentAirSpeed > VLE);
                 SetWarnVisible(ref OVERSPEED.MessageLine[2].isMessageVisible, FWS.adiru.adr.instrumentAirSpeed > VFE);
