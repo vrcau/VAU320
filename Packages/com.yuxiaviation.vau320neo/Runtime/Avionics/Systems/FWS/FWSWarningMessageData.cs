@@ -1,16 +1,17 @@
 ﻿using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace A320VAU.FWS {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class FWSWarningMessageData : UdonSharpBehaviour {
         public string Id;
-        public string WarningGroup; // exmaple: HYD F/CTL
+        public string WarningGroup; // example: HYD F/CTL
         public WarningStyle WarningGroupStyle;
-        public string WarningTitle; // exmaple: ENGINE DUAL FAILURE
+        public string WarningTitle; // example: ENGINE DUAL FAILURE
         public WarningStyle WarningTitleStyle;
         public WarningColor TitleColor;
-        [HideInInspector] public bool isVisable;
+        [HideInInspector] public bool isVisible;
         public DisplayZone Zone; // on the left or right of the ecam
         public WarningType Type;
         public WarningLevel Level;

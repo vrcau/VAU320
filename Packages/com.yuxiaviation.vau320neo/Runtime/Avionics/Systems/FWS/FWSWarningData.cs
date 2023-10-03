@@ -40,8 +40,8 @@ namespace A320VAU.FWS {
             MonitorConfig();
             MonitorSpeed();
 
-            fws._hasWarningDataVisableChange = _hasWarningDataVisibleChange;
-            fws._hasWarningVisableChange = _hasWarningVisibleChange;
+            fws._hasWarningDataVisibleChange = _hasWarningDataVisibleChange;
+            fws._hasWarningVisibleChange = _hasWarningVisibleChange;
         }
 
         private void SetWarnVisible(ref bool isVisible, bool newValue, bool isWarnData = false) {

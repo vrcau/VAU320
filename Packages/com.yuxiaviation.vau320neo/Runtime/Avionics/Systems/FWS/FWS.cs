@@ -3,6 +3,7 @@ using A320VAU.ECAM;
 using Avionics.Systems.Common;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace A320VAU.FWS {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
@@ -12,6 +13,34 @@ namespace A320VAU.FWS {
         [HideInInspector] public ADIRU.ADIRU adiru;
         [HideInInspector] public AircraftSystemData equipmentData;
         [HideInInspector] public RadioAltimeter.RadioAltimeter radioAltimeter;
+
+    #endregion
+
+    #region FWS Data (OEB) (Checklist and warnings)
+
+        [HideInInspector] public FWSWarningMessageData[] fwsWarningMessageDatas;
+        private FWSWarningData _fwsWarningData;
+
+    #endregion
+
+    #region ECAM and Warning Light/Audio
+
+        public Animator cockpitAnimator;
+
+        private readonly int MASTER_WARNING_HASH = Animator.StringToHash("IsMasterWarning");
+        private readonly int MASTER_CAUTION_HASH = Animator.StringToHash("IsMasterCaution");
+
+        [Header("ECAM and warning Light/Audio")]
+        public ECAMDisplay ECAMController;
+
+        [HideInInspector] public AudioClip Caution; // looking for master warning? check out the FWS GameObject
+
+    #endregion
+
+    #region FWS Warning
+
+        [HideInInspector] public bool _hasWarningVisibleChange;
+        [HideInInspector] public bool _hasWarningDataVisibleChange;
 
     #endregion
 
@@ -49,17 +78,17 @@ namespace A320VAU.FWS {
             if (Time.time - _lastFwsUpdate < FWS_UPDATE_INTERVAL) return;
             _lastFwsUpdate = Time.time;
 
-            var hasMasterWarning = false;
-            var hasMasterCaution = false;
             _fwsWarningData.Monitor(this); // the core of the FWS
 
-            if (!_hasWarningVisableChange) return; // return if there is nothing need to update
+            if (!_hasWarningVisibleChange) return; // return if there is nothing need to update
 
-        #region Get Updated Warnings and Wanring Level (e.g Master Caution/Warning)
+            // Get Updated Warnings and Warning Level (e.g Master Caution/Warning)
+            if (_hasWarningDataVisibleChange) {
+                var hasMasterWarning = false;
+                var hasMasterCaution = false;
 
-            if (_hasWarningDataVisableChange)
                 foreach (var memo in fwsWarningMessageDatas)
-                    if (memo.isVisable && memo.Type == WarningType.Primary && !Contains(_activeWarnings, memo.Id))
+                    if (memo.isVisible && memo.Type == WarningType.Primary)
                         switch (memo.Level) {
                             case WarningLevel.Immediate:
                                 hasMasterWarning = true;
@@ -72,44 +101,35 @@ namespace A320VAU.FWS {
                                 break;
                         }
 
-        #endregion
+                if (hasMasterWarning) {
+                    audioSource.Play();
 
-        #region Warning Light & Sound
+                    cockpitAnimator.SetBool(MASTER_WARNING_HASH, true);
+                }
 
-            if (hasMasterWarning) {
-                audioSource.Play();
+                if (hasMasterCaution) {
+                    cockpitAnimator.SetBool(MASTER_CAUTION_HASH, true);
 
-                MasterWarningLightCAPT.SetActive(true);
-                MasterWarningLightFO.SetActive(true);
-                MasterCautionLightCAPT.SetActive(true);
-                MasterCautionLightFO.SetActive(true);
-            }
-            else if (hasMasterCaution) {
-                MasterCautionLightCAPT.SetActive(true);
-                MasterCautionLightFO.SetActive(true);
-                audioSource.PlayOneShot(Caution);
-            }
-            else {
-                audioSource.Stop();
-                MasterWarningLightCAPT.SetActive(false);
-                MasterWarningLightFO.SetActive(false);
-                MasterCautionLightCAPT.SetActive(false);
-                MasterCautionLightFO.SetActive(false);
+                    audioSource.PlayOneShot(Caution);
+                }
+
+                if (!hasMasterCaution && !hasMasterWarning) {
+                    audioSource.Stop();
+
+                    cockpitAnimator.SetBool(MASTER_WARNING_HASH, false);
+                    cockpitAnimator.SetBool(MASTER_CAUTION_HASH, false);
+                }
             }
 
-        #endregion
-
-            _activeWarnings = new string[0];
             ECAMController.UpdateMemo();
         }
 
         // ReSharper disable once UnusedMember.Global
-        public void CancleWarning() {
+        public void ResetWarning() {
             audioSource.Stop();
-            MasterWarningLightCAPT.SetActive(false);
-            MasterWarningLightFO.SetActive(false);
-            MasterCautionLightCAPT.SetActive(false);
-            MasterCautionLightFO.SetActive(false);
+
+            cockpitAnimator.SetBool(MASTER_WARNING_HASH, false);
+            cockpitAnimator.SetBool(MASTER_CAUTION_HASH, false);
         }
 
         private static bool Contains(string[] array, string item) {
@@ -119,35 +139,6 @@ namespace A320VAU.FWS {
 
             return false;
         }
-
-    #region FWS Data (OEB) (Checklist and warnings)
-
-        [HideInInspector] public FWSWarningMessageData[] fwsWarningMessageDatas;
-        private FWSWarningData _fwsWarningData;
-
-    #endregion
-
-    #region ECAM and Warning Light/Audio
-
-        [Header("ECAM and warning Light/Audio")]
-        public ECAMDisplay ECAMController;
-
-        [HideInInspector] public AudioClip Caution; // looking for master warning? check out the FWS gameobject
-
-        public GameObject MasterWarningLightCAPT;
-        public GameObject MasterWarningLightFO;
-        public GameObject MasterCautionLightCAPT;
-        public GameObject MasterCautionLightFO;
-
-    #endregion
-
-    #region FWS Warning
-
-        [HideInInspector] public bool _hasWarningVisableChange;
-        [HideInInspector] public bool _hasWarningDataVisableChange;
-        private string[] _activeWarnings = new string[0];
-
-    #endregion
 
     #region AltitudeCallout
 
@@ -160,7 +151,7 @@ namespace A320VAU.FWS {
 
         public AudioClip retardCallout;
         public AudioClip hundredAboveCallout;
-        public AudioClip mininmumCallout;
+        public AudioClip minimumCallout;
 
         public float decisionHeight = 200f;
         // public float MinimumDescentAltitude = 200f;
@@ -196,7 +187,7 @@ namespace A320VAU.FWS {
         }
 
         public void CalloutMinimum() {
-            audioSource.PlayOneShot(mininmumCallout);
+            audioSource.PlayOneShot(minimumCallout);
         }
 
         private int GetMinimumCalloutIndex(float radioAltitude) {
@@ -221,7 +212,6 @@ namespace A320VAU.FWS {
             // RETARD
             if (radioAltitude < 20f &&
                 (int)equipmentData.throttleLevelerSlot < (int)ThrottleLevelerSlot.IDLE) {
-
                 audioSource.PlayOneShot(retardCallout);
 
                 SendCustomEventDelayedSeconds(nameof(CalloutRetard), 1);
