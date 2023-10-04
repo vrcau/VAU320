@@ -501,8 +501,10 @@ namespace A320VAU.SFEXT {
         private void Sound_Update(float deltaTime) {
             var currentThrottleLevelerSlot = _aircraftSystemData.throttleLevelerSlot;
 
-            if (currentThrottleLevelerSlot != _lastThrottleLevelerSlot) {
-                Networking.LocalPlayer.PlayHapticEventInHand(VRC_Pickup.PickupHand.Left, 0.2f, 0.5f, 0.1f);
+            if (currentThrottleLevelerSlot != _lastThrottleLevelerSlot && airVehicle.IsOwner) {
+                Networking.LocalPlayer.PlayHapticEventInHand(
+                    airVehicle.SwitchHandsJoyThrottle ? VRC_Pickup.PickupHand.Left : VRC_Pickup.PickupHand.Right, 0.2f,
+                    0.5f, 0.1f);
 
                 if ((_lastThrottleLevelerSlot != ThrottleLevelerSlot.Revers ||
                      _lastThrottleLevelerSlot != ThrottleLevelerSlot.IDLERevers) &&
