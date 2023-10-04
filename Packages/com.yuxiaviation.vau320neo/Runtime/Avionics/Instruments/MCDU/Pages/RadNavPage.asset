@@ -62,7 +62,7 @@ MonoBehaviour:
       Data: 3|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: VirtualAviationJapan.NavSelector, VirtualAviationJapan.Virtual-CNS
+      Data: VirtualCNS.NavSelector, VirtualAviationJapan.Virtual-CNS
     - Name: 
       Entry: 8
       Data: 
@@ -278,7 +278,7 @@ MonoBehaviour:
       Data: 15|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: VirtualAviationJapan.NavaidDatabase, VirtualAviationJapan.Virtual-CNS
+      Data: VirtualCNS.NavaidDatabase, VirtualAviationJapan.Virtual-CNS
     - Name: 
       Entry: 8
       Data: 
