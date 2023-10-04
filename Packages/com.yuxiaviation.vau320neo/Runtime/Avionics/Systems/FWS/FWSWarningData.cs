@@ -1,7 +1,7 @@
 ﻿using UdonSharp;
 
 namespace A320VAU.FWS {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public partial class FWSWarningData : UdonSharpBehaviour {
         private FWSWarningMessageData[] _fwsWarningMessageData;
         private bool _hasWarningDataVisibleChange;

@@ -3,10 +3,9 @@ using A320VAU.ECAM;
 using Avionics.Systems.Common;
 using UdonSharp;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace A320VAU.FWS {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class FWS : UdonSharpBehaviour {
     #region Aircraft Systems
 
