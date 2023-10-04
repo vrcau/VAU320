@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace A320VAU.FWS {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WarningMessageLine : UdonSharpBehaviour {
         public WarningColor MessageColor;
         public string MessageText;
