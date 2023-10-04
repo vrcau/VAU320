@@ -113,6 +113,8 @@ namespace A320VAU {
         }
 
         public void SFEXT_O_PilotEnter() {
+            gameObject.SetActive(true);
+
             if (Dial_Funcon) Dial_Funcon.SetActive(Cruise);
             Piloting = true;
         }
@@ -122,6 +124,8 @@ namespace A320VAU {
         }
 
         public void SFEXT_O_PilotExit() {
+            gameObject.SetActive(false);
+
             Piloting = false;
             Selected = false;
         }
