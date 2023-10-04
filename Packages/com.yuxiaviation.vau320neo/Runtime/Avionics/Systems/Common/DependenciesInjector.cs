@@ -10,7 +10,7 @@ using UdonSharp;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
-using VirtualAviationJapan;
+using VirtualCNS;
 using YuxiFlightInstruments.BasicFlightData;
 #if !COMPILER_UDONSHARP && UNITY_EDITOR
 using UdonSharpEditor;

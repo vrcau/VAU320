@@ -1,6 +1,6 @@
 ﻿using A320VAU.Common;
 using UdonSharp;
-using VirtualAviationJapan;
+using VirtualCNS;
 
 namespace A320VAU.MCDU {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]

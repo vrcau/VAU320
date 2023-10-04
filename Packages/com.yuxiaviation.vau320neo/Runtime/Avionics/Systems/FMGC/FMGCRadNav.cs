@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 using UdonSharp;
-using VirtualAviationJapan;
+using VirtualCNS;
 
 namespace A320VAU.FMGC {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]

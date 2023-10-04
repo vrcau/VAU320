@@ -5,7 +5,7 @@ using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
 using Varneon.VUdon.ArrayExtensions;
-using VirtualAviationJapan;
+using VirtualCNS;
 
 namespace A320VAU.ND.Pages {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
