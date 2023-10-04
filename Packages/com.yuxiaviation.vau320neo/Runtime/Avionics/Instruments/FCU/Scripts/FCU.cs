@@ -26,9 +26,10 @@ namespace A320VAU.FCU {
 
         private void LateUpdate() {
             if (!UpdateIntervalUtil.CanUpdate(ref _lastUpdate, UPDATE_INTERVAL)) return;
-            
-            autoPilot1Switch.SetActive(_altHoldDFunc.AltHold);
-            autoThrustSwitch.SetActive(_cruiseDFunc.Cruise || _cruiseDFunc.isAutoThrustArm);
+
+            cockpitAnimator.SetBool(AP1_HASH, _altHoldDFunc.AltHold);
+            cockpitAnimator.SetBool(ATHR_HASH, _cruiseDFunc.Cruise || _cruiseDFunc.isAutoThrustArm);
+
             TargetSpeed = Convert.ToInt32(_cruiseDFunc.SetSpeed * 1.9438445f);
         }
 
@@ -246,6 +247,12 @@ namespace A320VAU.FCU {
 
     #region UI Elements
 
+        private readonly int AP1_HASH = Animator.StringToHash("IsAP1On");
+        private readonly int AP2_HASH = Animator.StringToHash("IsAP2On");
+        private readonly int ATHR_HASH = Animator.StringToHash("IsAutoThrustOn");
+
+        public Animator cockpitAnimator;
+
         [Header("UI Elements")]
         public Text SpeedText;
 
@@ -271,11 +278,6 @@ namespace A320VAU.FCU {
         public GameObject VerticalSpeedManagedIndicate;
         public GameObject VerticalSpeedModeIndicate;
         public GameObject FPAModeIndicate;
-
-        public GameObject autoPilot1Switch;
-        public GameObject autoPilot2Switch;
-
-        public GameObject autoThrustSwitch;
 
     #endregion
     }

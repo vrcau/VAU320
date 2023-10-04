@@ -17,10 +17,10 @@ namespace A320VAU.FWS {
 
         #region Takeoff Memo
 
-            SetWarnVisible(ref TAKEOFF_MEMO.isVisable,
+            SetWarnVisible(ref TAKEOFF_MEMO.isVisible,
                 FWS.equipmentData.isAircraftGrounded && !FWS.equipmentData.isTakeoffThrustSet &&
                 (isEngine1Running || isEngine2Running), true);
-            if (TAKEOFF_MEMO.isVisable) {
+            if (TAKEOFF_MEMO.isVisible) {
                 // AUTO BRK MAX
                 TAKEOFF_MEMO.MessageLine[0].isMessageVisible = false;
                 TAKEOFF_MEMO.MessageLine[1].isMessageVisible = false;
@@ -76,11 +76,11 @@ namespace A320VAU.FWS {
 
         #region Landing Memo
 
-            SetWarnVisible(ref LANDING_MEMO.isVisable,
+            SetWarnVisible(ref LANDING_MEMO.isVisible,
                 !FWS.equipmentData.isAircraftGrounded & (FWS.adiru.adr.instrumentAirSpeed > 80f) & (isEngine1Running | isEngine2Running) &
                 (FWS.radioAltimeter.radioAltitude < 2000f));
 
-            if (LANDING_MEMO.isVisable) {
+            if (LANDING_MEMO.isVisible) {
                 // GEAR DN
                 if (FWS.equipmentData.isGearsTargetDown) {
                     SetWarnVisible(ref LANDING_MEMO.MessageLine[0].isMessageVisible, false);

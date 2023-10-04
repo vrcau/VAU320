@@ -1,4 +1,5 @@
-﻿using A320VAU.Common;
+﻿using System;
+using A320VAU.Common;
 using A320VAU.ND.Pages;
 using A320VAU.Utils;
 using JetBrains.Annotations;
@@ -101,12 +102,9 @@ namespace A320VAU.ND {
     #region EFIS Indicator Elements
 
         [Header("EFIS Status Display")]
-        public GameObject cstr;
+        public Animator cockpitAnimator;
 
-        public GameObject waypoint;
-        public GameObject vordme;
-        public GameObject ndb;
-        public GameObject airport;
+        private readonly int EFIS_STATUS_HASH = Animator.StringToHash("EFISStatus");
 
         [Header("Pages")]
         public GameObject ARCPage;
@@ -273,24 +271,30 @@ namespace A320VAU.ND {
             foreach (var mapDisplay in _mapDisplays)
                 mapDisplay.SetVisibilityType(visibilityType);
 
-            ResetEFIS();
+            // To make Udon Happy
+            var animationValue = 0f;
             switch (visibilityType) {
                 case EFISVisibilityType.CSTR:
-                    cstr.SetActive(true);
+                    animationValue = 0f;
                     break;
                 case EFISVisibilityType.WPT:
-                    waypoint.SetActive(true);
+                    animationValue = 1f;
                     break;
                 case EFISVisibilityType.VORDME:
-                    vordme.SetActive(true);
+                    animationValue = 2f;
                     break;
                 case EFISVisibilityType.NDB:
-                    ndb.SetActive(true);
+                    animationValue = 3f;
                     break;
                 case EFISVisibilityType.APPT:
-                    airport.SetActive(true);
+                    animationValue = 4f;
+                    break;
+                case EFISVisibilityType.NONE:
+                    animationValue = 5f;
                     break;
             }
+
+            cockpitAnimator.SetFloat(EFIS_STATUS_HASH, animationValue / 5f);
         }
 
         // For TouchSwitch Event
@@ -322,14 +326,6 @@ namespace A320VAU.ND {
         [PublicAPI]
         private void ToggleVisibilityType(EFISVisibilityType type) {
             SetVisibilityType(_efisVisibilityType == type ? EFISVisibilityType.NONE : type);
-        }
-
-        private void ResetEFIS() {
-            cstr.SetActive(false);
-            waypoint.SetActive(false);
-            vordme.SetActive(false);
-            ndb.SetActive(false);
-            airport.SetActive(false);
         }
 
     #endregion

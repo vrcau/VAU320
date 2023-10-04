@@ -260,7 +260,7 @@ namespace A320VAU.ECAM {
             var hasWarning = false;
             var hasMemoDisplayed = false;
             foreach (var memo in _fws.fwsWarningMessageDatas)
-                if (memo.isVisable)
+                if (memo.isVisible)
                     switch (memo.Type) {
                         // Like LDG INHIBIT, T.O INHIBIT, LAND ASAP
                         case WarningType.SpecialLine:
