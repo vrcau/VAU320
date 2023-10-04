@@ -504,7 +504,7 @@ namespace A320VAU.SFEXT {
             if (currentThrottleLevelerSlot != _lastThrottleLevelerSlot && airVehicle.IsOwner) {
                 Networking.LocalPlayer.PlayHapticEventInHand(
                     airVehicle.SwitchHandsJoyThrottle ? VRC_Pickup.PickupHand.Left : VRC_Pickup.PickupHand.Right, 0.2f,
-                    0.5f, 0.1f);
+                    1f, 0.1f);
 
                 if ((_lastThrottleLevelerSlot != ThrottleLevelerSlot.Revers ||
                      _lastThrottleLevelerSlot != ThrottleLevelerSlot.IDLERevers) &&
