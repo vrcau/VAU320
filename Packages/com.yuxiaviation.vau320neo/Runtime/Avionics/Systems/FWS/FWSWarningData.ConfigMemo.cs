@@ -22,10 +22,17 @@ namespace A320VAU.FWS {
                 (isEngine1Running || isEngine2Running), true);
             if (TAKEOFF_MEMO.isVisible) {
                 // AUTO BRK MAX
-                TAKEOFF_MEMO.MessageLine[0].isMessageVisible = false;
-                TAKEOFF_MEMO.MessageLine[1].isMessageVisible = false;
+                if (FWS.autoBrake.currentAutoBrakeMode == AutoBrakeMode.Max) {
+                    SetWarnVisible(ref TAKEOFF_MEMO.MessageLine[0].isMessageVisible, false);
+                    SetWarnVisible(ref TAKEOFF_MEMO.MessageLine[1].isMessageVisible, false);
+                    SetWarnVisible(ref TAKEOFF_MEMO.MessageLine[2].isMessageVisible, true);
+                }
+                else {
+                    SetWarnVisible(ref TAKEOFF_MEMO.MessageLine[0].isMessageVisible, true);
+                    SetWarnVisible(ref TAKEOFF_MEMO.MessageLine[1].isMessageVisible, true);
+                    SetWarnVisible(ref TAKEOFF_MEMO.MessageLine[2].isMessageVisible, false);
+                }
 
-                TAKEOFF_MEMO.MessageLine[2].isMessageVisible = true;
                 // SIGN ON
                 TAKEOFF_MEMO.MessageLine[3].isMessageVisible = false;
                 TAKEOFF_MEMO.MessageLine[4].isMessageVisible = false;

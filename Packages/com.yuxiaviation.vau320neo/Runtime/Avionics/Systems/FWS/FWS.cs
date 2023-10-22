@@ -12,6 +12,7 @@ namespace A320VAU.FWS {
         [HideInInspector] public ADIRU.ADIRU adiru;
         [HideInInspector] public AircraftSystemData equipmentData;
         [HideInInspector] public RadioAltimeter.RadioAltimeter radioAltimeter;
+        [HideInInspector] public AutoBrake autoBrake;
 
     #endregion
 
@@ -52,6 +53,7 @@ namespace A320VAU.FWS {
             var injector = DependenciesInjector.GetInstance(this);
             adiru = injector.adiru;
             radioAltimeter = injector.radioAltimeter;
+            autoBrake = injector.autoBrake;
 
             fwsWarningMessageDatas = GetComponentsInChildren<FWSWarningMessageData>();
             _fwsWarningData = GetComponentInChildren<FWSWarningData>();
