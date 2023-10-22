@@ -40,6 +40,7 @@ namespace A320VAU.Common {
         public SFEXT_a320_AdvancedGear rightLadingGear;
         public SFEXT_a320_AdvancedGear frontLadingGear;
         public DFUNC_a320_Brake brake;
+        public AutoBrake autoBrake;
 
         public DFUNC_a320_LandingLight landingLight;
         public DFUNC_Canopy canopy;
@@ -100,6 +101,7 @@ namespace A320VAU.Common {
             canopy = GetComponentInChildren<DFUNC_Canopy>(true);
             autoThrust = GetComponentInChildren<DFUNC_a320_AutoThrust>(true);
             altHold = GetComponentInChildren<DFUNC_AltHold>(true);
+            autoBrake = GetComponentInChildren<AutoBrake>(true);
 
             gpws = GetComponentInChildren<GPWS>(true);
             radioAltimeter = GetComponentInChildren<RadioAltimeter.RadioAltimeter>(true);

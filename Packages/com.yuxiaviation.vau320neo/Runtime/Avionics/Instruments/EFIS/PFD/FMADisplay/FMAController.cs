@@ -1,4 +1,5 @@
-﻿using A320VAU.Common;
+﻿using System;
+using A320VAU.Common;
 using A320VAU.Utils;
 using Avionics.Systems.Common;
 using SaccFlightAndVehicles;
@@ -12,6 +13,7 @@ namespace A320VAU.PFD {
         private AircraftSystemData _aircraftSystemData;
         private DFUNC_AltHold _altHoldDFunc;
         private DFUNC_a320_AutoThrust _cruiseDFunc;
+        private AutoBrake _autoBrake;
         private DependenciesInjector _injector;
         
         private readonly float UPDATE_INTERVAL = UpdateIntervalUtil.GetUpdateIntervalFromFPS(30);
@@ -23,6 +25,7 @@ namespace A320VAU.PFD {
             _aircraftSystemData = _injector.equipmentData;
             _cruiseDFunc = _injector.autoThrust;
             _altHoldDFunc = _injector.altHold;
+            _autoBrake = _injector.autoBrake;
 
             AutoThrustModeText.text = "";
             ManThrText.text = "";
@@ -90,32 +93,56 @@ namespace A320VAU.PFD {
                 IsAutoThrustActive = false;
                 AutoThrustMode = "";
             }
+
+            switch (_autoBrake.currentAutoBrakeMode) {
+                case A320VAU.AutoBrakeMode.Low:
+                    IsAutoBrakeArm = true;
+                    AutoBrakeMode = AutoBrakeMode.LOW;
+                    break;
+                case A320VAU.AutoBrakeMode.Med:
+                    IsAutoBrakeArm = true;
+                    AutoBrakeMode = AutoBrakeMode.MED;
+                    break;
+                case A320VAU.AutoBrakeMode.Max:
+                    IsAutoBrakeArm = true;
+                    AutoBrakeMode = AutoBrakeMode.MAX;
+                    break;
+                case A320VAU.AutoBrakeMode.None:
+                    IsAutoBrakeArm = false;
+                    AutoBrakeMode = AutoBrakeMode.None;
+                    break;
+                default:
+                    IsAutoBrakeArm = false;
+                    AutoBrakeMode = AutoBrakeMode.None;
+                    break;
+            }
+
+            IsAutoBrakeActive = _autoBrake.isAutoBrakeActive;
+
+            if (_autoBrake.isAutoBrakeActive) {
+
+            }
         }
 
         private void UpdateAutoThrustDisplay() {
             ManThrRoot.SetActive((_isAutoThrustArm || !_isAutoThrustActive) && ManThrType != ManThrType.None);
             AutoBrkArmModeGameObject.SetActive(!_isAutoBrakeActive);
 
-            AutoThrustModeText.text = AutoThrustMode;
-            if (IsAutoBrakeArm) {
-                var autoBrakeString = "";
-                switch (AutoBrakeMode) {
-                    case AutoBrakeMode.MAX:
-                        autoBrakeString = "MAX";
-                        break;
-                    case AutoBrakeMode.MED:
-                        autoBrakeString = "MED";
-                        break;
-                    case AutoBrakeMode.LOW:
-                        autoBrakeString = "LOW";
-                        break;
-                }
+            var autoBrakeString = "";
+            switch (AutoBrakeMode) {
+                case AutoBrakeMode.MAX:
+                    autoBrakeString = "MAX";
+                    break;
+                case AutoBrakeMode.MED:
+                    autoBrakeString = "MED";
+                    break;
+                case AutoBrakeMode.LOW:
+                    autoBrakeString = "LOW";
+                    break;
+            }
 
-                AutoBrkArmModeText.text = $"BRK {autoBrakeString}";
-            }
-            else {
-                AutoBrkArmModeText.text = "";
-            }
+            AutoThrustModeText.text = IsAutoBrakeActive ? $"BRK {autoBrakeString}" : AutoThrustMode;
+            AutoBrkArmModeText.text = IsAutoBrakeArm ? $"BRK {autoBrakeString}" : "";
 
             switch (ManThrType) {
                 case ManThrType.TOGA:

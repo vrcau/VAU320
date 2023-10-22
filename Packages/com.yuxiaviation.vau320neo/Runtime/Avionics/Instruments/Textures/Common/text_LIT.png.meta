@@ -17,6 +17,9 @@ TextureImporter:
   - first:
       213: 7205443770961099946
     second: MASTER_CAUT
+  - first:
+      213: 3181307320009328807
+    second: DECEL
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -185,7 +188,7 @@ TextureImporter:
         width: 111
         height: 84
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -206,7 +209,7 @@ TextureImporter:
         width: 116
         height: 90
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -214,6 +217,27 @@ TextureImporter:
       bones: []
       spriteID: aacff210fe0eef360800000000000000
       internalID: 7205443770961099946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DECEL
+      rect:
+        serializedVersion: 2
+        x: 3432
+        y: 2980
+        width: 106
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a8818af626462c20800000000000000
+      internalID: 3181307320009328807
       vertices: []
       indices: 
       edges: []
