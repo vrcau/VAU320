@@ -196,9 +196,9 @@ namespace Avionics.Systems.Common {
                                              Mathf.Approximately(RightLandingGear.position, 0f);
 
         [PublicAPI] public bool isGearsInTransition =>
-            Mathf.Approximately(LeftLandingGear.position, LeftLandingGear.targetPosition) &&
-            Mathf.Approximately(CenterLandingGear.position, CenterLandingGear.targetPosition) &&
-            Mathf.Approximately(RightLandingGear.position, RightLandingGear.targetPosition);
+            !Mathf.Approximately(LeftLandingGear.position, LeftLandingGear.targetPosition) ||
+            !Mathf.Approximately(CenterLandingGear.position, CenterLandingGear.targetPosition) ||
+            !Mathf.Approximately(RightLandingGear.position, RightLandingGear.targetPosition);
 
         [PublicAPI] public bool isGearsDownLock => isGearsTargetDown && !isGearsInTransition;
 
