@@ -94,8 +94,6 @@ namespace A320VAU.Avionics {
             advancedFlaps = injector.flaps;
             _adiru = injector.adiru;
             _radioAltimeter = injector.radioAltimeter;
-
-            audioSource = GetComponent<AudioSource>();
         }
 
         public override void PostLateUpdate() {
