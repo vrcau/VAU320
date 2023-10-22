@@ -7,8 +7,12 @@ using VRC.Udon.Common.Interfaces;
 
 namespace A320VAU.Brake {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
-    public class DFUNC_a320_Brake : UdonSharpBehaviour
-        /*320专用的刹车，增加了地面摩擦阻力,停留刹车*/ {
+    public class DFUNC_a320_Brake : UdonSharpBehaviour {
+        /*320专用的刹车，增加了地面摩擦阻力,停留刹车*/
+
+        public float autoBrakeInput;
+        public bool isManuelBrakeInUse { get; private set; }
+
         public UdonSharpBehaviour SAVControl;
 
         [Tooltip("Looping sound to play while brake is active")]
@@ -134,6 +138,11 @@ namespace A320VAU.Brake {
                     }
 
                     BrakeInput = Mathf.Max(VRBrakeInput, KeyboardBrakeInput);
+                    isManuelBrakeInUse = BrakeInput > 0;
+
+                    if (BrakeInput < autoBrakeInput) {
+                        BrakeInput = autoBrakeInput;
+                    }
 
                     if (Taxiing) {
                         //ground brake checks if vehicle is on top of a rigidbody, and if it is, brakes towards its speed rather than zero
