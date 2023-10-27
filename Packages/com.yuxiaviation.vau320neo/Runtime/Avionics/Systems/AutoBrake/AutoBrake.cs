@@ -153,7 +153,7 @@ namespace A320VAU {
                 else {
                     var targetDecelerationRate = GetTargetDecelerationRate();
 
-                    var error = targetDecelerationRate - decelerationRate;
+                    var error = decelerationRate - targetDecelerationRate;
                     _integral += error * Time.deltaTime;
                     var derivative = (error - _previousError) / Time.deltaTime;
                     brakeInput = Kp * error + Ki * _integral + Kd * derivative;
@@ -243,7 +243,7 @@ namespace A320VAU {
             var velocity = _saccAirVehicle.CurrentVel;
 
             var acceleration = (velocity - _lastVelocity) / Time.fixedDeltaTime;
-            var temp = Vector3.Project(acceleration, Vector3.forward);
+            var temp = _saccAirVehicle.transform.rotation * acceleration;
 
             _lastVelocity = velocity;
 
@@ -264,10 +264,10 @@ namespace A320VAU {
         }
 
         private bool IsReachDecelerationRateTarget(float decelerationRate) {
-            var targetDecelerationRate = GetTargetDecelerationRate() * 0.8f;
-
             if (currentAutoBrakeMode == AutoBrakeMode.Max) return true;
-            return decelerationRate > targetDecelerationRate;
+
+            var targetDecelerationRate = GetTargetDecelerationRate() * 0.8f;
+            return decelerationRate < targetDecelerationRate;
         }
 
         public void Reset() {
