@@ -171,7 +171,7 @@ namespace A320VAU {
         }
 
         private void UpdateAutoBrakeActive() {
-            if (brake.isManuelBrakeInUse) {
+            if (isAutoBrakeActive && brake.isManuelBrakeInUse) {
                 isAutoBrakeActive = false;
                 currentAutoBrakeMode = AutoBrakeMode.None;
                 return;
