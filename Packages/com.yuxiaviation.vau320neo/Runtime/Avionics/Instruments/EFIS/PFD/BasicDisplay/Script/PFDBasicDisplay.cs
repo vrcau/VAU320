@@ -92,6 +92,7 @@ namespace A320VAU.PFD {
 
         public Text VSText;
         public Text RadioHeightText;
+        public Text MeterAltitudeText;
         public Text MachNumberText;
 
         public GameObject TargetSpeedTop;
@@ -346,6 +347,9 @@ namespace A320VAU.PFD {
             //默认都会写Altitude
             _altitude = _adiru.adr.pressureAltitude;
             IndicatorAnimator.SetFloat(ALT_HASH, _altitude / MAXALT);
+
+            var meterAltitude = (int)(_altitude / 3.28084f);
+            MeterAltitudeText.text = $"{meterAltitude - meterAltitude % 10} <color=#FFFFFF>M</color>";
 
             if (!altbybit) return;
             IndicatorAnimator.SetFloat(ALT10_HASH, _altitude % 100 / 100f);
