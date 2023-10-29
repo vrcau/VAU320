@@ -20,6 +20,9 @@ TextureImporter:
   - first:
       213: 3181307320009328807
     second: DECEL
+  - first:
+      213: 217057725860628257
+    second: APU_AVAIL
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -230,7 +233,7 @@ TextureImporter:
         width: 106
         height: 36
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -238,6 +241,27 @@ TextureImporter:
       bones: []
       spriteID: 7a8818af626462c20800000000000000
       internalID: 3181307320009328807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: APU_AVAIL
+      rect:
+        serializedVersion: 2
+        x: 3442
+        y: 3952
+        width: 100
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1274da50ad4230300800000000000000
+      internalID: 217057725860628257
       vertices: []
       indices: 
       edges: []
