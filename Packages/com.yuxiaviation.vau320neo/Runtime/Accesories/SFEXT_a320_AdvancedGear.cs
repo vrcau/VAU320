@@ -97,13 +97,14 @@ namespace A320VAU.SFEXT {
         private bool Bursted {
             set {
                 if (burstEffect) {
-                    if (value && !burstEffectInstance) {
-                        burstEffectInstance = VRCInstantiate(burstEffect);
-                        burstEffectInstance.transform.SetParent(wheelCollider.transform, false);
-                    }
-                    else if (!value && burstEffectInstance) {
-                        Destroy(burstEffectInstance);
-                    }
+                    burstEffect.SetActive(value);
+                    //if (value && !burstEffectInstance) {
+                    //    burstEffectInstance = Instantiate(burstEffect);
+                    //    burstEffectInstance.transform.SetParent(wheelCollider.transform, false);
+                    //}
+                    //else if (!value && burstEffectInstance) {
+                    //    Destroy(burstEffectInstance);
+                    //}
                 }
 
                 if (value && !_bursted && transitionSound) transitionSound.PlayOneShot(burstSound);
