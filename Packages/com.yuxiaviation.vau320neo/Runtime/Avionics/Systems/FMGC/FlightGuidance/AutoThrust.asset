@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: AutoThrust
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 73a936f09a4f3234ab21cb4bc58f8a51,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 1c928ce2132be5b4183ebd25b88c9cb8,
     type: 2}
   udonAssembly: 
   assemblyError: 

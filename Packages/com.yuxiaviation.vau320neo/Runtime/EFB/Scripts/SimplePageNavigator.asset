@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: SimplePageNavigator
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 8990d7fbc417a47418580959291dae39,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: d40a949176775894fb1e29e783b13324,
     type: 2}
   udonAssembly: 
   assemblyError: 

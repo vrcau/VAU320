@@ -42,7 +42,7 @@ TextureImporter:
       213: 2950028048870293489
     second: SPEED_MAX_FLAP_DOWN
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -59,9 +59,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -93,10 +96,15 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -108,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -120,6 +129,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -132,6 +142,20 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -321,7 +345,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: acdf0e64eb39c7c50800000000000000
-      internalID: 6664363994043710922
+      internalID: -8977798341525563396
       vertices: []
       indices: 
       edges: []
@@ -342,7 +366,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 1c4af93359bfdb930800000000000000
-      internalID: 4160758248995005633
+      internalID: -3412586128972105032
       vertices: []
       indices: 
       edges: []
@@ -363,7 +387,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 0a03ac13097ae6a50800000000000000
-      internalID: 6516329948604149920
+      internalID: -2378176188150589870
       vertices: []
       indices: 
       edges: []
@@ -384,7 +408,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 9b7325e214f828e60800000000000000
-      internalID: 7963084601257244601
+      internalID: 5488128799473371640
       vertices: []
       indices: 
       edges: []
@@ -405,7 +429,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 0b6267f3577cabd90800000000000000
-      internalID: -7081128157696874832
+      internalID: 7262651376745896844
       vertices: []
       indices: 
       edges: []
@@ -426,7 +450,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 72dca274bcbeb0950800000000000000
-      internalID: 6416481352424279335
+      internalID: 4214176804918390644
       vertices: []
       indices: 
       edges: []
@@ -546,9 +570,28 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      HDG_arrow: 3764173056682815603
+      HDG_bar: 8386957279264588627
+      IAS_arrow: 744658782366660234
+      IAS_bar: -2950472004124889981
+      MANGED_SELECT: -3412586128972105032
+      PFD_ILS: -8072622731538276985
+      PFD_ILS_Pointer: -4053935606227167044
+      SELECT: -8977798341525563396
+      SPD_FLAP_SPEED: 7262651376745896844
+      SPD_S_SPEED: 5488128799473371640
+      SPD_V1: -2378176188150589870
+      SPEED_ALPHA_MIN: -7406065464356745632
+      SPEED_ALPHA_PROT: -8190416847078239227
+      SPEED_GREEN_DOT: 4214176804918390644
+      SPEED_MAX_FLAP_DOWN: 2950028048870293489
+      SPEED_VLS: -3257972142984786412
+      SPEED_VMAX: 4671231037042643878
+      SPEED_VR: -4344615827158156795
+      bank_limit: -3551457262869626832
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

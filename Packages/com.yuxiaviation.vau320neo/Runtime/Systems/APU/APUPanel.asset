@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: APUPanel
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 9a19ec3f2de505346b2930bffdb4bb15,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: ebdf888ddef72084e9d23323387f06a1,
     type: 2}
   udonAssembly: 
   assemblyError: 
