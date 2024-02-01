@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: AutoBrake
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 11f973ae6a2ac574da4f723182b4f7f7,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 03ba201d061d30049bfc508eff3ccdd1,
     type: 2}
   udonAssembly: 
   assemblyError: 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: ADIRU
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 8827288c85af49e4ba620fa5e4aa134c,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: f9211922fb818964a973653cf0730665,
     type: 2}
   udonAssembly: 
   assemblyError: 

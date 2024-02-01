@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: VirtualFlightBagMain
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: aa825fdbb59811e4b982805f5b77094e,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: eade49ae3ac382e42bf4bcf474c9ae8c,
     type: 2}
   udonAssembly: 
   assemblyError: 
