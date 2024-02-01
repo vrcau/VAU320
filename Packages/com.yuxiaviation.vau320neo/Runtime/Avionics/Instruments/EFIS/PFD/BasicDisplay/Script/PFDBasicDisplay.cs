@@ -332,7 +332,7 @@ namespace A320VAU.PFD {
         private void UpdateMachNumber() {
             if (_adiru.adr.mach > 0.5f) {
                 MachNumberText.gameObject.SetActive(true);
-                MachNumberText.text = "." + (_adiru.adr.mach * 100).ToString("f0");
+                MachNumberText.text = "." + (_adiru.adr.mach*100f).ToString("f0");
             }
             else {
                 MachNumberText.gameObject.SetActive(false);

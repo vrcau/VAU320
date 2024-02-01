@@ -7,6 +7,7 @@ using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon.Common.Interfaces;
+using A320VAU.AtmosphereModel;
 using Random = UnityEngine.Random;
 
 //note:this script is original from https://github.com/esnya/EsnyaSFAddons
@@ -17,7 +18,8 @@ namespace A320VAU.SFEXT {
     [DefaultExecutionOrder(1000)] // After SoundController
     public class SFEXT_a320_AdvancedEngine : UdonSharpBehaviour {
         [Header("Misc")]
-        public float externalTempurature = 15.0f;
+        public EarthAtmosphereModel gasProperty;
+        public float externalTempurature => gasProperty.TemperatureStatic;
 
         public float randomRange = 0.2f;
         public float wheelWakeUpTorque = 1.0e-36f;
@@ -61,7 +63,8 @@ namespace A320VAU.SFEXT {
             JetBrust_Start();
 
             gameObject.SetActive(false);
-
+            if (forcePosition == null)
+                forcePosition = gameObject;
             initialized = true;
         }
 
@@ -199,7 +202,8 @@ namespace A320VAU.SFEXT {
 
         [Header("Power")]
         [Tooltip("[N]")] public float maxThrust = 130408.51f;
-
+        [Tooltip("adjust engine thrust force postion")]
+        public GameObject forcePosition;
         public float thrustCurve = 2.0f;
 
         [Header("N1")]
@@ -226,7 +230,7 @@ namespace A320VAU.SFEXT {
         public float n2StartupResponse = 0.005f;
 
         [Header("EGT")]
-        [Tooltip("未点火时，N依靠压气达到的最大EGT[℃]")] public float compressorEGT = 55;
+        [Tooltip("未点火时，依靠压气机出口的最大EGT[℃]")] public float compressorEGT = 55;
 
         [Tooltip("[℃]")] public float idleEGT = 725;
         [Tooltip("[℃]")] public float continuousEGT = 1013;
@@ -363,7 +367,7 @@ namespace A320VAU.SFEXT {
 
         private void Power_OwnerFixedUpdate() {
             var thrust = normalizedThrust * maxThrust * Mathf.Lerp(1, -reverserRatio, reverserPosition * 2.0f - 1.0f);
-            vehicleRigidbody.AddForceAtPosition(transform.forward * thrust, transform.position, ForceMode.Force);
+            vehicleRigidbody.AddForceAtPosition(transform.forward * thrust, forcePosition.transform.position, ForceMode.Force);
         }
 
         private float Power_GetThrottleInput() {
@@ -436,7 +440,7 @@ namespace A320VAU.SFEXT {
                         startUpFFN2[2], startUpFFN2[3])
                     : 0
                 : Convert.ToInt32(fuel) * Mathf.Lerp(0.95f * startUpFF[3], takeOffFF, throttleInput);
-            //气动时的峰值油量400，慢车380
+            //启动时的峰值油量400，慢车380
             ff = Mathf.Lerp(ff, ffTarget, starter ? 1 : deltaTime * n1Response);
 
             var ectTarget = Lerp4(externalTempurature, idleECT, continuousECT, egt, egt, externalTempurature, idleEGT,
