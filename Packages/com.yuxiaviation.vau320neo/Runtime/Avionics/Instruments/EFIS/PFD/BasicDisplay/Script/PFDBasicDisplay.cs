@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using VRC.SDKBase;
 
 namespace A320VAU.PFD {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class PFDBasicDisplay : UdonSharpBehaviour {
     #region Aircraft Systems
 
