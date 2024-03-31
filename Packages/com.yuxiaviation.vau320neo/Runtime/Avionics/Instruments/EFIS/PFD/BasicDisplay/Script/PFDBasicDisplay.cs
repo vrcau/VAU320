@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using VRC.SDKBase;
 
 namespace A320VAU.PFD {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]//PFD需要网络同步！（LS按键，FD按键之类）
     public class PFDBasicDisplay : UdonSharpBehaviour {
     #region Aircraft Systems
 

@@ -295,7 +295,8 @@ namespace A320VAU.SFEXT {
 
         private float GetTargetMaxSteerAngle(float groundSpeed) {
             groundSpeed = groundSpeed * 1.94401f < 0 ? 0 : groundSpeed;
-            var SteerAngle = -1.23333f * groundSpeed + 98.66667f; //20节-74度 80节-0度
+            //var SteerAngle = -1.23333f * groundSpeed + 98.66667f; //20节-74度 80节-0度
+            var SteerAngle = -0.0027f * Mathf.Pow(groundSpeed, 2) - 0.6726f * groundSpeed + 81.269f;
             maxSteeringCurrent = Mathf.Clamp(SteerAngle, minSteerAngle, maxSteerAngle);
             return maxSteeringCurrent;
         }
