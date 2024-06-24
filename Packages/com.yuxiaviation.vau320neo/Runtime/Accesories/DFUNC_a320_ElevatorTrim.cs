@@ -25,7 +25,8 @@ namespace A320VAU.DFUNC {
         public float TrimError = 0;
         public float TrimErrorIntergrate = 0;
         public float targetPitch = 0;
-        
+        public float kp = 0.04f; //载荷系数控制率 0.6 0.015 俯仰角控制率 0.02 0.001
+        public float ki = 0.0015f;
 
         [Header("animation")]
         public string animatorParameterName = "elevtrim";
@@ -62,9 +63,10 @@ namespace A320VAU.DFUNC {
             //2022-12-03添加自动配平功能
 
             //检查自动配平是否需要介入，调定目标俯仰
-            if (Mathf.Abs(SAVControl.RotationInputs.x) < 0.1f) 
+            if (Mathf.Abs(SAVControl.RotationInputs.x) < 0.17f) 
             {
-                if (Mathf.Abs(rotationInputLastFrame) > 0.1f && Mathf.Abs(BasicFlightData.verticalG - 1) < 1f) {
+                if (Mathf.Abs(rotationInputLastFrame) > 0.17f && Mathf.Abs(BasicFlightData.verticalG - 1) < 0.7f) {
+
                     targetPitch = BasicFlightData.pitch;
                     TrimError = 0;
                     TrimErrorIntergrate = 0;
@@ -84,13 +86,12 @@ namespace A320VAU.DFUNC {
                 {
                     TrimError = (targetPitch - BasicFlightData.pitch);
 
-                //使用载荷控制律
-                var kp = 1.3f;
-                var ki = 0.015f;
-                //TrimError = (targetPitch - BasicFlightData.pitch);
-                TrimError = (1f - BasicFlightData.verticalG);
-                TrimErrorIntergrate += TrimError;
-                trim = Mathf.Lerp(trim, Mathf.Clamp(kp * TrimError + ki * TrimErrorIntergrate, -1, 1), 0.1f);
+                TrimError = (targetPitch - BasicFlightData.pitch);
+                //TrimError = (1f - BasicFlightData.verticalG); //载荷因数控制率对于键盘过于不友好（松开按键时载荷因数一般都还没稳定呢）
+                TrimErrorIntergrate = Mathf.Clamp(TrimError+ TrimErrorIntergrate, -10,10);//处理积分饱和
+                trim = Mathf.MoveTowards(trim, Mathf.Clamp(kp * TrimError + ki * TrimErrorIntergrate, -1, 1), 0.1f);
+                float GLimitStrength = Mathf.Clamp(-((float)(SAVControl.GetProgramVariable("VertGs")) / 3f) + 1, 0, 1);
+                trim *= GLimitStrength;
 
                 ////使用俯仰角控制率
                 //var kp = 0.02f;
@@ -104,18 +105,17 @@ namespace A320VAU.DFUNC {
                 //地面模式
                 else if (TrimActive && autoTrim > 0 && SAVControl.Taxiing)
                 {
-                    trim = Mathf.Lerp(trim, 0.4f, 0.002f); ;//先把配平随便放在一个可以起飞的位置(缓慢趋向这一位置，避免接地瞬间触发)
+                    trim = Mathf.MoveTowards(trim, 0.4f, 0.002f); ;//先把配平随便放在一个可以起飞的位置(缓慢趋向这一位置，避免接地瞬间触发)
                 }
                 //拉平模式(无视杆状态)
                 else if ( autoTrim > 0 && radioAltimeter.radioAltitude < 50 && !SAVControl.Taxiing && BasicFlightData.verticalSpeed<0)
                 {
                     //俯仰角控制率
-                    var kp = 0.02f;
-                    var ki = 0.0001f;
+                    
                     targetPitch = -2f;
                     TrimError = (targetPitch - BasicFlightData.pitch);
                     TrimErrorIntergrate += TrimError;
-                    trim = Mathf.Lerp(trim, Mathf.Clamp(kp * TrimError + ki * TrimErrorIntergrate, -1, 1), 0.1f);
+                    trim = Mathf.MoveTowards(trim, Mathf.Clamp(kp * TrimError + ki * TrimErrorIntergrate, -1, 1), 0.1f);
                 }
 
             else {//手动配平

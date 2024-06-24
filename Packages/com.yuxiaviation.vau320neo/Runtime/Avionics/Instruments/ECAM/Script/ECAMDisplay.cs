@@ -133,10 +133,11 @@ namespace A320VAU.ECAM {
         private readonly int ENG1N1CMD_HASH = Animator.StringToHash("ENG1N1Cmd");
         private readonly int ENG2N1CMD_HASH = Animator.StringToHash("ENG2N1Cmd");
         private readonly int FLAP_HASH = Animator.StringToHash("flapPos");
+        private readonly int SLAT_HASH = Animator.StringToHash("slatPos");
 
-    #endregion
+        #endregion
 
-    #region Pages
+        #region Pages
 
         public GameObject enginePage;
         public GameObject statusPage;
@@ -173,20 +174,24 @@ namespace A320VAU.ECAM {
             {
                 flapText.color = _airbusAvionicsTheme.BlueColor;
                 ECAMAnimator.SetFloat(FLAP_HASH, _aircraftSystemData.flapAngle);
+                ECAMAnimator.SetFloat(SLAT_HASH, _aircraftSystemData.slatAngle);
                 switch (_aircraftSystemData.flapTargetIndex) {
                     case 0:
                         flapText.text = "0";
                         break;
                     case 1:
-                        flapText.text = _adiru.adr.instrumentAirSpeed < 210f ? "1+F" : "1";
+                        flapText.text = "1";
                         break;
                     case 2:
-                        flapText.text = "2";
+                        flapText.text = "1+F";
                         break;
                     case 3:
-                        flapText.text = "3";
+                        flapText.text = "2";
                         break;
                     case 4:
+                        flapText.text = "3";
+                        break;
+                    case 5:
                         flapText.text = "FULL";
                         break;
                 }

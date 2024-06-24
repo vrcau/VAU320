@@ -1,4 +1,5 @@
 ﻿using A320VAU.Common;
+using A320VAU.DFUNC;
 using Avionics.Systems.Common;
 using EsnyaSFAddons.DFUNC;
 using UdonSharp;
@@ -74,7 +75,7 @@ namespace A320VAU.Avionics {
 
         private ADIRU.ADIRU _adiru;
         private RadioAltimeter.RadioAltimeter _radioAltimeter;
-        private DFUNC_AdvancedFlaps advancedFlaps;
+        private DFUNC_a320_FlapController advancedFlaps;
 
         private AircraftSystemData _aircraftSystemData;
         private bool initialClimbing;
@@ -107,7 +108,7 @@ namespace A320VAU.Avionics {
 
             var airspeed = _adiru.adr.instrumentAirSpeed;
 
-            var advancedFlapsDown = advancedFlaps && advancedFlaps.targetAngle > 0;
+            var advancedFlapsDown = advancedFlaps && advancedFlaps.leverIndex > 0;
             var anyFlapsDown = !advancedFlaps || advancedFlapsDown;
             var gearDown = _aircraftSystemData.isGearsDownLock;
 

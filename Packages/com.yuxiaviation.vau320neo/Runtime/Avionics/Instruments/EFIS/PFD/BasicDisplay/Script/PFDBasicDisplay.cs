@@ -1,5 +1,6 @@
 ﻿using A320VAU.Common;
 using A320VAU.Utils;
+using A320VAU.DFUNC;
 using Avionics.Systems.Common;
 using EsnyaSFAddons.DFUNC;
 using JetBrains.Annotations;
@@ -19,7 +20,7 @@ namespace A320VAU.PFD {
         private RadioAltimeter.RadioAltimeter _radioAltimeter;
         private AircraftSystemData _aircraftSystemData;
         private FCU.FCU _fcu;
-        private DFUNC_AdvancedFlaps _flaps;
+        private DFUNC_a320_FlapController _flaps;
         private SystemEventBus _eventBus;
 
     #endregion
@@ -40,6 +41,7 @@ namespace A320VAU.PFD {
         private float PitchAngle;
         private float RadioHeight;
 
+        private float instrumentAirSpeedLastFrame = 0;
         [PublicAPI] public bool isFlightDirectionOn { get; private set; } = true;
         [PublicAPI] public bool isLandingSystemOn { get; private set; }
 
@@ -135,6 +137,9 @@ namespace A320VAU.PFD {
         [Tooltip("标高指示范围")]
         public float MAXRHE = 600f;
 
+        [Tooltip("速度趋势指示范围")]
+        public float MAXSPDTRND = 42f;
+
         [Header("对于数字每一位都需要单独动画的仪表")]
         public bool altbybit = true;
 
@@ -176,6 +181,7 @@ namespace A320VAU.PFD {
         private readonly int VLS_HASH = Animator.StringToHash("VLSNormalize");
         private readonly int INPUT_X_HASH = Animator.StringToHash("PilotInputX");
         private readonly int INPUT_Y_HASH = Animator.StringToHash("PilotInputY");
+        private readonly int SPEED_TREND = Animator.StringToHash("SpeedTrend");
 
     #endregion
 
@@ -220,11 +226,11 @@ namespace A320VAU.PFD {
         public int VLE = 280;
 
         // VSW
-        public int VSWCONF0 = 145;
-        public int VSWCONF1 = 113;
-        public int VSWCONF2 = 107;
-        public int VSWCONF3 = 104;
-        public int VSWCONFFULL = 102;
+        //public float VSWCONF0 = 145;
+        //public float VSWCONF1 = 113;
+        //public float VSWCONF2 = 107;
+        //public float VSWCONF3 = 104;
+        //public float VSWCONFFULL = 102;
 
         // F and S
         // public int SSpeed = 178;
@@ -236,9 +242,12 @@ namespace A320VAU.PFD {
             foreach (var item in disableOnGround) item.SetActive(!_aircraftSystemData.isAircraftGrounded);
             foreach (var item in enableOnGround) item.SetActive(_aircraftSystemData.isAircraftGrounded);
 
-            IndicatorAnimator.SetFloat(AIRSPEED_HASH, _adiru.adr.instrumentAirSpeed / MAXSPEED);
+            var IAS = _adiru.adr.instrumentAirSpeed;
+            IndicatorAnimator.SetFloat(AIRSPEED_HASH, IAS / MAXSPEED);
+            var deltaAirSpeed = IAS - instrumentAirSpeedLastFrame;
+            instrumentAirSpeedLastFrame = _adiru.adr.instrumentAirSpeed;
 
-        #region Target Speed
+            #region Target Speed
 
             IndicatorAnimator.SetFloat(AIRSPEED_SECLECT_HASH, _fcu.TargetSpeed / 500f);
 
@@ -253,9 +262,16 @@ namespace A320VAU.PFD {
             if (_fcu.TargetSpeed - _adiru.adr.instrumentAirSpeed > 45)
                 TargetSpeedTop.SetActive(true);
 
-        #endregion
+            #endregion
 
-        #region VMAX
+            #region Speed Trend
+            
+            var deltaT = Time.deltaTime;
+            deltaAirSpeed = deltaAirSpeed * 10f / deltaT;
+            IndicatorAnimator.SetFloat(SPEED_TREND, Remap01(Mathf.Abs(deltaAirSpeed)>5? deltaAirSpeed:0, -MAXSPDTRND, MAXSPDTRND));
+            #endregion
+
+            #region VMAX
 
             var VMAX = VMO;
             if (_aircraftSystemData.flapTargetSpeedLimit < VMAX)
@@ -269,26 +285,29 @@ namespace A320VAU.PFD {
 
             IndicatorAnimator.SetFloat(VMAX_HASH, VMAX / 360f);
 
-        #endregion
+            #endregion
 
-        #region VSW
+            #region VSW
 
-            var VSW = VSWCONF0;
-            switch (_aircraftSystemData.flapCurrentIndex) {
-                case 1:
-                    VSW = VSWCONF1;
-                    break;
-                case 2:
-                    VSW = VSWCONF2;
-                    break;
-                case 3:
-                    VSW = VSWCONF3;
-                    break;
-                case 4:
-                    VSW = VSWCONFFULL;
-                    break;
-            }
+            //var VSW = VSWCONF0;
+            //switch (_aircraftSystemData.flapCurrentIndex) {
+            //    case 1:
+            //        VSW = VSWCONF1;
+            //        break;
+            //    case 2:
+            //        VSW = VSWCONF2;
+            //        break;
+            //    case 3:
+            //        VSW = VSWCONF3;
+            //        break;
+            //    case 4:
+            //        VSW = VSWCONFFULL;
+            //        break;
+            //}
 
+            //失速速度计算VSW = VS1G/0.94;
+            var VSW = _adiru.adr.Vstall/0.94f;
+            var VS1G = _adiru.adr.Vstall_1g/0.94f;
             IndicatorAnimator.SetFloat(VSW_HASH, VSW / 300f);
 
         #endregion
@@ -317,10 +336,10 @@ namespace A320VAU.PFD {
             var VLS = 1.28f * VSW;
             switch (_flaps.detentIndex) {
                 case 2:
-                    VLS = 1.13f * VSW;
-                    break;
-                case 1:
                     VLS = 1.28f * VSW;
+                    break;
+                case 3:
+                    VLS = 1.13f * VSW;
                     break;
             }
 
@@ -400,6 +419,7 @@ namespace A320VAU.PFD {
 
         private void UpdatePitch() {
             //玄学问题，Pitch 跟 Bank 调用不了Remap01??
+            //可能不是玄学问题，Pitch与Bank可能为负数值
             var PitchAngleNormal = Mathf.Clamp01((PitchAngle + MAXPITCH) / (MAXPITCH + MAXPITCH));
             IndicatorAnimator.SetFloat(PITCH_HASH, PitchAngleNormal);
         }

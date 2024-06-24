@@ -33,7 +33,7 @@ namespace A320VAU.Common {
 
         public SFEXT_AuxiliaryPowerUnit apu;
 
-        public DFUNC_AdvancedFlaps flaps;
+        public DFUNC_a320_FlapController flaps;
 
         public DFUNC_Gear gear;
         public SFEXT_a320_AdvancedGear leftLadingGear;
@@ -94,7 +94,7 @@ namespace A320VAU.Common {
 
             flightData = GetComponentInChildren<YFI_FlightDataInterface>(true);
             apu = GetComponentInChildren<SFEXT_AuxiliaryPowerUnit>(true);
-            flaps = GetComponentInChildren<DFUNC_AdvancedFlaps>(true);
+            flaps = GetComponentInChildren<DFUNC_a320_FlapController>(true);
 
             brake = GetComponentInChildren<DFUNC_a320_Brake>(true);
             landingLight = GetComponentInChildren<DFUNC_a320_LandingLight>(true);

@@ -674,7 +674,7 @@ MonoBehaviour:
       Data: 33|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: EsnyaSFAddons.DFUNC.DFUNC_AdvancedFlaps, EsnyaSFAddons.Runtime
+      Data: A320VAU.DFUNC.DFUNC_a320_FlapController, com.yuxiaviation.vau320neo
     - Name: 
       Entry: 8
       Data: 
