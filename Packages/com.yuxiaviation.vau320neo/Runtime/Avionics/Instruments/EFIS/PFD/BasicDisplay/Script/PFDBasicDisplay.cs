@@ -305,9 +305,9 @@ namespace A320VAU.PFD {
             //        break;
             //}
 
-            //失速速度计算VSW = VS1G/0.94;
-            var VSW = _adiru.adr.Vstall/0.94f;
-            var VS1G = _adiru.adr.Vstall_1g/0.94f;
+            //失速速度计算VS = VS1G/0.94;
+            var VSW = _adiru.adr.Vstall;
+            var VS1G = _adiru.adr.Vstall_1g;
             IndicatorAnimator.SetFloat(VSW_HASH, VSW / 300f);
 
         #endregion

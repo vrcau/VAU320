@@ -63,7 +63,7 @@ namespace A320VAU.DFUNC {
         public ADIRU.ADIRU adiru;
 
         [Header("Inputs")]
-        public float controllerSensitivity = 0.02f;
+        public float controllerSensitivity = 10f;
         public Vector3 vrInputAxis = Vector3.forward;
         public KeyCode desktopKey = KeyCode.F;
         public bool seamless = true;
@@ -85,7 +85,7 @@ namespace A320VAU.DFUNC {
         public float brokenLiftMultiplier = 0.3f;
 
         [Header("Haptics")]
-        [Range(0, 1)] public float hapticDuration = 0.2f;
+        [Range(0, 1)] public float hapticDuration = 0.1f;
         [Range(0, 1)] public float hapticAmplitude = 0.5f;
         [Range(0, 1)] public float hapticFrequency = 0.1f;
 
@@ -245,9 +245,10 @@ namespace A320VAU.DFUNC {
                         targetDetentOrigin = leverIndex;
                     }
                     else {
-                        leverIndex = (int)Mathf.Clamp(targetDetentOrigin - Vector3.Dot(trackingPosition - trackingOrigin, vrInputAxis) * flapDetents.Length / controllerSensitivity, 0, flapDetents.Length);
+                        leverIndex = (int)Mathf.Clamp(targetDetentOrigin - Vector3.Dot(trackingPosition - trackingOrigin, vrInputAxis) * (flapLeverDetent-1) * controllerSensitivity, 0, (flapLeverDetent-1));
                         if (isPilot && targetDetentOrigin != leverIndex) {
-                            PlayHapticEvent();
+                            OnLeverChanged();
+                            PlayHapticEvent(); 
                             
                         }
                     }

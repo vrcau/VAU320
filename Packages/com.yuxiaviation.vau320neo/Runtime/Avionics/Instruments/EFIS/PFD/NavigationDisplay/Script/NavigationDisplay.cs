@@ -43,15 +43,22 @@ namespace A320VAU.PFD {
         }
 
         private void UpdateText() {
-            var distance = _ils.HasDME ? Vector3.Distance(transform.position, GetNavaidPosition()) / 1852.0f : 0;
             var frequency =
                 _ils.Index >= 0 ? _ils.database.frequencies[_ils.Index] : 999.9; //TODO 错误频率怎么显示
-            NaviInfo.text = string.Format("{0}\n{1:f0}<size=14>.{2:f0}</size>\n{3:f1}",
+
+            if (_ils.HasDME) {
+                NaviInfo.text = string.Format("{0}\n{1:f0}<size=14>.{2:f0}</size>\n{3:f1}",
                 _ils.Identity ?? "---",
                 (int)frequency,
                 (frequency - (int)frequency) * 10,
-                distance
-            );
+                Vector3.Distance(transform.position, GetNavaidPosition()) / 1852.0f);
+                }
+            else {
+                NaviInfo.text = string.Format("{0}\n{1:f0}<size=14>.{2:f0}</size>\n-.-",
+                _ils.Identity ?? "---",
+                (int)frequency,
+                (frequency - (int)frequency) * 10);
+                }
         }
     }
 }

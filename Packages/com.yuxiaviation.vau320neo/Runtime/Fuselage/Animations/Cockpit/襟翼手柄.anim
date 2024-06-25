@@ -7,7 +7,7 @@ AnimationClip:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: "\u895F\u7FFC\u624B\u67C4"
-  serializedVersion: 6
+  serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
   m_UseHighQualityCurve: 1
@@ -27,8 +27,8 @@ AnimationClip:
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 1, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
-        time: 0.43333334
-        value: {x: 91.31598, y: 0, z: -180}
+        time: 0.083333336
+        value: {x: 88.402, y: 0, z: -180}
         inSlope: {x: -42.489418, y: 0, z: 0}
         outSlope: {x: -42.489418, y: 0, z: 0}
         tangentMode: 0
@@ -36,8 +36,8 @@ AnimationClip:
         inWeight: {x: 1, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 1, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
-        time: 0.6333333
-        value: {x: 59.049004, y: 0, z: -180.00002}
+        time: 0.16666667
+        value: {x: 50.632, y: 0, z: -180}
         inSlope: {x: -145.04355, y: 0, z: 0}
         outSlope: {x: -145.04355, y: 0, z: 0}
         tangentMode: 0
@@ -45,8 +45,8 @@ AnimationClip:
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.9984704, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
-        time: 0.96666664
-        value: {x: 10.541, y: 0, z: -180.00002}
+        time: 0.25
+        value: {x: 1.234, y: 0, z: -180}
         inSlope: {x: -50.592056, y: 0, z: 0}
         outSlope: {x: -50.592056, y: 0, z: 0}
         tangentMode: 0
@@ -54,8 +54,8 @@ AnimationClip:
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.99801344, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
-        time: 1.6666666
-        value: {x: -23.803001, y: 0, z: -179.99998}
+        time: 0.33333334
+        value: {x: -21.54, y: 0, z: -180}
         inSlope: {x: -45.248714, y: 0, z: 0}
         outSlope: {x: -45.248714, y: 0, z: 0}
         tangentMode: 0
@@ -84,13 +84,15 @@ AnimationClip:
       typeID: 4
       customType: 4
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     pptrCurveMapping: []
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.6666666
+    m_StopTime: 0.33333334
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -106,7 +108,8 @@ AnimationClip:
     m_HeightFromFeet: 0
     m_Mirror: 0
   m_EditorCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -119,8 +122,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 1
       - serializedVersion: 3
-        time: 0.43333334
-        value: 91.31598
+        time: 0.083333336
+        value: 88.402
         inSlope: -42.489418
         outSlope: -42.489418
         tangentMode: 0
@@ -128,8 +131,8 @@ AnimationClip:
         inWeight: 1
         outWeight: 1
       - serializedVersion: 3
-        time: 0.6333333
-        value: 59.049004
+        time: 0.16666667
+        value: 50.632
         inSlope: -145.04355
         outSlope: -145.04355
         tangentMode: 0
@@ -137,8 +140,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.9984704
       - serializedVersion: 3
-        time: 0.96666664
-        value: 10.541
+        time: 0.25
+        value: 1.234
         inSlope: -50.592056
         outSlope: -50.592056
         tangentMode: 0
@@ -146,8 +149,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.99801344
       - serializedVersion: 3
-        time: 1.6666666
-        value: -23.803001
+        time: 0.33333334
+        value: -21.54
         inSlope: -45.248714
         outSlope: -45.248714
         tangentMode: 0
@@ -161,7 +164,9 @@ AnimationClip:
     path: "PlaneBody/interior_empty/\u895F\u7FFC\u624B\u67C4"
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -174,7 +179,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.43333334
+        time: 0.083333336
         value: 0
         inSlope: 0
         outSlope: 0
@@ -183,7 +188,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.6333333
+        time: 0.16666667
         value: 0
         inSlope: 0
         outSlope: 0
@@ -192,7 +197,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.96666664
+        time: 0.25
         value: 0
         inSlope: 0
         outSlope: 0
@@ -201,7 +206,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.6666666
+        time: 0.33333334
         value: 0
         inSlope: 0
         outSlope: 0
@@ -216,7 +221,9 @@ AnimationClip:
     path: "PlaneBody/interior_empty/\u895F\u7FFC\u624B\u67C4"
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -229,7 +236,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.43333334
+        time: 0.083333336
         value: -180
         inSlope: 0
         outSlope: 0
@@ -238,8 +245,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.6333333
-        value: -180.00002
+        time: 0.16666667
+        value: -180
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -247,8 +254,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.96666664
-        value: -180.00002
+        time: 0.25
+        value: -180
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -256,8 +263,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.6666666
-        value: -179.99998
+        time: 0.33333334
+        value: -180
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -271,8 +278,10 @@ AnimationClip:
     path: "PlaneBody/interior_empty/\u895F\u7FFC\u624B\u67C4"
     classID: 4
     script: {fileID: 0}
+    flags: 16
   m_EulerEditorCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -282,7 +291,9 @@ AnimationClip:
     path: "PlaneBody/interior_empty/\u895F\u7FFC\u624B\u67C4"
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 0
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -292,7 +303,9 @@ AnimationClip:
     path: "PlaneBody/interior_empty/\u895F\u7FFC\u624B\u67C4"
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 0
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -302,6 +315,7 @@ AnimationClip:
     path: "PlaneBody/interior_empty/\u895F\u7FFC\u624B\u67C4"
     classID: 4
     script: {fileID: 0}
+    flags: 0
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events: []
