@@ -122,9 +122,13 @@ namespace A320VAU.ECAM {
 
         public Text RightMemoText;
 
-    #endregion
+        [Header("Permanent Data")]
+        public Text TATText;
+        public Text SATText;
+        public Text GWText;
+        #endregion
 
-    #region Animation Hashs
+        #region Animation Hashs
 
         private readonly int ENG1N1_HASH = Animator.StringToHash("ENG1N1");
         private readonly int ENG2N1_HASH = Animator.StringToHash("ENG2N1");
@@ -162,7 +166,7 @@ namespace A320VAU.ECAM {
             
             UpdateEngineStatus();
             UpdateFlapStatus();
-
+            UpdatePermanentData();
             // Update ECAM SD Page
             if (CurrentPageBehaviour != null) CurrentPageBehaviour.OnPageUpdate();
         }
@@ -328,13 +332,21 @@ namespace A320VAU.ECAM {
             RightMemoText.text = rightMemoText;
         }
 
-    #endregion
+        #endregion
 
-    #endregion
+        #region SD Update
+        private void UpdatePermanentData() {
+            TATText.text = (_adiru.adr.airDataModule.TemperatureTotal).ToString("F0");
+            SATText.text = (_adiru.adr.airDataModule.TemperatureStatic).ToString("F0");
+            GWText.text = (_aircraftSystemData.grossWeight).ToString("F0");
+        }
 
-    #region Page Navigation
+        #endregion
+        #endregion
 
-    #region Button Functions
+        #region Page Navigation
+
+        #region Button Functions
 
         [PublicAPI]
         public void ToggleEnginePage() => TogglePage(SystemPage.Engine);

@@ -59,7 +59,7 @@ namespace A320VAU.AtmosphereModel
         //总参数计算：气体绝热常数取1.4
         //总温(K)
         public float TemperatureTotal =>
-            (TemperatureStatic+273.15f) * (1f + (1.4f - 1f) / 2f * MachNumber * MachNumber);
+            (TemperatureStatic+273.15f) * (1f + (1.4f - 1f) / 2f * MachNumber * MachNumber)-273.15f;
 
         //总压(kPa)
         public float PressureTotal =>

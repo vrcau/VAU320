@@ -84,15 +84,16 @@ namespace Avionics.Systems.Common {
 
         public Vector3 pilotInput => _saccAirVehicle.RotationInputs;
 
+        public float grossWeight => _saccAirVehicle.VehicleRigidbody.mass;
         //synced targetAngle actuatorBroken _wingBroken
 
-    #region Flaps
+        #region Flaps
 
         [PublicAPI] public float flapAngle => Flap.flapAngle / Flap.maxFlapAngle;
         [PublicAPI] public float slatAngle => Flap.slatAngle / Flap.maxSlatAngle;
         [PublicAPI] public int flapCurrentIndex => Flap.detentIndex;
         [PublicAPI] public int flapTargetIndex => Flap.targetDetentIndex;
-        [PublicAPI] public bool flapInPosition => Mathf.Approximately(Flap.detentIndex, Flap.targetDetentIndex);
+        [PublicAPI] public bool flapInPosition => flapCurrentIndex == flapTargetIndex;
 
         [PublicAPI] public float flapCurrentSpeedLimit => Flap.speedLimit;
         [PublicAPI] public float flapTargetSpeedLimit => Flap.targetSpeedLimit;

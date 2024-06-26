@@ -89,9 +89,9 @@ namespace A320VAU.DFUNC {
         [Range(0, 1)] public float hapticAmplitude = 0.5f;
         [Range(0, 1)] public float hapticFrequency = 0.1f;
 
-        [System.NonSerialized][UdonSynced(UdonSyncMode.None)] public int leverIndex;
+        /*[System.NonSerialized]*/ [UdonSynced(UdonSyncMode.None)] public int leverIndex;
         /*[HideInInspector]*/
-        public int lastLeverIndex, detentIndex, targetDetentIndex;
+        public int detentIndex, targetDetentIndex; //detentIndex为 负n 表示襟翼向着n-1位置移动中
         public float targetFlapAngle, targetSlatAngle, targetLift, targetDrag, targetSpeedLimit;
         public float flapAngle, slatAngle, speedLimit, lift, drag;
         public float maxFlapAngle, maxSlatAngle;
@@ -185,7 +185,7 @@ namespace A320VAU.DFUNC {
             var actuatorAvailable = !actuatorBroken && (!powerSource || powerSource.activeInHierarchy);
             UpdateSounds(deltaTime, actuatorAvailable);
 
-            if (!Mathf.Approximately(targetFlapAngle, flapAngle) && !Mathf.Approximately(targetSlatAngle, slatAngle)) {
+            if (!Mathf.Approximately(targetFlapAngle, flapAngle) || !Mathf.Approximately(targetSlatAngle, slatAngle)) {
                 if (actuatorAvailable) {
                     flapAngle = Mathf.MoveTowards(flapAngle, targetFlapAngle, response * deltaTime);
                     slatAngle = Mathf.MoveTowards(slatAngle, targetSlatAngle, response * deltaTime);
@@ -286,7 +286,7 @@ namespace A320VAU.DFUNC {
             else if (leverIndex == 1 && adiru.adr.instrumentAirSpeed > 100f) targetDetentIndex = 1;
             else if (leverIndex == 0) targetDetentIndex = 0;
             else targetDetentIndex = leverIndex + 1;
-
+            detentIndex = -targetDetentIndex-1;
 
             targetFlapAngle = flapDetents[targetDetentIndex];
             targetSlatAngle = slatDetents[targetDetentIndex];
@@ -296,6 +296,7 @@ namespace A320VAU.DFUNC {
 
             targetSpeedLimit = speedLimits[targetDetentIndex];
 
+            
             vehicleAnimator.SetFloat(flapLeverParameterName, (float)leverIndex / (flapLeverDetent - 1));
         }
         private void UpdateSounds(float deltaTime, bool actuatorAvailable) {
