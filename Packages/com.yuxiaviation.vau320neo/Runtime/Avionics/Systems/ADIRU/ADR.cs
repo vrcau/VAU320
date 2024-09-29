@@ -7,8 +7,8 @@ using UnityEngine;
 namespace A320VAU.ADIRU {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class ADR : UdonSharpBehaviour {
-        private DependenciesInjector _dependenciesInjector;
-        private YFI_FlightDataInterface _flightDataInterface;
+        public DependenciesInjector _dependenciesInjector;
+        public YFI_FlightDataInterface _flightDataInterface;
         public EarthAtmosphereModel airDataModule;
 
         //一次参数从_flightDataInterface里面取
@@ -25,7 +25,8 @@ namespace A320VAU.ADIRU {
         public float Vstall => _flightDataInterface.velocityStall;
         private void Start() {
             _dependenciesInjector = DependenciesInjector.GetInstance(this);
-            _flightDataInterface = _dependenciesInjector.flightData;
+            if(_flightDataInterface == null)
+                _flightDataInterface = _dependenciesInjector.flightData;
         }
 
     }
