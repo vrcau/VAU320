@@ -20,6 +20,7 @@ namespace A320VAU {
 
         private VRCPlayerApi localPlayer;
 
+        private VRCPlayerApi.TrackingDataType trackingTarget;
         public bool isAutoThrustArm { get; private set; }
 
         [Tooltip("Object enabled when function is active (used on MFD)")]
@@ -29,16 +30,18 @@ namespace A320VAU {
         private bool TriggerLastFrame;
         private float TriggerTapTime = 0;
 
-        public float CruiseProportional = .1f;
-        public float CruiseIntegral = .1f;
-        public float CruiseIntegrator;
-        public float CruiseIntegratorMax = 5;
-        public float CruiseIntegratorMin = -5;
-        private float Cruiselastframeerror;
+        public float kp = .5f;
+        //public float CruiseIntegral = .1f;
+        public float kd = .1f;
+        public float CruiseDerivative = 0f;
+        public float CruiseDerivativeLastFrame = 0f;
+        //public float CruiseIntegrator;
+        //public float CruiseIntegratorMax = 5;
+        //public float CruiseIntegratorMin = -5;
 
         private float CruiseTemp;
         private float SpeedZeroPoint;
-        [NonSerialized] public float SetSpeed = 83.3328f;
+        [NonSerialized] public float SetSpeed = 100f;
 
         [NonSerialized] public bool Cruise;
         private bool func_active;
@@ -92,10 +95,12 @@ namespace A320VAU {
 
         public void DFUNC_LeftDial() {
             UseLeftTrigger = true;
+            trackingTarget = VRCPlayerApi.TrackingDataType.LeftHand;
         }
 
         public void DFUNC_RightDial() {
             UseLeftTrigger = false;
+            trackingTarget = VRCPlayerApi.TrackingDataType.RightHand;
         }
 
         public void DFUNC_Selected() {
@@ -196,12 +201,12 @@ namespace A320VAU {
                     if (Trigger > 0.75) {
                         //for setting speed in VR
                         Vector3 handpos = ControlsRoot.position -
-                                          localPlayer.GetTrackingData(VRCPlayerApi.TrackingDataType.LeftHand)
+                                          localPlayer.GetTrackingData(trackingTarget)
                                               .position;
                         handpos = ControlsRoot.InverseTransformDirection(handpos);
 
                         //enable and disable
-                        if (!TriggerLastFrame) {
+                        if (!TriggerLastFrame) {//当上一帧扳机未按下时才更新SpeedZeroPoint
                             if (!Cruise) {
                                 if (!_saccAirVehicle.Taxiing && !InReverse) {
                                     isAutoThrustArm = true;
@@ -235,15 +240,18 @@ namespace A320VAU {
             SetSpeed = Mathf.Max(SetSpeed + (equals - minus), 0);
 
             if (func_active) {
-                float error = SetSpeed - _saccAirVehicle.AirSpeed;
+                var error = SetSpeed - _saccAirVehicle.AirSpeed;
 
-                CruiseIntegrator += error * DeltaTime;
-                CruiseIntegrator = Mathf.Clamp(CruiseIntegrator, CruiseIntegratorMin, CruiseIntegratorMax);
+                CruiseDerivative = (error - CruiseDerivativeLastFrame) / DeltaTime;
+                
+                //CruiseIntegrator += error * DeltaTime;
+                //CruiseIntegrator = Mathf.Clamp(CruiseIntegrator, CruiseIntegratorMin, CruiseIntegratorMax);
 
                 foreach (var engine in engines) {
                     engine.autoThrustInput =
-                        Mathf.Clamp((CruiseProportional * error) + (CruiseIntegral * CruiseIntegrator), 0, 1);
+                        Mathf.Clamp((kp * error) + (kd * CruiseDerivative), 0, 1);
                 }
+                CruiseDerivativeLastFrame = error;
             }
         }
 

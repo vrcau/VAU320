@@ -24,22 +24,22 @@ namespace Avionics.Systems.Common {
         SaccAirVehicle
          */
 
-        private DependenciesInjector _dependenciesInjector;
-        private SFEXT_AuxiliaryPowerUnit APU;
-        private DFUNC_a320_Brake Brake;
+        public DependenciesInjector _dependenciesInjector;
+        public SFEXT_AuxiliaryPowerUnit APU;
+        public DFUNC_a320_Brake Brake;
 
-        private DFUNC_Canopy Canopy;
-        private SFEXT_a320_AdvancedGear CenterLandingGear;
+        public DFUNC_Canopy Canopy;
+        public SFEXT_a320_AdvancedGear CenterLandingGear;
 
-        private SFEXT_a320_AdvancedEngine EngineL;
-        private SFEXT_a320_AdvancedEngine EngineR;
+        public SFEXT_a320_AdvancedEngine EngineL;
+        public SFEXT_a320_AdvancedEngine EngineR;
 
-        private DFUNC_a320_FlapController Flap;
+        public DFUNC_a320_FlapController Flap;
 
-        private SFEXT_a320_AdvancedGear LeftLandingGear;
-        private SFEXT_a320_AdvancedGear RightLandingGear;
+        public SFEXT_a320_AdvancedGear LeftLandingGear;
+        public SFEXT_a320_AdvancedGear RightLandingGear;
 
-        private SaccAirVehicle _saccAirVehicle;
+        public SaccAirVehicle _saccAirVehicle;
 
         private void Start() {
             _dependenciesInjector = DependenciesInjector.GetInstance(this);

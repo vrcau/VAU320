@@ -56,8 +56,8 @@ namespace A320VAU.FWS {
 
                 SetWarnVisible(ref TAKEOFF_MEMO.MessageLine[11].isMessageVisible, true);
                 // FLAP T.O & T.O CONFIG TEST
-                if ((FWS.equipmentData.flapCurrentIndex == 1 && FWS.equipmentData.flapTargetIndex == 1) ||
-                    (FWS.equipmentData.flapCurrentIndex == 2 && FWS.equipmentData.flapTargetIndex == 2)) {
+                if ((FWS.equipmentData.flapCurrentIndex == 2 && FWS.equipmentData.flapTargetIndex == 2) ||
+                    (FWS.equipmentData.flapCurrentIndex == 3 && FWS.equipmentData.flapTargetIndex == 3)) {
                     // FLAP T.O
                     SetWarnVisible(ref TAKEOFF_MEMO.MessageLine[12].isMessageVisible, false);
                     SetWarnVisible(ref TAKEOFF_MEMO.MessageLine[13].isMessageVisible, false);

@@ -20,7 +20,7 @@ namespace A320VAU.PFD {
         private RadioAltimeter.RadioAltimeter _radioAltimeter;
         private AircraftSystemData _aircraftSystemData;
         private FCU.FCU _fcu;
-        private DFUNC_a320_FlapController _flaps;
+        //private DFUNC_a320_FlapController _flaps;
         private SystemEventBus _eventBus;
 
     #endregion
@@ -52,7 +52,7 @@ namespace A320VAU.PFD {
             _radioAltimeter = _injector.radioAltimeter;
             _aircraftSystemData = _injector.equipmentData;
             _fcu = _injector.fcu;
-            _flaps = _injector.flaps;
+            //_flaps = _injector.flaps;
             _eventBus = _injector.systemEventBus;
 
             _eventBus.RegisterSaccEvent(this);
@@ -226,11 +226,11 @@ namespace A320VAU.PFD {
         public int VLE = 280;
 
         // VSW
-        //public float VSWCONF0 = 145;
-        //public float VSWCONF1 = 113;
-        //public float VSWCONF2 = 107;
-        //public float VSWCONF3 = 104;
-        //public float VSWCONFFULL = 102;
+        public float VSWCONF0 = 140; 
+        public float VSWCONF1 = 136; //1
+        public float VSWCONF2 = 133; //2
+        public float VSWCONF3 = 127; //3
+        public float VSWCONFFULL = 120; //full
 
         // F and S
         // public int SSpeed = 178;
@@ -274,11 +274,12 @@ namespace A320VAU.PFD {
             #region VMAX
 
             var VMAX = VMO;
+            var flaps = _aircraftSystemData.Flap;
             if (_aircraftSystemData.flapTargetSpeedLimit < VMAX)
-                VMAX = (int)_flaps.targetSpeedLimit;
+                VMAX = (int)flaps.targetSpeedLimit;
 
             if (_aircraftSystemData.flapCurrentSpeedLimit < VMAX)
-                VMAX = (int)_flaps.speedLimit;
+                VMAX = (int)flaps.speedLimit;
 
             if (!_aircraftSystemData.isGearsUp && VLE < VMAX)
                 VMAX = VLE;
@@ -289,41 +290,42 @@ namespace A320VAU.PFD {
 
             #region VSW
 
-            //var VSW = VSWCONF0;
-            //switch (_aircraftSystemData.flapCurrentIndex) {
-            //    case 1:
-            //        VSW = VSWCONF1;
-            //        break;
-            //    case 2:
-            //        VSW = VSWCONF2;
-            //        break;
-            //    case 3:
-            //        VSW = VSWCONF3;
-            //        break;
-            //    case 4:
-            //        VSW = VSWCONFFULL;
-            //        break;
-            //}
-
-            //失速速度计算VS = VS1G/0.94;
-            var VSW = _adiru.adr.Vstall;
-            var VS1G = _adiru.adr.Vstall_1g;
-            IndicatorAnimator.SetFloat(VSW_HASH, VSW / 300f);
-
-        #endregion
-
-        #region VFE NEXT
-
-            var VFENext = _flaps.speedLimits[1];
-            switch (_flaps.targetDetentIndex) {
+            var VSW = VSWCONF0;
+            switch (_aircraftSystemData.flapCurrentIndex) {
                 case 1:
-                    VFENext = _flaps.speedLimits[2];
-                    break;
-                case 2:
-                    VFENext = _flaps.speedLimits[3];
+                    VSW = VSWCONF1;
                     break;
                 case 3:
-                    VFENext = _flaps.speedLimits[4];
+                    VSW = VSWCONF2;
+                    break;
+                case 4:
+                    VSW = VSWCONF3;
+                    break;
+                case 5:
+                    VSW = VSWCONFFULL;
+                    break;
+            }
+
+            //失速速度计算VS = VS1G/0.94;
+            //var VSW = _adiru.adr.Vstall;
+            //var VS1G = _adiru.adr.Vstall_1g;
+            IndicatorAnimator.SetFloat(VSW_HASH, VSW / 300f);
+
+            #endregion
+
+            #region VFE NEXT
+
+            
+            var VFENext = flaps.speedLimits[1]; //0
+            switch (flaps.targetDetentIndex) {
+                case 1: //1
+                    VFENext = flaps.speedLimits[3];
+                    break;
+                case 3:
+                    VFENext = flaps.speedLimits[4];
+                    break;
+                case 4:
+                    VFENext = flaps.speedLimits[5];
                     break;
             }
 
@@ -334,11 +336,11 @@ namespace A320VAU.PFD {
         #region VLS
 
             var VLS = 1.28f * VSW;
-            switch (_flaps.detentIndex) {
-                case 2:
+            switch (flaps.detentIndex) {
+                case 4:
                     VLS = 1.28f * VSW;
                     break;
-                case 3:
+                case 5:
                     VLS = 1.13f * VSW;
                     break;
             }
