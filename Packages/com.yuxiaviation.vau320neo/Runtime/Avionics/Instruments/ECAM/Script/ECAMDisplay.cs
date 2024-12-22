@@ -122,9 +122,13 @@ namespace A320VAU.ECAM {
 
         public Text RightMemoText;
 
-    #endregion
+        [Header("Permanent Data")]
+        public Text TATText;
+        public Text SATText;
+        public Text GWText;
+        #endregion
 
-    #region Animation Hashs
+        #region Animation Hashs
 
         private readonly int ENG1N1_HASH = Animator.StringToHash("ENG1N1");
         private readonly int ENG2N1_HASH = Animator.StringToHash("ENG2N1");
@@ -133,10 +137,11 @@ namespace A320VAU.ECAM {
         private readonly int ENG1N1CMD_HASH = Animator.StringToHash("ENG1N1Cmd");
         private readonly int ENG2N1CMD_HASH = Animator.StringToHash("ENG2N1Cmd");
         private readonly int FLAP_HASH = Animator.StringToHash("flapPos");
+        private readonly int SLAT_HASH = Animator.StringToHash("slatPos");
 
-    #endregion
+        #endregion
 
-    #region Pages
+        #region Pages
 
         public GameObject enginePage;
         public GameObject statusPage;
@@ -161,7 +166,7 @@ namespace A320VAU.ECAM {
             
             UpdateEngineStatus();
             UpdateFlapStatus();
-
+            UpdatePermanentData();
             // Update ECAM SD Page
             if (CurrentPageBehaviour != null) CurrentPageBehaviour.OnPageUpdate();
         }
@@ -173,20 +178,24 @@ namespace A320VAU.ECAM {
             {
                 flapText.color = _airbusAvionicsTheme.BlueColor;
                 ECAMAnimator.SetFloat(FLAP_HASH, _aircraftSystemData.flapAngle);
+                ECAMAnimator.SetFloat(SLAT_HASH, _aircraftSystemData.slatAngle);
                 switch (_aircraftSystemData.flapTargetIndex) {
                     case 0:
                         flapText.text = "0";
                         break;
                     case 1:
-                        flapText.text = _adiru.adr.instrumentAirSpeed < 210f ? "1+F" : "1";
+                        flapText.text = "1";
                         break;
                     case 2:
-                        flapText.text = "2";
+                        flapText.text = "1+F";
                         break;
                     case 3:
-                        flapText.text = "3";
+                        flapText.text = "2";
                         break;
                     case 4:
+                        flapText.text = "3";
+                        break;
+                    case 5:
                         flapText.text = "FULL";
                         break;
                 }
@@ -323,13 +332,21 @@ namespace A320VAU.ECAM {
             RightMemoText.text = rightMemoText;
         }
 
-    #endregion
+        #endregion
 
-    #endregion
+        #region SD Update
+        private void UpdatePermanentData() {
+            TATText.text = (_adiru.adr.airDataModule.TemperatureTotal).ToString("F0");
+            SATText.text = (_adiru.adr.airDataModule.TemperatureStatic).ToString("F0");
+            GWText.text = (_aircraftSystemData.grossWeight).ToString("F0");
+        }
 
-    #region Page Navigation
+        #endregion
+        #endregion
 
-    #region Button Functions
+        #region Page Navigation
+
+        #region Button Functions
 
         [PublicAPI]
         public void ToggleEnginePage() => TogglePage(SystemPage.Engine);

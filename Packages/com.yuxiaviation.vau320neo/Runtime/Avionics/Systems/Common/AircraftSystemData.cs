@@ -2,6 +2,7 @@
 using A320VAU.Brake;
 using A320VAU.Common;
 using A320VAU.SFEXT;
+using A320VAU.DFUNC;
 using EsnyaSFAddons.DFUNC;
 using EsnyaSFAddons.SFEXT;
 using JetBrains.Annotations;
@@ -13,32 +14,32 @@ namespace Avionics.Systems.Common {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class AircraftSystemData : UdonSharpBehaviour {
         /*
-         写作ECAMDataInterface，但是接下来所有设备的参数建议都放在这并且从这里访问，例如发动机是否启动，是否起火，起落架状态
+         写作AircraftSystemData，但是接下来所有设备的参数建议都放在这并且从这里访问，例如发动机是否启动，是否起火，起落架状态
         尽量以最少的网络同步量与Update把所有需要的extension参数同步地整到手，特别是ESFA里面的私有成员
         应该有完善的调试功能，打印自身状态
 
         为了便于维护，开发组件时请按以下顺序查找机上设备的相关变量
-        ECAMDataInterface
+        AircraftSystemData
         BasicFlightData
         SaccAirVehicle
          */
 
-        private DependenciesInjector _dependenciesInjector;
-        private SFEXT_AuxiliaryPowerUnit APU;
-        private DFUNC_a320_Brake Brake;
+        public DependenciesInjector _dependenciesInjector;
+        public SFEXT_AuxiliaryPowerUnit APU;
+        public DFUNC_a320_Brake Brake;
 
-        private DFUNC_Canopy Canopy;
-        private SFEXT_a320_AdvancedGear CenterLandingGear;
+        public DFUNC_Canopy Canopy;
+        public SFEXT_a320_AdvancedGear CenterLandingGear;
 
-        private SFEXT_a320_AdvancedEngine EngineL;
-        private SFEXT_a320_AdvancedEngine EngineR;
+        public SFEXT_a320_AdvancedEngine EngineL;
+        public SFEXT_a320_AdvancedEngine EngineR;
 
-        private DFUNC_AdvancedFlaps Flap;
+        public DFUNC_a320_FlapController Flap;
 
-        private SFEXT_a320_AdvancedGear LeftLandingGear;
-        private SFEXT_a320_AdvancedGear RightLandingGear;
+        public SFEXT_a320_AdvancedGear LeftLandingGear;
+        public SFEXT_a320_AdvancedGear RightLandingGear;
 
-        private SaccAirVehicle _saccAirVehicle;
+        public SaccAirVehicle _saccAirVehicle;
 
         private void Start() {
             _dependenciesInjector = DependenciesInjector.GetInstance(this);
@@ -83,14 +84,16 @@ namespace Avionics.Systems.Common {
 
         public Vector3 pilotInput => _saccAirVehicle.RotationInputs;
 
+        public float grossWeight => _saccAirVehicle.VehicleRigidbody.mass;
         //synced targetAngle actuatorBroken _wingBroken
 
-    #region Flaps
+        #region Flaps
 
-        [PublicAPI] public float flapAngle => Flap.angle / Flap.maxAngle;
+        [PublicAPI] public float flapAngle => Flap.flapAngle / Flap.maxFlapAngle;
+        [PublicAPI] public float slatAngle => Flap.slatAngle / Flap.maxSlatAngle;
         [PublicAPI] public int flapCurrentIndex => Flap.detentIndex;
         [PublicAPI] public int flapTargetIndex => Flap.targetDetentIndex;
-        [PublicAPI] public bool flapInPosition => Mathf.Approximately(Flap.angle, Flap.targetAngle);
+        [PublicAPI] public bool flapInPosition => flapCurrentIndex == flapTargetIndex;
 
         [PublicAPI] public float flapCurrentSpeedLimit => Flap.speedLimit;
         [PublicAPI] public float flapTargetSpeedLimit => Flap.targetSpeedLimit;
