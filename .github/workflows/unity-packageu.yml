@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: apperry/action-cached-lfs-checkout@c0616236fe56259b047ba97925bad9d8b644be88
+        uses: nschloe/action-cached-lfs-checkout@354ab66d93f164e0bb45c8dea38a47f5e5540023
 
       - name: Get version
         id: version
