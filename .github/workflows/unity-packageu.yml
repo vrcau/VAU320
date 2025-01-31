@@ -48,13 +48,13 @@ jobs:
           include-files: metaList
 
       - name: Upload .unitypackage
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.unityPackage }}
           path: ${{ env.unityPackage }}
 
       - name: Upload .zip
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.zipFile }}
           path: ${{ env.zipFile }}
