@@ -70,7 +70,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: SoundController/AttachedSounds/CabinSignSFX
+    path: EnableInVehicle/CabinSignSFX
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -92,7 +92,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 1192599343
+      path: 2918839475
       attribute: 2086281974
       script: {fileID: 0}
       typeID: 1
@@ -185,7 +185,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: SoundController/AttachedSounds/CabinSignSFX
+    path: EnableInVehicle/CabinSignSFX
     classID: 1
     script: {fileID: 0}
     flags: 0
