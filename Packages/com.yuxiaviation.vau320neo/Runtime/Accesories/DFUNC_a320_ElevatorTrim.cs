@@ -38,10 +38,18 @@ namespace A320VAU.DFUNC {
         private float TrimErrorLastFrame = 0;
         public float TrimErrorIntergrate = 0;
         public float TrimErrorDerivative = 0;
-        
-        public float kp = 0.04f; //载荷系数控制率 0.6 0.015 俯仰角控制率 0.02 0.001
-        public float ki = 0.0015f;
-        public float kd = 0.0001f;
+
+        [Header("Controllor value for curise")]
+        public float kp1 = 0.04f; //载荷系数控制率 0.6 0.015 俯仰角控制率 0.02 0.001
+        public float ki1 = 0.0015f;
+        public float kd1 = 0.0001f;
+
+        [Header("Controllor value for low speed (below 220kts)")]
+        //低空小表速，使用另一套更稳定的参数
+        public float kp2 = 0.25f; 
+        public float ki2 = 0.4f;
+        public float kd2 = 0.0003f;
+
 
         [Header("animation")]
         public string animatorParameterName = "elevtrim";
@@ -59,6 +67,7 @@ namespace A320VAU.DFUNC {
         public bool TrimActive = true; //当侧杆(SFEXT_O_JoystickGrabbed/SFEXT_O_JoystickDropped)以及AP(JoystickOverride)无输入时，配平才激活
         public bool TrimActiveLastFrame = false;
         public bool afloorProtect = false;
+        public bool lowSpeedMode = false;
 
         public Vector3 FBWRotationInputs;
 
@@ -79,93 +88,17 @@ namespace A320VAU.DFUNC {
 
         private void PilotUpdate() {
 
-            /*检查是否有输入
-            //当杆量输入小于特定数值时，开始执行配平
-            //当前键盘是否输入
-            var Wi = Input.GetKey(KeyCode.W); 
-            var Si = Input.GetKey(KeyCode.S);
-            var Ai = Input.GetKey(KeyCode.A);
-            var Di = Input.GetKey(KeyCode.D);
-            var upi = Input.GetKey(KeyCode.UpArrow);
-            var downi = Input.GetKey(KeyCode.DownArrow);
-            var lefti = Input.GetKey(KeyCode.LeftArrow);
-            var righti = Input.GetKey(KeyCode.RightArrow);
-            var isKeyboardInput = Wi || Si || Ai || Di || upi || downi || lefti || righti;
-
-            //当前VR摇杆是否输入
-            float JoyStickGrip;
-            if (SAVControl.SwitchHandsJoyThrottle) {
-                JoyStickGrip = Input.GetAxisRaw("Oculus_CrossPlatform_PrimaryHandTrigger"); 
-            }
-            else {
-                JoyStickGrip = Input.GetAxisRaw("Oculus_CrossPlatform_SecondaryHandTrigger");
-            }
-            var isVRGrabInput = !Mathf.Approximately(JoyStickGrip,0f);
-
-            //当前外设摇杆是否输入（待验证）
-            var LStickPos = Vector2.zero;
-            LStickPos.x = Input.GetAxisRaw("Oculus_CrossPlatform_PrimaryThumbstickHorizontal");
-            LStickPos.y = Input.GetAxisRaw("Oculus_CrossPlatform_PrimaryThumbstickVertical");
-            var isFlightStickInput = (!SAVControl.InVR) && (!Mathf.Approximately(LStickPos.x, 0f) || !Mathf.Approximately(LStickPos.y, 0f));
-
-            var hasStickInput = isKeyboardInput || isVRGrabInput || isFlightStickInput;
-
-            //var SAVJoystickOverridden = (int)SAVControl.GetProgramVariable("JoystickOverridden");
-            if (hasStickInput != hasStickInputLastFrame) {
-                if (hasStickInput) {
-                    //正在通过摇杆操纵
-                    TrimActive = false;
-                    trim = initialTrim;
-                    //if (SAVJoystickOverridden > 0)
-                        //SAVControl.SetProgramVariable("JoystickOverridden", SAVJoystickOverridden - 1);
-                }
-                else {
-                    //if (hasStickInputLastFrame  && Mathf.Abs(BasicFlightData.verticalG - 1) < 0.7f ) {
-                    TrimActive = true;
-                    //SAVControl.SetProgramVariable("JoystickOverridden", (int)SAVControl.GetProgramVariable("JoystickOverridden") + 1);
-                    //targetPitch = BasicFlightData.pitch;
-                    trim = initialTrim;
-                    TrimError = 0;
-                    TrimErrorIntergrate = 0;  
-                    //}
-                }
-            }
-            hasStickInputLastFrame = hasStickInput;
-            */
-            //if (SAVControl.Taxiing) {
-            //TrimActive = false;
-            //if (SAVJoystickOverridden > 0)
-            //SAVControl.SetProgramVariable("JoystickOverridden", SAVJoystickOverridden - 1);
-            //}
 
             //计算配平值
             float DeltaTime = Time.deltaTime;
 
-            //if (TrimActive && autoTrim == 1 && !SAVControl.Taxiing) {
-            //    TrimError = (targetPitch - BasicFlightData.pitch);//俯仰角控制率
-            //    //TrimError = (1f - BasicFlightData.verticalG); //载荷因数控制率 (对于键盘过于不友好（一般玩家的操作习惯松开按键时载荷因数一般都还没稳定呢))
-            //    TrimErrorIntergrate = Mathf.Clamp(TrimError * DeltaTime + TrimErrorIntergrate, -10, 10);//处理积分饱和
-            //    TrimErrorDerivative = (TrimError - TrimErrorLastFrame) / DeltaTime;
-            //    //trim = Mathf.MoveTowards(trim, Mathf.Clamp(kp * TrimError + ki * TrimErrorIntergrate, -1, 1), 0.1f);
-            //    trim = Mathf.Clamp(kp * TrimError + ki * TrimErrorIntergrate + kd * TrimErrorDerivative, -1, 1);
-            //    var GLimitStrength = Mathf.Clamp(-((BasicFlightData.verticalG) / 3f) + 1, 0, 1);
-            //    trim *= GLimitStrength;
-            //    TrimErrorLastFrame = TrimError;
-            //}
             var pitchInputs = SAVControl.RotationInputs.x;
 
             //飞行模式
             if (TrimActive &&
                 !SAVControl.Taxiing &&
                 radioAltimeter.radioAltitude >= 50 ) {
-                //if (SAVControl.AngleOfAttack < SAVControl.MaxAngleOfAttackPitch) {
-                //不知道为啥不好使
-                //    Debug.Log(SAVControl.AngleOfAttack);
-                //    Debug.Log(SAVControl.MaxAngleOfAttackPitch);
-                //    trimMode = 0;
-                //    trim = 0;
-                //}
-                //else {
+
                 if (trimMode != 1) {
                     trimMode = 1;
                     TrimError = TrimErrorIntergrate = TrimErrorDerivative = 0f;
@@ -190,9 +123,20 @@ namespace A320VAU.DFUNC {
                         TrimErrorIntergrate = 0;
                         TrimErrorDerivative = 0;
                     }
-                
-                    //trim = Mathf.MoveTowards(trim, Mathf.Clamp(kp * TrimError + ki * TrimErrorIntergrate, -1, 1), 0.1f);
-                    trim = Mathf.Clamp(kp * TrimError + ki * TrimErrorIntergrate + kd * TrimErrorDerivative, -1, 1);
+       
+                    var kp = kp1;
+                    var ki = ki1;
+                    var kd = kd1;
+
+                    lowSpeedMode = SAVControl.AirSpeed < 110f;
+                    if (lowSpeedMode) {
+                        kp = kp2;
+                        ki = ki2;
+                        kd = kd2;
+                    }
+
+                        //trim = Mathf.MoveTowards(trim, Mathf.Clamp(kp * TrimError + ki * TrimErrorIntergrate, -1, 1), 0.1f);
+                        trim = Mathf.Clamp(kp * TrimError + ki * TrimErrorIntergrate + kd * TrimErrorDerivative, -1, 1);
                     TrimErrorLastFrame = TrimError;
                 }
 

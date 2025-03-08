@@ -559,9 +559,9 @@ namespace A320VAU.SFEXT {
             var n2ToIdle = Remap01(n2, 0, idleN2);
             var n1ToIdle = Remap01(n1, 0, idleN1);
             SetAudioVolumeAndPitch(idleSound, isInside ? 0.0f : n2ToIdle * idleVolume,
-                Lerp3(0.0f, 1.0f, 2.7f, n2, 0.0f, idleN2, continuousN2) * doppler, soundResponse * deltaTime);
+                Lerp3(0.0f, 0.23f, 1.1f, n2, 0.0f, idleN2, continuousN2) * doppler, soundResponse * deltaTime);
             SetAudioVolumeAndPitch(insideSound, isInside ? n1ToIdle * insideVolume : 0,
-                Lerp3(0.0f, 0.8f, 1.2f, n1, 0, idleN1, takeOffN1), soundResponse * deltaTime);
+                Lerp3(0.0f, 0.45f, 1.5f, n1, 0, idleN1, takeOffN1), soundResponse * deltaTime);
             SetAudioVolumeAndPitch(thrustSound,
                 n1ToIdle * thrustVolume * ClampedRemap01(n1, idleN1, takeOffN1) * (isInside ? 0.09f : 1.0f) *
                 (silent ? 0.0f : 1.0f) * doppler, 1, soundResponse * deltaTime);
