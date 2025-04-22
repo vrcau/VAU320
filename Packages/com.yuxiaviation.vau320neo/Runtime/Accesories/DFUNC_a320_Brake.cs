@@ -174,7 +174,7 @@ namespace A320VAU.Brake {
                                     BrakeForce.sqrMagnitude) BrakeForce = speed; //this'll stop the vehicle exactly
                             }
 
-                            if (ParkBreakSet && Speed < 5) BrakeForce = speed;
+                            if (ParkBreakSet && Speed < 5) BrakeForce = speed * 0.5f;
                             //else ToggleParkBrake();
                             VehicleRigidbody.AddForceAtPosition(-BrakeForce, GroundBrakeForcePosition.position,
                                 ForceMode.VelocityChange);
