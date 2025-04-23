@@ -9,7 +9,9 @@ using VRC.SDKBase;
 using VRC.Udon.Common.Interfaces;
 using A320VAU.AtmosphereModel;
 using Random = UnityEngine.Random;
-
+using YuxiFlightInstruments;
+using YuxiFlightInstruments.BasicFlightData;
+using static UnityEngine.EventSystems.EventTrigger;
 //note:this script is original from https://github.com/esnya/EsnyaSFAddons
 //to satisfy vau320's demand, moditied startup charcrastic and add force point
 
@@ -20,15 +22,16 @@ namespace A320VAU.SFEXT {
         [Header("Misc")]
         public EarthAtmosphereModel gasProperty;
         public float externalTempurature => gasProperty.TemperatureStatic;
-
+        public YFI_FlightDataInterface basicFilghtData;
+        
+        public AircraftSystemData aircraftSystemData;
         public float randomRange = 0.2f;
-        public float wheelWakeUpTorque = 1.0e-36f;
+        //public float wheelWakeUpTorque = 1.0e-36f;
 
         public bool isAutoThrustActive;
         public float autoThrustInput;
 
-        private DependenciesInjector _injector;
-        private AircraftSystemData _aircraftSystemData;
+        
 
         public AudioSource throttleLevelerAudioSource;
         public AudioClip togaClip;
@@ -47,16 +50,20 @@ namespace A320VAU.SFEXT {
     #region SFEXT Core
 
         private bool initialized, isOwner, isPilot, hasPilot, isPassenger;
-        private SaccAirVehicle airVehicle;
+        public SaccAirVehicle airVehicle;
+        private SaccEntity entity;
+
 
         public void SFEXT_L_EntityStart() {
-            _injector = DependenciesInjector.GetInstance(this);
-            _aircraftSystemData = _injector.equipmentData;
 
-            var entity = GetComponentInParent<SaccEntity>();
-            airVehicle = entity.GetComponentInChildren<SaccAirVehicle>();
+            entity = basicFilghtData.entityControl;
+            airVehicle = basicFilghtData.SAVControl;
+            vehicleRigidbody = airVehicle.VehicleRigidbody;
+            vehicleAnimator = airVehicle.VehicleAnimator;
+            airVehicle.ThrottleStrength = 0;
+            airVehicle.AccelerationResponse = 0;
 
-            Power_Start(entity, airVehicle);
+            Power_Start();
             Sound_Start(entity);
             Fault_Start();
             Effect_Start();
@@ -95,6 +102,7 @@ namespace A320VAU.SFEXT {
 
         public void SFEXT_O_TakeOwnership() {
             isOwner = true;
+            gameObject.SetActive(true);//take controll 时候避免熄火
         }
 
         public void SFEXT_O_LoseOwnership() {
@@ -121,7 +129,7 @@ namespace A320VAU.SFEXT {
             onBoarding = true;
         }
 
-        public void SFEXT_L_BoardingEnxit() {
+        public void SFEXT_L_BoardingExit() {
             onBoarding = false;
         }
 
@@ -132,20 +140,19 @@ namespace A320VAU.SFEXT {
             }
         }
 
-        private WheelCollider[] wheels;
+        //private WheelCollider[] wheels;
 
         private void OnEnable() {
-            if (wheels == null) wheels = GetComponentInParent<Rigidbody>().GetComponentsInChildren<WheelCollider>(true);
-            foreach (var wheel in wheels) wheel.motorTorque += wheelWakeUpTorque;
+            //if (wheels == null) wheels = GetComponentInParent<Rigidbody>().GetComponentsInChildren<WheelCollider>(true);
+            //foreach (var wheel in wheels) wheel.motorTorque += wheelWakeUpTorque;
         }
 
         private void OnDisable() {
-            foreach (var wheel in wheels) wheel.motorTorque -= wheelWakeUpTorque;
+            //foreach (var wheel in wheels) wheel.motorTorque -= wheelWakeUpTorque;
         }
 
         private void FixedUpdate() {
             if (!initialized) return;
-
             if (isOwner) Power_OwnerFixedUpdate();
         }
 
@@ -179,14 +186,21 @@ namespace A320VAU.SFEXT {
         private void ResetStatus() {
             Power_Reset();
             Fault_Reset();
+            Fault_Update();
             Sound_Reset();
+            Effect_Update();
+            JetBrust_Update();
         }
 
         public void ToggleEngine() {
-            if (fuel)
-                ToggleFuel();
+            //当发动机主电门状态变化
+            if (fuel || starter)//断油
+            {
+                FuelCutoff();
+                DisengageStarter();
+            }                
             else
-                ToggleStarter();
+                EngageStarter();
         }
 
         public void _InstantStart() {
@@ -205,7 +219,8 @@ namespace A320VAU.SFEXT {
         [Tooltip("adjust engine thrust force postion")]
         public GameObject forcePosition;
         public float thrustCurve = 2.0f;
-
+        [Tooltip("current thrust")]
+        public float normalizedThrust = 0f;
         [Header("N1")]
         [Tooltip("[rpm]")] public float minN1 = 307.9f;
 
@@ -239,13 +254,13 @@ namespace A320VAU.SFEXT {
         public float egtResponse = 0.02f;
 
         [Header("Fuel")]
-        //燃油参数
-        public float[] startUpFFN2 = { 0.20f, 0.23f, 0.25f, 0.60f };
+        //启动过程中核心机相对换算转速
+        public float[] startUpN2rLaw = { 0.20f, 0.23f, 0.25f, 0.60f };
 
-        [Tooltip("公斤每小时")]
-        public float[] startUpFF = { 20, 200, 160, 400 }; //乘以20是公斤每小时的数值
+        [Tooltip("启动过程供油控制律（公斤每小时）")]
+        public float[] startUpFFLaw = { 20, 200, 160, 400 }; //乘以20是公斤每小时的数值
 
-        [Tooltip("公斤每小时")]
+        [Tooltip("最大状态耗油率（公斤每小时）")]
         public float takeOffFF = 5060;
 
         [Header("ECT")]
@@ -267,12 +282,10 @@ namespace A320VAU.SFEXT {
 
         [Header("Starter")]
         public bool autoRelease = true;
-
-        public bool autoFuel;
+        public bool autoFuel = true;
 
         [Header("Reverser")]
         public float reverserRatio = 0.6f;
-
         public float reverserExtractResponse = 0.5f;
         public float reverserRetractResponse = 0.5f;
         [NonSerialized] public float idlePoint = 0.375f;
@@ -281,13 +294,14 @@ namespace A320VAU.SFEXT {
         [NonSerialized] [UdonSynced] public bool reversing, starter, fuel;
         [NonSerialized] [UdonSynced] public float n1, n2, egt, ect, ff, throttleLeveler;
 
-        [NonSerialized] public float throttleInput, normalizedThrust, oilTempurature, oilPressure;
+        [NonSerialized] public float throttleInput, oilTempurature, oilPressure;
+
         [NonSerialized] public float reverserPosition;
-        private DFUNC_Brake brake;
+        
+        //private DFUNC_Brake brake;
         private Rigidbody vehicleRigidbody;
-        private bool hasWheelCollider;
+        //private bool hasWheelCollider;
         private Animator vehicleAnimator;
-        private SFEXT_AuxiliaryPowerUnit apu;
         private string gripAxis;
 
 
@@ -315,39 +329,32 @@ namespace A320VAU.SFEXT {
             fuel = !fuel;
         }
 
-        private void Power_Start(SaccEntity entity, SaccAirVehicle airVehicle) {
+        private void Power_Start() {
+            //启动过程中几个转速关键帧
+            startUpN2rLaw[0] *= takeOffN2;
+            startUpN2rLaw[1] *= takeOffN2;
+            startUpN2rLaw[2] *= takeOffN2;
+            startUpN2rLaw[3] *= takeOffN2;
+
             //实现空客反推所需的ThrottleInput设置
             idlePoint = reverserRatio / (1 + reverserRatio);
-            startUpFFN2[0] *= takeOffN2;
-            startUpFFN2[1] *= takeOffN2;
-            startUpFFN2[2] *= takeOffN2;
-            startUpFFN2[3] *= takeOffN2;
-            airVehicle.ThrottleInput = idlePoint;
-            throttleLeveler = idlePoint;
-            //
-
-            airVehicle.ThrottleStrength = 0;
-            airVehicle.AccelerationResponse = 0;
-
-            gripAxis = airVehicle.SwitchHandsJoyThrottle
-                ? "Oculus_CrossPlatform_SecondaryHandTrigger"
-                : "Oculus_CrossPlatform_PrimaryHandTrigger";
-
-            vehicleRigidbody = airVehicle.VehicleRigidbody;
-            vehicleAnimator = airVehicle.VehicleAnimator;
-
-            brake = entity.GetComponentInChildren<DFUNC_Brake>(true);
-            apu = entity.GetComponentInChildren<SFEXT_AuxiliaryPowerUnit>(true);
-            hasWheelCollider = entity.GetComponentInChildren<WheelCollider>(true) != null;
-
-
+            //brake = entity.GetComponentInChildren<DFUNC_Brake>(true);
+            //apu = entity.GetComponentInChildren<SFEXT_AuxiliaryPowerUnit>(true);
+            //hasWheelCollider = entity.GetComponentInChildren<WheelCollider>(true) != null;
             Power_Reset();
         }
 
         private void Power_Reset() {
+            gripAxis = airVehicle.SwitchHandsJoyThrottle
+                        ? "Oculus_CrossPlatform_SecondaryHandTrigger"
+                        : "Oculus_CrossPlatform_PrimaryHandTrigger";
+
             starter = false;
             fuel = false;
             reversing = false;
+            reverserPosition = 0;
+            throttleLeveler = idlePoint;
+            airVehicle.ThrottleInput = idlePoint;
             n1 = 0;
             n2 = 0;
             egt = externalTempurature;
@@ -358,11 +365,8 @@ namespace A320VAU.SFEXT {
             isAutoThrustActive = false;
             autoThrustInput = 0f;
 
-            if (vehicleAnimator) {
-                vehicleAnimator.SetBool("reverse", false);
-                vehicleAnimator.SetFloat("reverser", 0);
-                vehicleAnimator.SetFloat("throttleleveler", throttleLeveler);
-            }
+            Update_Animator();
+            
         }
 
         private void Power_OwnerFixedUpdate() {
@@ -406,7 +410,7 @@ namespace A320VAU.SFEXT {
             throttleLeveler = airVehicle.ThrottleInput;
             //throttleInput = reverserInterlocked ? 0.0f : (airVehicle.ThrottleOverridden > 0 && Input.GetAxis(gripAxis) < 0.75f ? airVehicle.ThrottleOverride : airVehicle.ThrottleInput);
 
-            var isStarterAvailable = starter && (apu == null || apu.started);
+            var isStarterAvailable = starter && aircraftSystemData.hasBleedAir;
             var isN2Runnning = fuel && n2 >= minN2 && !stall;
             var targetN2 = isStarterAvailable || isN2Runnning
                 ? Mathf.Lerp(fuel ? idleN2 : minN2 * 1.1f, takeOffN2, throttleInput) *
@@ -435,11 +439,11 @@ namespace A320VAU.SFEXT {
             egt = Mathf.Lerp(egt, egtTarget, deltaTime * egtResponse * Randomize());
 
             var ffTarget = starter
-                ? n2 > startUpFFN2[0]
-                    ? Lerp4(startUpFF[0], startUpFF[1], startUpFF[2], startUpFF[3], n2, startUpFFN2[0], startUpFFN2[1],
-                        startUpFFN2[2], startUpFFN2[3])
+                ? n2 > startUpN2rLaw[0]  
+                    ? Lerp4(startUpFFLaw[0], startUpFFLaw[1], startUpFFLaw[2], startUpFFLaw[3], n2, startUpN2rLaw[0], startUpN2rLaw[1],
+                        startUpN2rLaw[2], startUpN2rLaw[3])
                     : 0
-                : Convert.ToInt32(fuel) * Mathf.Lerp(0.95f * startUpFF[3], takeOffFF, throttleInput);
+                : Convert.ToInt32(fuel) * Mathf.Lerp(0.95f * startUpFFLaw[3], takeOffFF, throttleInput);
             //启动时的峰值油量400，慢车380
             ff = Mathf.Lerp(ff, ffTarget, starter ? 1 : deltaTime * n1Response);
 
@@ -449,7 +453,7 @@ namespace A320VAU.SFEXT {
                 deltaTime * (egt <= continuousEGT || fire ? ectResponse : ectOverheatResponse) * Randomize());
 
 
-            airVehicle.EngineOutput = normalizedThrust;
+            //airVehicle.EngineOutput = normalizedThrust;
 
             if (starter && autoFuel && n2 >= minN2 && !fuel) fuel = true;
             if (starter && autoRelease && fuel && n2 >= minN2 * 2.27f) starter = false;
@@ -459,15 +463,10 @@ namespace A320VAU.SFEXT {
             //reverserPosition = TowWayMoveTowards(reverserPosition, reversing ? 1 : 0, deltaTime, reverserExtractResponse, reverserRetractResponse);
             reverserPosition = TowWayMoveTowards(reverserPosition, reversing ? 0.99f : 0, deltaTime,
                 reverserExtractResponse, reverserRetractResponse);
-            if (vehicleAnimator) {
-                vehicleAnimator.SetBool("reverse", reversing);
-                vehicleAnimator.SetFloat("reverser", reverserPosition);
-                vehicleAnimator.SetFloat("throttleleveler", throttleLeveler);
-            }
-
             oilTempurature = Lerp4(externalTempurature, idleOilTempurature, maxOilTempurature, takeOffOilTempurature,
                 ect, externalTempurature, idleECT, continuousECT, Mathf.Max(egt, continuousEGT));
-            oilPressure = Lerp3(1013.25f, idleOilPressure, maxOilPressure, n2, 0, idleN2, takeOffN2);
+            oilPressure = Lerp3(gasProperty.PressuerStatic/10000f, idleOilPressure, maxOilPressure, n2, 0, idleN2, takeOffN2);
+            Update_Animator();
         }
 
     #endregion
@@ -488,22 +487,11 @@ namespace A320VAU.SFEXT {
 
         private void Sound_Start(SaccEntity entity) {
             soundController = entity.GetComponentInChildren<SAV_SoundController>();
-
-            MuteAudioSources(soundController.PlaneIdle);
-            MuteAudioSources(soundController.Thrust);
-            MuteAudioSource(soundController.PlaneInside);
-
-            if (InitializeAudioSource(idleSound)) idleVolume = idleSound.volume;
-            if (InitializeAudioSource(insideSound)) insideVolume = insideSound.volume;
-            if (InitializeAudioSource(takeOffSound)) takeOffVolume = takeOffSound.volume;
-            if (InitializeAudioSource(thrustSound)) thrustVolume = thrustSound.volume;
-
-
             Sound_Reset();
         }
 
         private void Sound_Update(float deltaTime) {
-            var currentThrottleLevelerSlot = _aircraftSystemData.throttleLevelerSlot;
+            var currentThrottleLevelerSlot = aircraftSystemData.throttleLevelerSlot;
 
             if (currentThrottleLevelerSlot != _lastThrottleLevelerSlot && airVehicle.IsOwner) {
                 Networking.LocalPlayer.PlayHapticEventInHand(
@@ -570,11 +558,20 @@ namespace A320VAU.SFEXT {
                 (silent ? 0.0f : 1.0f) * doppler, 1, soundResponse * deltaTime);
         }
 
-        private void Sound_Reset() { }
+        private void Sound_Reset() {
+            MuteAudioSources(soundController.PlaneIdle);
+            MuteAudioSources(soundController.Thrust);
+            MuteAudioSource(soundController.PlaneInside);
+
+            if (InitializeAudioSource(idleSound)) idleVolume = idleSound.volume;
+            if (InitializeAudioSource(insideSound)) insideVolume = insideSound.volume;
+            if (InitializeAudioSource(takeOffSound)) takeOffVolume = takeOffSound.volume;
+            if (InitializeAudioSource(thrustSound)) thrustVolume = thrustSound.volume;
+        }
 
     #endregion
 
-    #region Effect
+    #region Effect && Animator
 
         [Header("Effects")]
         public ParticleSystem fireEffect;
@@ -593,7 +590,16 @@ namespace A320VAU.SFEXT {
                 thrustStartSpeed * Mathf.Max(n1 / takeOffN1, 0.1f));
         }
 
-    #endregion
+        private void Update_Animator() {
+            if (vehicleAnimator) {
+                vehicleAnimator.SetBool("reverse", reversing);
+                vehicleAnimator.SetFloat("reverser", reverserPosition);
+                vehicleAnimator.SetFloat("throttleleveler", throttleLeveler);
+            }
+
+        }
+
+        #endregion
 
     #region Fault
 
