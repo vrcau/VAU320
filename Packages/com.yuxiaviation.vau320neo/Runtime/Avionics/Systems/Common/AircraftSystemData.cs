@@ -12,6 +12,8 @@ using UnityEngine;
 
 namespace Avionics.Systems.Common {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    
+    [DefaultExecutionOrder(2000)]
     public class AircraftSystemData : UdonSharpBehaviour {
         /*
          写作AircraftSystemData，但是接下来所有设备的参数建议都放在这并且从这里访问，例如发动机是否启动，是否起火，起落架状态
@@ -23,6 +25,8 @@ namespace Avionics.Systems.Common {
         BasicFlightData
         SaccAirVehicle
          */
+
+        public SaccAirVehicle SAVControl;
 
         public DependenciesInjector _dependenciesInjector;
         public SFEXT_AuxiliaryPowerUnit APU;
@@ -39,10 +43,11 @@ namespace Avionics.Systems.Common {
         public SFEXT_a320_AdvancedGear LeftLandingGear;
         public SFEXT_a320_AdvancedGear RightLandingGear;
 
-        public SaccAirVehicle _saccAirVehicle;
+        
 
         private void Start() {
             _dependenciesInjector = DependenciesInjector.GetInstance(this);
+            SAVControl = _dependenciesInjector.saccAirVehicle;
 
             EngineL = _dependenciesInjector.engine1;
             EngineR = _dependenciesInjector.engine2;
@@ -58,8 +63,9 @@ namespace Avionics.Systems.Common {
 
             Canopy = _dependenciesInjector.canopy;
 
-            _saccAirVehicle = _dependenciesInjector.saccAirVehicle;
+            
         }
+
 
         [PublicAPI] public bool isCabinDoorOpen => Canopy.CanopyOpen;
         [PublicAPI] public bool isParkBreakSet => Brake.ParkBreakSet;
@@ -80,12 +86,19 @@ namespace Avionics.Systems.Common {
         [PublicAPI] public bool isBothThrottleLevelerIdle =>
             isEngine1ThrottleLevelerIdle && isEngine2ThrottleLevelerIdle;
 
-        public bool isOwner => _saccAirVehicle.IsOwner;
+        public bool isOwner => SAVControl.IsOwner;
 
-        public Vector3 pilotInput => _saccAirVehicle.RotationInputs;
+        public Vector3 pilotInput => SAVControl.RotationInputs;
 
-        public float grossWeight => _saccAirVehicle.VehicleRigidbody.mass;
+        public float grossWeight => SAVControl.VehicleRigidbody.mass;
         //synced targetAngle actuatorBroken _wingBroken
+
+        #region Flaps
+        //电 水 气 液压
+        [PublicAPI] public bool hasBleedAir => APU.started || isEngine1Running || isEngine2Running;//是否有起动供气
+
+        #endregion
+
 
         #region Flaps
 
@@ -98,8 +111,9 @@ namespace Avionics.Systems.Common {
         [PublicAPI] public float flapCurrentSpeedLimit => Flap.speedLimit;
         [PublicAPI] public float flapTargetSpeedLimit => Flap.targetSpeedLimit;
 
-    #endregion
+        #endregion
 
+    #region PowerThrottle
         public ThrottleLevelerSlot engine1ThrottleLevelerSlot =>
             GetThrottleLevelerSlot(engine1ThrottleLeveler, isEngine1Reversing);
 
@@ -187,7 +201,8 @@ namespace Avionics.Systems.Common {
 
             return ThrottleLevelerSlot.Manuel;
         }
-
+        #endregion
+        
     #region Gears
 
         [PublicAPI] public bool isGearsTargetDown => Mathf.Approximately(LeftLandingGear.targetPosition, 1f) &&
@@ -205,7 +220,7 @@ namespace Avionics.Systems.Common {
 
         [PublicAPI] public bool isGearsDownLock => isGearsTargetDown && !isGearsInTransition;
 
-        [PublicAPI] public bool isAircraftGrounded => _saccAirVehicle.Taxiing;
+        [PublicAPI] public bool isAircraftGrounded => SAVControl.Taxiing;
 
     #endregion
 
@@ -236,9 +251,10 @@ namespace Avionics.Systems.Common {
         [PublicAPI] public bool isEngine1Fire => EngineL.fire;
         [PublicAPI] public bool isEngine1Fuel => EngineL.fuel;
 
-    #endregion
+        [PublicAPI] public bool isEngine1Overheat => EngineL.overheat;
+        #endregion
 
-    #region ENG2 params
+        #region ENG2 params
 
         [PublicAPI] public bool isEngine2Avail => EngineR.n1 > 0.9f * EngineR.idleN1;
         [PublicAPI] public float engine2n1 => EngineR.n1 / EngineR.takeOffN1;
@@ -265,7 +281,9 @@ namespace Avionics.Systems.Common {
         [PublicAPI] public bool isEngine2Fire => EngineR.fire;
         [PublicAPI] public bool isEngine2Fuel => EngineR.fuel;
 
-    #endregion
+        [PublicAPI] public bool isEngine2Overheat => EngineR.overheat;
+
+        #endregion
     }
 
     public enum ThrottleLevelerSlot {

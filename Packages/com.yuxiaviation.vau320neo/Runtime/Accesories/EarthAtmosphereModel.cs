@@ -8,6 +8,7 @@ using YuxiFlightInstruments.BasicFlightData;
 namespace A320VAU.AtmosphereModel
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    [DefaultExecutionOrder(101)]
     public class EarthAtmosphereModel : UdonSharpBehaviour
     {
         /*根据当前飞行高度，计算大气静参数
