@@ -2,14 +2,20 @@ using System;
 using SaccFlightAndVehicles;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.UI;
 using VRC.SDKBase;
+using YamlDotNet.Core.Tokens;
 using Random = UnityEngine.Random;
+using YuxiFlightInstruments;
+using YuxiFlightInstruments.BasicFlightData;
+using A320VAU.Brake;
 
 //note:this code is original from https://github.com/esnya/EsnyaSFAddons
 //to satisfy vau320's demand, moditied SteerAngle limiter
 
 namespace A320VAU.SFEXT {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Continuous)]
+    [DefaultExecutionOrder(160)]//after electrical bus
     public class SFEXT_a320_AdvancedGear : UdonSharpBehaviour {
         public WheelCollider wheelCollider;
         public Transform suspensionTransform;
@@ -17,6 +23,8 @@ namespace A320VAU.SFEXT {
         public Transform wheelTransform;
         public Vector3 wheelUp = Vector3.up;
         public Vector3 wheelRight = Vector3.right;
+
+        public YFI_FlightDataInterface basicFilghtData;
 
         [Header("Steering")]
         [Tooltip("deg")] public float maxSteerAngle;
@@ -67,26 +75,9 @@ namespace A320VAU.SFEXT {
         [Header("Misc")]
         public float timeNosieScale = 0.1f;
 
-        [UdonSynced] [FieldChangeCallback(nameof(Bursted))]
-        private bool _bursted;
-
-        private SaccAirVehicle airVehicle;
-        private DFUNC_Brake brakeFunction;
-        private GameObject burstEffectInstance;
-        [NonSerialized] [UdonSynced] public bool failed, broken, parkingBrake;
-        private bool hasPilot, isOwner;
-
-        private bool initialized;
-
+        
         [NonSerialized] public float maxSteeringCurrent;
-        [NonSerialized] [UdonSynced] public bool moving, inTransition;
-
-        [NonSerialized] [UdonSynced(UdonSyncMode.Smooth)]
-        public float position;
-
-        private bool prevIsGrounded;
-
-        private Vector3 prevVehiclePosition;
+        private bool prevIsGrounded = true;
         [NonSerialized] public float targetPosition;
         private Animator vehicleAnimator;
         private Rigidbody vehicleRigidbody;
@@ -94,17 +85,94 @@ namespace A320VAU.SFEXT {
         private Vector3 wheelPositionOffset;
         private Quaternion wheelRotationOffset = Quaternion.identity, steerRotationOffset = Quaternion.identity;
 
+
+        [UdonSynced][FieldChangeCallback(nameof(Bursted))]
+        private bool _bursted;
+        [NonSerialized][UdonSynced(UdonSyncMode.Smooth)] public float position;
+        [NonSerialized][UdonSynced] public bool failed, broken, moving, inTransition;
+
+
+        
+
+        #region SFEXT Core
+        
+        private SaccAirVehicle airVehicle;
+        public DFUNC_a320_Brake brakeFunction;
+
+        
+        private bool hasPilot, isOwner;
+        private bool initialized;
+
+        public void SFEXT_L_EntityStart() {
+
+            airVehicle = basicFilghtData.SAVControl;
+
+            airVehicle.DisableTaxiRotation_++;
+            vehicleAnimator = airVehicle.VehicleAnimator;
+            vehicleRigidbody = airVehicle.VehicleRigidbody;
+
+            if (suspensionTransform)
+                wheelPositionOffset = suspensionTransform.localPosition -
+                                      suspensionTransform.parent.InverseTransformPoint(wheelCollider.transform
+                                          .position);
+            if (wheelTransform) wheelRotationOffset = wheelTransform.localRotation;
+            if (steerTransform) steerRotationOffset = steerTransform.localRotation;
+
+            gameObject.SetActive(false);
+            initialized = true;
+
+            ResetStatus();
+        }
+
+        public void SFEXT_O_PilotEnter() {
+            isOwner = true;
+        }
+
+        public void SFEXT_O_TakeOwnership() {
+            isOwner = true;
+        }
+
+        public void SFEXT_O_LoseOwnership() {
+            isOwner = false;
+        }
+
+        public void SFEXT_G_PilotEnter() {
+            hasPilot = true;
+            gameObject.SetActive(true);
+        }
+
+        public void SFEXT_G_PilotExit() {
+            hasPilot = false;
+        }
+
+        public void SFEXT_G_Explode() {
+            ResetStatus();
+        }
+
+        public void SFEXT_G_RespawnButton() {
+            ResetStatus();
+        }
+
+        public void SFEXT_G_GearUp() {
+            targetPosition = 0;
+            if (!gameObject.activeInHierarchy) vehicleAnimator.SetFloat(gearPositionParameterName, targetPosition);
+        }
+
+        public void SFEXT_G_GearDown() {
+            targetPosition = 1;
+            if (!gameObject.activeInHierarchy) vehicleAnimator.SetFloat(gearPositionParameterName, targetPosition);
+        }
+
+        public void SFEXT_G_TouchDown() { 
+            return;
+        }
+        #endregion
+
+
         private bool Bursted {
             set {
                 if (burstEffect) {
                     burstEffect.SetActive(value);
-                    //if (value && !burstEffectInstance) {
-                    //    burstEffectInstance = Instantiate(burstEffect);
-                    //    burstEffectInstance.transform.SetParent(wheelCollider.transform, false);
-                    //}
-                    //else if (!value && burstEffectInstance) {
-                    //    Destroy(burstEffectInstance);
-                    //}
                 }
 
                 if (value && !_bursted && transitionSound) transitionSound.PlayOneShot(burstSound);
@@ -119,13 +187,8 @@ namespace A320VAU.SFEXT {
 
             var deltaTime = Time.deltaTime;
             var taxiing = airVehicle.Taxiing;
-
-            var groundVelocity =
-                (isOwner ? vehicleRigidbody.velocity : (vehicleRigidbody.position - prevVehiclePosition) / deltaTime) *
-                1.94384f;
-            prevVehiclePosition = vehicleRigidbody.position;
-
-            var groundSpeed = Vector3.Dot(groundVelocity, vehicleRigidbody.transform.forward);
+            
+            var groundSpeed = basicFilghtData.groundSpeed;
             if (isOwner) {
                 inTransition = !Mathf.Approximately(position, targetPosition);
                 moving = inTransition && !failed && !broken;
@@ -186,7 +249,7 @@ namespace A320VAU.SFEXT {
 
             if (isOwner) {
                 if (!retracted) {
-                    var ias = airVehicle.AirSpeed * 1.94384f;
+                    var ias = basicFilghtData.TAS;
                     var maxSpeed = _GetMaxSpeed();
                     var overspeed = maxSpeed > 0 && ias > maxSpeed;
                     var mtbfMultiplier = overspeed ? ias / maxSpeed : 1.0f;
@@ -201,10 +264,18 @@ namespace A320VAU.SFEXT {
                         groundSpeed / brakeMaxGroundSpeed * wheelCollider.brakeTorque / brakeTorque /
                         mtbBurstOnOverGroundSpeed * Time.deltaTime > Random.value) Burst();
 
-                    var verticalSpeed = -vehicleRigidbody.velocity.y * 197;
-                    if (isGrounded && !prevIsGrounded && verticalSpeed > verticalSpeedLimit && Random.value <
-                        (verticalSpeed - verticalSpeedLimit) / (burstVerticalSpeed - verticalSpeedLimit)) Burst();
-
+                    var verticalSpeed = -basicFilghtData.verticalSpeed;
+                    if (!prevIsGrounded && isGrounded) {
+                        if (verticalSpeed > verticalSpeedLimit && Random.value <
+                            (verticalSpeed - verticalSpeedLimit) / (burstVerticalSpeed - verticalSpeedLimit)) {
+                            Burst();
+                        }
+                        else {
+                            //TODO:根据速度判断是否有烟雾
+                            burstEffect.SetActive(true);
+                            SendCustomEventDelayedSeconds("DisableSmoke", 1f);
+                        }
+                    }
                     prevIsGrounded = wheelCollider.isGrounded;
                 }
 
@@ -218,68 +289,11 @@ namespace A320VAU.SFEXT {
             if (!hasPilot && !moving) gameObject.SetActive(false);
         }
 
-        public void SFEXT_L_EntityStart() {
-            var entity = GetComponentInParent<SaccEntity>();
-
-            airVehicle = entity.GetComponentInChildren<SaccAirVehicle>();
-            airVehicle.DisableTaxiRotation_++;
-            vehicleAnimator = airVehicle.VehicleAnimator;
-            vehicleRigidbody = airVehicle.VehicleRigidbody;
-
-            brakeFunction = entity.GetComponentInChildren<DFUNC_Brake>(true);
-
-            if (suspensionTransform)
-                wheelPositionOffset = suspensionTransform.localPosition -
-                                      suspensionTransform.parent.InverseTransformPoint(wheelCollider.transform
-                                          .position);
-            if (wheelTransform) wheelRotationOffset = wheelTransform.localRotation;
-            if (steerTransform) steerRotationOffset = steerTransform.localRotation;
-
-            gameObject.SetActive(false);
-            initialized = true;
-
-            ResetStatus();
+        public void DisableSmoke() {
+            if(!Bursted)    
+                burstEffect.SetActive(false);
         }
-
-        public void SFEXT_O_PilotEnter() {
-            isOwner = true;
-        }
-
-        public void SFEXT_O_TakeOwnership() {
-            isOwner = true;
-        }
-
-        public void SFEXT_O_LoseOwnership() {
-            isOwner = false;
-        }
-
-        public void SFEXT_G_PilotEnter() {
-            hasPilot = true;
-            gameObject.SetActive(true);
-        }
-
-        public void SFEXT_G_PilotExit() {
-            hasPilot = false;
-        }
-
-        public void SFEXT_G_Explode() {
-            ResetStatus();
-        }
-
-        public void SFEXT_G_RespawnButton() {
-            ResetStatus();
-        }
-
-        public void SFEXT_G_GearUp() {
-            targetPosition = 0;
-            if (!gameObject.activeInHierarchy) vehicleAnimator.SetFloat(gearPositionParameterName, targetPosition);
-        }
-
-        public void SFEXT_G_GearDown() {
-            targetPosition = 1;
-            if (!gameObject.activeInHierarchy) vehicleAnimator.SetFloat(gearPositionParameterName, targetPosition);
-        }
-
+        
         private void Burst() {
             Bursted = true;
             RequestSerialization();
@@ -303,17 +317,17 @@ namespace A320VAU.SFEXT {
 
         private void ResetStatus() {
             if (!initialized) return;
-
             targetPosition = position = 1.0f;
             if (transitionSound) transitionSound.Stop();
             failed = false;
             broken = false;
             vehicleAnimator.SetFloat(gearPositionParameterName, position);
             Bursted = false;
+            burstEffect.SetActive(false);
         }
 
         private float GetTargetBrakeStrength(float groundSpeed) {
-            if (Mathf.Approximately(position, 0.0f) || parkingBrake) return 1.0f;
+            if (Mathf.Approximately(position, 0.0f) || brakeFunction.ParkBreakSet) return 1.0f;
             if (!brakeFunction ||
                 ((autoLimitGroundSpeed || (!Networking.LocalPlayer.IsUserInVR() && autoLimitGroundSpeedOnDesktop)) &&
                  groundSpeed >= brakeMaxGroundSpeed)) return 0;
