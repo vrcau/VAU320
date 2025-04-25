@@ -1,7 +1,9 @@
 ﻿using UdonSharp;
+using UnityEngine;
 
 namespace A320VAU.FWS {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    [DefaultExecutionOrder(2044)] //after ECAM
     public partial class FWSWarningData : UdonSharpBehaviour {
         private FWSWarningMessageData[] _fwsWarningMessageData;
         private bool _hasWarningDataVisibleChange;

@@ -1,44 +1,45 @@
 ﻿using JetBrains.Annotations;
 using SaccFlightAndVehicles;
 using UdonSharp;
+using UnityEngine;
 using Varneon.VUdon.ArrayExtensions;
+using YuxiFlightInstruments.BasicFlightData;
 
 namespace A320VAU.Common {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    [DefaultExecutionOrder(151)] //after YFI electrical bus
     public class SystemEventBus : UdonSharpBehaviour {
-        private DependenciesInjector _injector;
-        private UdonSharpBehaviour[] _receivers = { };
-
-        private SaccEntity _saccEntity;
-
+        public YFI_FlightDataInterface basicFlightData;
+        public SaccEntity saccEntity;
+        public UdonSharpBehaviour[] receivers = { };
+        
         private void Start() {
-            _injector = DependenciesInjector.GetInstance(this);
-            _saccEntity = _injector.saccEntity;
+            saccEntity = basicFlightData.SAVControl.EntityControl;
         }
 
         [PublicAPI]
         public void RegisterSaccEvent(UdonSharpBehaviour behaviour) {
-            _saccEntity.ExtensionUdonBehaviours = _saccEntity.ExtensionUdonBehaviours.Add(behaviour);
+            saccEntity.ExtensionUdonBehaviours = saccEntity.ExtensionUdonBehaviours.Add(behaviour);
         }
 
         [PublicAPI]
         public void Register(UdonSharpBehaviour behaviour) {
-            _receivers = _receivers.Add(behaviour);
+            receivers = receivers.Add(behaviour);
         }
 
         [PublicAPI]
         public void SendEvent(string eventName) {
-            foreach (var receiver in _receivers) receiver.SendCustomEvent("EventBus_" + eventName);
+            foreach (var receiver in receivers) receiver.SendCustomEvent("EventBus_" + eventName);
         }
 
         [PublicAPI]
         public void SendEventWithOutPrefix(string eventName) {
-            foreach (var receiver in _receivers) receiver.SendCustomEvent(eventName);
+            foreach (var receiver in receivers) receiver.SendCustomEvent(eventName);
         }
 
         [PublicAPI]
         public void SendEventToSacc(string eventName) {
-            _saccEntity.SendEventToExtensions(eventName);
+            saccEntity.SendEventToExtensions(eventName);
         }
     }
 }

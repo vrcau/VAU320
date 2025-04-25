@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace A320VAU.ADIRU {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    [DefaultExecutionOrder(2025)] // after ADR IRS
     public class ADIRU : UdonSharpBehaviour {
         public ADR adr;
         public IRS irs;

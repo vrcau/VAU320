@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace A320VAU.RadioAltimeter {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
-    [DefaultExecutionOrder(1100)]
+    [DefaultExecutionOrder(2030)]
     public class RadioAltimeter : UdonSharpBehaviour {
         public LayerMask groundLayers = -1;
         public QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal;

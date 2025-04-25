@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace A320VAU.FWS {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [DefaultExecutionOrder(2045)] // after FWS Warning Data
     public class FWS : UdonSharpBehaviour {
     #region Aircraft Systems
 
@@ -25,10 +26,11 @@ namespace A320VAU.FWS {
 
     #region ECAM and Warning Light/Audio
 
-        public Animator cockpitAnimator;
-
-        private readonly int MASTER_WARNING_HASH = Animator.StringToHash("IsMasterWarning");
-        private readonly int MASTER_CAUTION_HASH = Animator.StringToHash("IsMasterCaution");
+        public GameObject MasterWarningLight;
+        public GameObject MasterCautionLight;
+        public GameObject Eng1FireLight;
+        public GameObject Eng2FireLight;
+        public GameObject APUFireLight;
 
         [Header("ECAM and warning Light/Audio")]
         public ECAMDisplay ECAMController;
@@ -57,6 +59,8 @@ namespace A320VAU.FWS {
 
             fwsWarningMessageDatas = GetComponentsInChildren<FWSWarningMessageData>();
             _fwsWarningData = GetComponentInChildren<FWSWarningData>();
+
+            ResetWarning();
         }
 
         private void LateUpdate() {
@@ -73,6 +77,12 @@ namespace A320VAU.FWS {
         private void OnEnable() {
             _lastAltitudeCalloutIndex = -1;
             _lastMinimumCalloutIndex = -1;
+        }
+
+        private void OnDisable() {
+            //对于不接入sacc event的航电脚本，似乎可以通过关闭监测坠毁/重置？
+            //但是这个方法会导致处于警报状态时上下飞机后报警也被重置？
+            ResetWarning();
         }
 
         private void UpdateFWS() {
@@ -104,21 +114,19 @@ namespace A320VAU.FWS {
 
                 if (hasMasterWarning) {
                     audioSource.Play();
-
-                    cockpitAnimator.SetBool(MASTER_WARNING_HASH, true);
+                    MasterWarningLight.SetActive(true);
                 }
 
                 if (hasMasterCaution) {
-                    cockpitAnimator.SetBool(MASTER_CAUTION_HASH, true);
+                    MasterCautionLight.SetActive(true);
 
                     audioSource.PlayOneShot(Caution);
                 }
 
                 if (!hasMasterCaution && !hasMasterWarning) {
                     audioSource.Stop();
-
-                    cockpitAnimator.SetBool(MASTER_WARNING_HASH, false);
-                    cockpitAnimator.SetBool(MASTER_CAUTION_HASH, false);
+                    MasterWarningLight.SetActive(false);
+                    MasterCautionLight.SetActive(false);
                 }
             }
 
@@ -128,9 +136,8 @@ namespace A320VAU.FWS {
         // ReSharper disable once UnusedMember.Global
         public void ResetWarning() {
             audioSource.Stop();
-
-            cockpitAnimator.SetBool(MASTER_WARNING_HASH, false);
-            cockpitAnimator.SetBool(MASTER_CAUTION_HASH, false);
+            MasterWarningLight.SetActive(false);
+            MasterCautionLight.SetActive(false);
         }
 
         private static bool Contains(string[] array, string item) {

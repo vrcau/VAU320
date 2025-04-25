@@ -4,7 +4,7 @@ using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
 using VRC.SDKBase;
-using YamlDotNet.Core.Tokens;
+
 using Random = UnityEngine.Random;
 using YuxiFlightInstruments;
 using YuxiFlightInstruments.BasicFlightData;
