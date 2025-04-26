@@ -17,7 +17,7 @@ namespace A320VAU.ND {
 
         [Tooltip("仪表的动画控制器")]
         public Animator IndicatorAnimator;
-
+        public CDIAnimationDriver CDIAnimator;
         [FieldChangeCallback(nameof(NDMode))] public NDMode _ndMode;
         private FMGC.FMGC _fmgc;
 
@@ -27,6 +27,10 @@ namespace A320VAU.ND {
 
         private NavSelector _vor1;
         private NavSelector _vor2;
+        private NavSelector _ils;
+
+        private NavSelector _currentNavDataSource; //当前仪表上主界面导航信息来源
+
         private ADIRU.ADIRU _adiru;
         private SystemEventBus _eventBus;
 
@@ -45,6 +49,10 @@ namespace A320VAU.ND {
 
             _vor1 = _fmgc.radNav.VOR1;
             _vor2 = _fmgc.radNav.VOR2;
+            _ils = _fmgc.radNav.ILS;
+
+            _currentNavDataSource = _ils;
+
             _eventBus = _injector.systemEventBus;
 
             _eventBus.RegisterSaccEvent(this);
@@ -146,25 +154,32 @@ namespace A320VAU.ND {
         private void UpdateNavigation() {
             VOR1SelectOnly.SetActive(_vor1.Index >= 0);
             VOR2SelectOnly.SetActive(_vor2.Index >= 0);
+            
+
             NavInfoIndicatior.SetActive(_vor2.Index >= 0);
 
             //功能：waypoint 更新 右下角距离更新 向台背台（TODO）
             //Waypoint & Navaid indication 先只实现一下Navaid indication模式
             //种类
-            switch (MainDataSource) {
-                case 1:
-                    UpdateNavigationInfo(_vor1);
-                    break;
-                case 2:
-                    UpdateNavigationInfo(_vor2);
-                    break;
-                default:
-                    UpdateNavigationInfo(_vor1);
-                    break;
-            }
+
+            UpdateNavigationInfo();
+            
+            //switch (MainDataSource) {
+            //    case 1:
+            //        UpdateNavigationInfo(_vor1);
+            //        break;
+            //    case 2:
+            //        UpdateNavigationInfo(_vor2);
+            //        break;
+            //    default:
+            //        UpdateNavigationInfo(_ils);
+            //        break;
+            //}
         }
 
-        private void UpdateNavigationInfo(NavSelector navigationReceiver) {
+        private void UpdateNavigationInfo() {
+            if (_currentNavDataSource == null) return;
+
             if (NDMode != NDMode.PLAN) {
                 if (_vor1.Index >= 0) {
                     VOR1Name.text = _vor1.Identity;
@@ -184,25 +199,23 @@ namespace A320VAU.ND {
             switch (NDMode) {
                 case NDMode.LS:
                     line1Text.text = $"ILS{MainDataSource}";
-                    if (navigationReceiver.Index >= 0) {
+                    if (_currentNavDataSource.Index >= 0) {
                         //频率
                         line2Text.text =
-                            $"<color={AirbusAvionicsTheme.Carmine}>{(navigationReceiver.Index >= 0 ? navigationReceiver.database.frequencies[navigationReceiver.Index].ToString("f2") : "---.--")}</color>";
+                            $"<color={AirbusAvionicsTheme.Carmine}>{(_currentNavDataSource.Index >= 0 ? _currentNavDataSource.database.frequencies[_currentNavDataSource.Index].ToString("f2") : "---.--")}</color>";
                         line3Text.text =
-                            $"CRS <color={AirbusAvionicsTheme.Carmine}>{navigationReceiver.Course:f0}</color> <color={AirbusAvionicsTheme.Blue}>°</color>";
-
-
+                            $"CRS <color={AirbusAvionicsTheme.Carmine}>{_currentNavDataSource.Course:f0}</color> <color={AirbusAvionicsTheme.Blue}>°</color>";
                         line4Text.text =
                             $"<color={AirbusAvionicsTheme.Carmine}>NaviData1.SelectedBeacon.beaconName</color>";
                     }
 
                     break;
                 case NDMode.VOR:
-                    if (navigationReceiver.Index >= 0) {
+                    if (_currentNavDataSource.Index >= 0) {
                         line1Text.text = $"VOR{MainDataSource}";
                         //频率
-                        line2Text.text = navigationReceiver.Index >= 0
-                            ? navigationReceiver.database.frequencies[navigationReceiver.Index].ToString("f2")
+                        line2Text.text = _currentNavDataSource.Index >= 0
+                            ? _currentNavDataSource.database.frequencies[_currentNavDataSource.Index].ToString("f2")
                             : "---.--";
                         line3Text.text = "CRS";
 
@@ -232,17 +245,22 @@ namespace A320VAU.ND {
             switch (NDMode) {
                 case NDMode.LS:
                     ILSPage.SetActive(true);
+                    _currentNavDataSource = _ils;
                     break;
                 case NDMode.VOR:
                     VORPage.SetActive(true);
+                    _currentNavDataSource = _vor1;
                     break;
                 case NDMode.ARC:
                     ARCPage.SetActive(true);
+                    _currentNavDataSource = _ils;
                     break;
                 default:
-                    ARCPage.SetActive(true);
+                    //ARCPage.SetActive(true);
+                    NDMode = (NDMode)(((int)NDMode + 1) % 5);//页面为空的话自动跳到下一个页面
                     break;
             }
+            CDIAnimator.navaidSelector = _currentNavDataSource;
         }
 
         [PublicAPI]

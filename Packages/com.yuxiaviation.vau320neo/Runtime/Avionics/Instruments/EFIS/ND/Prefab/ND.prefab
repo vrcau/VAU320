@@ -1188,7 +1188,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &3784576087012473265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1736,6 +1736,7 @@ MonoBehaviour:
   _udonSharpBackingUdonBehaviour: {fileID: 6414129205283512572}
   MainDataSource: 1
   IndicatorAnimator: {fileID: 3784576087332373829}
+  CDIAnimator: {fileID: 6560152703442696820}
   _ndMode: 3
   TASText: {fileID: 3784576087810834881}
   GSText: {fileID: 3784576087639297728}
@@ -3217,7 +3218,8 @@ PrefabInstance:
         type: 3}
       propertyPath: serializedProgramAsset
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 89d2ddc4c2a74d74c96a46957d6d3c07,
+        type: 2}
     - target: {fileID: 5161439906487536026, guid: 65b748a5cbd298441bc6e04029c4215c,
         type: 3}
       propertyPath: serializationData.Prefab

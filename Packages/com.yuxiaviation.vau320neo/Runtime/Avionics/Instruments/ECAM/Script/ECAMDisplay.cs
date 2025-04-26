@@ -10,6 +10,7 @@ using YuxiFlightInstruments.BasicFlightData;
 
 namespace A320VAU.ECAM {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
+    [DefaultExecutionOrder(2040)] //after autobrk
     public class ECAMDisplay : UdonSharpBehaviour {
     #region Aircraft Systems
 
