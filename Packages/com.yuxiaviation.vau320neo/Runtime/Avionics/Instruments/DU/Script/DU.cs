@@ -10,90 +10,81 @@ namespace A320VAU.PFD {
         private DependenciesInjector _injector;
         private SystemEventBus _eventBus;
         
-        public GameObject SelfTestPage;
-        public GameObject InvaildDataPage;
-        public GameObject PowerPage;
-        public GameObject PowerFlashCover;
 
-        private bool _inSelfTest;
-        private bool _isSelfTestCompleted;
+        public bool inSelfTest;
+        public bool isSelfTestCompleted;
 
-        private bool _byPassSelfTest;
+        public bool byPassSelfTest;
+        public Animator displayUnitAnimator;
 
-        private void Start() {
+        public void Start() {
             _injector = DependenciesInjector.GetInstance(this);
             _eventBus = _injector.systemEventBus;
-            
             _eventBus.RegisterSaccEvent(this);
         }
 
         // Sacc Event
-        public void SFEXT_O_RespawnButton() => InitDU();
+        public void SFEXT_G_Explode() => InitDU();
+        public void SFEXT_G_RespawnButton() => InitDU();
 
-        private void OnEnable() {
-            if (_isSelfTestCompleted | _inSelfTest | _byPassSelfTest) return;
-            InitDU();
+        public void SFEXT_O_PilotExit() {
+        }
+        public void SFEXT_P_PassengerExit() {
 
-            PowerPage.SetActive(!_isSelfTestCompleted);
-
-            _inSelfTest = true;
-            var flashStartDelay = Random.Range(2f, 5f);
-            SendCustomEventDelayedSeconds(nameof(StartFlash), flashStartDelay);
         }
 
-        public void StartFlash() {
-            if (_isSelfTestCompleted | !_inSelfTest | _byPassSelfTest) return;
-
-            Debug.Log("DU Start Flash");
-            PowerFlashCover.SetActive(true);
-            SendCustomEventDelayedSeconds(nameof(EndFlash), 0.2f);
+        private void OnEnable() {//上电的话对象就会被激活
+            if (isSelfTestCompleted) {
+                displayUnitAnimator.enabled = false;
+            }
+            else {
+                displayUnitAnimator.enabled = true;
+                inSelfTest = true;
+                StartSelftest();
+            }
         }
 
-        public void EndFlash() {
-            if (_isSelfTestCompleted | !_inSelfTest | _byPassSelfTest) return;
-
-            PowerFlashCover.SetActive(false);
-            var selfTestStartDelay = Random.Range(1f, 2f);
-            SendCustomEventDelayedSeconds(nameof(StartSelftest), selfTestStartDelay);
+        private void OnDisable() {
+            //先不实现这个功能，避免时切换座位等原因导致错误触发
         }
 
         public void StartSelftest() {
-            if (_isSelfTestCompleted | !_inSelfTest | _byPassSelfTest) return;
+            if (isSelfTestCompleted | !inSelfTest | byPassSelfTest) {
+                return;
+            }
+            else {
+                displayUnitAnimator.SetTrigger("SelfTest");
+                SendCustomEventDelayedSeconds(nameof(SelfTestDone), 10);
+                Debug.Log("DU Start Selftest");
+            }
 
-            Debug.Log("DU Start Selftest");
-            PowerPage.SetActive(false);
-            SelfTestPage.SetActive(true);
-
-            var selfTestDelay = Random.Range(25f, 40f);
-            SendCustomEventDelayedSeconds(nameof(EndSelftest), selfTestDelay);
+            
         }
 
-        public void EndSelftest() {
-            Debug.Log("DU boot complete");
-            SelfTestPage.SetActive(false);
-            _inSelfTest = false;
-            _isSelfTestCompleted = true;
+        public void SelfTestDone() {
+            if (displayUnitAnimator.GetCurrentAnimatorStateInfo(1).IsName("default")) {
+                displayUnitAnimator.enabled = false;
+                inSelfTest = false;
+                isSelfTestCompleted = true;
+            }
+            else {
+                SendCustomEventDelayedSeconds(nameof(SelfTestDone), 10);
+                Debug.Log("DU Selftest over time, ");
+            }
         }
 
         public void BypassSelftest() {
             InitDU();
             Debug.Log("DU Bypass self-test");
-
-            _inSelfTest = false;
-            _isSelfTestCompleted = true;
-            PowerPage.SetActive(false);
+            inSelfTest = false;
+            isSelfTestCompleted = true;
         }
 
         public void InitDU() {
             Debug.Log("DU Init");
-
-            PowerPage.SetActive(true);
-            PowerFlashCover.SetActive(false);
-            InvaildDataPage.SetActive(false);
-            SelfTestPage.SetActive(false);
-
-            _inSelfTest = false;
-            _isSelfTestCompleted = false;
+            displayUnitAnimator.enabled = true;
+            inSelfTest = false;
+            isSelfTestCompleted = false;
         }
     }
 }
