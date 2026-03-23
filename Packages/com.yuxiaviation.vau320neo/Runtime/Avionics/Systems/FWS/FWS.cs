@@ -80,7 +80,7 @@ namespace A320VAU.FWS {
         }
 
         private void OnDisable() {
-            //对于不接入sacc event的航电脚本，似乎可以通过关闭监测坠毁/重置？
+            //对于不接入sacc event的航电脚本，似乎可以通过OnDisable认为飞机被坠毁/重置？
             //但是这个方法会导致处于警报状态时上下飞机后报警也被重置？
             ResetWarning();
         }
@@ -97,9 +97,11 @@ namespace A320VAU.FWS {
             if (_hasWarningDataVisibleChange) {
                 var hasMasterWarning = false;
                 var hasMasterCaution = false;
-
-                foreach (var memo in fwsWarningMessageDatas)
-                    if (memo.isVisible && memo.Type == WarningType.Primary)
+                var hasEng1Fire = false;
+                var hasEng2Fire = false;
+                foreach (var memo in fwsWarningMessageDatas) {
+                    if (memo.isVisible && memo.Type == WarningType.Primary) {
+                        //警告灯
                         switch (memo.Level) {
                             case WarningLevel.Immediate:
                                 hasMasterWarning = true;
@@ -111,6 +113,15 @@ namespace A320VAU.FWS {
                                 hasMasterCaution = true;
                                 break;
                         }
+                        //火警灯
+                        if (memo.Id == "ENGINE1_FIRE") {
+                            hasEng1Fire = true;
+                        }
+                        if (memo.Id == "ENGINE2_FIRE") {
+                            hasEng2Fire = true;
+                        }
+                    }
+                }
 
                 if (hasMasterWarning) {
                     audioSource.Play();
@@ -119,7 +130,6 @@ namespace A320VAU.FWS {
 
                 if (hasMasterCaution) {
                     MasterCautionLight.SetActive(true);
-
                     audioSource.PlayOneShot(Caution);
                 }
 
@@ -128,17 +138,27 @@ namespace A320VAU.FWS {
                     MasterWarningLight.SetActive(false);
                     MasterCautionLight.SetActive(false);
                 }
+
+                Eng1FireLight.SetActive(hasEng1Fire);
+                Eng2FireLight.SetActive(hasEng2Fire);
             }
 
             ECAMController.UpdateMemo();
         }
 
         // ReSharper disable once UnusedMember.Global
-        public void ResetWarning() {
+        public void OnMasterWarningPushed() {
             audioSource.Stop();
             MasterWarningLight.SetActive(false);
             MasterCautionLight.SetActive(false);
         }
+        public void ResetWarning() {
+            audioSource.Stop();
+            MasterWarningLight.SetActive(false);
+            MasterCautionLight.SetActive(false);
+            Eng1FireLight.SetActive(false);
+            Eng2FireLight.SetActive(false);
+    }
 
         private static bool Contains(string[] array, string item) {
             foreach (var temp in array)

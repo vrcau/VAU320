@@ -23,7 +23,7 @@ SpriteAtlas:
     platformSettings:
     - serializedVersion: 3
       m_BuildTarget: DefaultTexturePlatform
-      m_MaxTextureSize: 2048
+      m_MaxTextureSize: 4096
       m_ResizeAlgorithm: 0
       m_TextureFormat: -1
       m_TextureCompression: 1
@@ -151,9 +151,13 @@ SpriteAtlas:
     - efcb395f2f4358347a50e533dd37dc17: 3181307320009328807
     - efcb395f2f4358347a50e533dd37dc17: 756634296185599091
     - efcb395f2f4358347a50e533dd37dc17: -5063104590049656375
+    - efcb395f2f4358347a50e533dd37dc17: -1985440869
     - efcb395f2f4358347a50e533dd37dc17: -4507500050234387235
+    - efcb395f2f4358347a50e533dd37dc17: -1327548601
+    - efcb395f2f4358347a50e533dd37dc17: 253771239
     - efcb395f2f4358347a50e533dd37dc17: 217057725860628257
     - efcb395f2f4358347a50e533dd37dc17: 7205443770961099946
+    - efcb395f2f4358347a50e533dd37dc17: -1158039032
     - efcb395f2f4358347a50e533dd37dc17: -4452098067662554536
     - 728fb9bff8ddeb34c9ce96976a209795: 21300000
     - b94c81cf3c330f94e8522d0fdf651097: 21300000
@@ -255,9 +259,13 @@ SpriteAtlas:
   - {fileID: 3181307320009328807, guid: efcb395f2f4358347a50e533dd37dc17, type: 3}
   - {fileID: 756634296185599091, guid: efcb395f2f4358347a50e533dd37dc17, type: 3}
   - {fileID: -5063104590049656375, guid: efcb395f2f4358347a50e533dd37dc17, type: 3}
+  - {fileID: -1985440869, guid: efcb395f2f4358347a50e533dd37dc17, type: 3}
   - {fileID: -4507500050234387235, guid: efcb395f2f4358347a50e533dd37dc17, type: 3}
+  - {fileID: -1327548601, guid: efcb395f2f4358347a50e533dd37dc17, type: 3}
+  - {fileID: 253771239, guid: efcb395f2f4358347a50e533dd37dc17, type: 3}
   - {fileID: 217057725860628257, guid: efcb395f2f4358347a50e533dd37dc17, type: 3}
   - {fileID: 7205443770961099946, guid: efcb395f2f4358347a50e533dd37dc17, type: 3}
+  - {fileID: -1158039032, guid: efcb395f2f4358347a50e533dd37dc17, type: 3}
   - {fileID: -4452098067662554536, guid: efcb395f2f4358347a50e533dd37dc17, type: 3}
   - {fileID: 21300000, guid: 728fb9bff8ddeb34c9ce96976a209795, type: 3}
   - {fileID: 21300000, guid: b94c81cf3c330f94e8522d0fdf651097, type: 3}
@@ -358,9 +366,13 @@ SpriteAtlas:
   - DECEL
   - LDG_DN&LOCK
   - BTN_ON
+  - DISCH
   - LDG_UNLOCK
+  - SQUIB
+  - Fire
   - APU_AVAIL
   - MASTER_CAUT
+  - PUSH
   - MASTER_WARN
   - attitude-1
   - wing_indication
