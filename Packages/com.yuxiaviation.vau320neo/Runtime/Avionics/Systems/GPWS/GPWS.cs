@@ -8,7 +8,7 @@ using UnityEngine;
 namespace A320VAU.Avionics {
     //[RequireComponent(typeof(AudioSource))]
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
-    [DefaultExecutionOrder(1100)] // After SaccAirVehicle/PFDDriver
+    [DefaultExecutionOrder(2031)] // After 320 Radio Altimeter
     public class GPWS : UdonSharpBehaviour {
         private const int ALERT_PULL_UP = 2;
         private const int ALERT_TERRAIN = 8;

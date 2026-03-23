@@ -278,7 +278,7 @@ TextureImporter:
         width: 100
         height: 34
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -286,6 +286,90 @@ TextureImporter:
       bones: []
       spriteID: 1274da50ad4230300800000000000000
       internalID: 217057725860628257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SQUIB
+      rect:
+        serializedVersion: 2
+        x: 3925
+        y: 3819
+        width: 98
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58c9d1d1ebfa9f046b0442006cae840b
+      internalID: -1327548601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DISCH
+      rect:
+        serializedVersion: 2
+        x: 3581
+        y: 3877
+        width: 152
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 513a9e6e92e01df42b95ac6b97a8c4ce
+      internalID: -1985440869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire
+      rect:
+        serializedVersion: 2
+        x: 3324
+        y: 3566
+        width: 96
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b158f75136582f4438370c434a5faf62
+      internalID: 253771239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PUSH
+      rect:
+        serializedVersion: 2
+        x: 3410
+        y: 3106
+        width: 127
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5a8dc46bc01d574e820cf01cfc1af5c
+      internalID: -1158039032
       vertices: []
       indices: 
       edges: []
@@ -304,10 +388,14 @@ TextureImporter:
       APU_AVAIL: 217057725860628257
       BTN_ON: -5063104590049656375
       DECEL: 3181307320009328807
+      DISCH: -1985440869
+      Fire: 253771239
       LDG_DN&LOCK: 756634296185599091
       LDG_UNLOCK: -4507500050234387235
       MASTER_CAUT: 7205443770961099946
       MASTER_WARN: -4452098067662554536
+      PUSH: -1158039032
+      SQUIB: -1327548601
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace A320VAU.FWS {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [DefaultExecutionOrder(2045)] // after FWS Warning Data
     public class FWS : UdonSharpBehaviour {
     #region Aircraft Systems
 
@@ -25,10 +26,11 @@ namespace A320VAU.FWS {
 
     #region ECAM and Warning Light/Audio
 
-        public Animator cockpitAnimator;
-
-        private readonly int MASTER_WARNING_HASH = Animator.StringToHash("IsMasterWarning");
-        private readonly int MASTER_CAUTION_HASH = Animator.StringToHash("IsMasterCaution");
+        public GameObject MasterWarningLight;
+        public GameObject MasterCautionLight;
+        public GameObject Eng1FireLight;
+        public GameObject Eng2FireLight;
+        public GameObject APUFireLight;
 
         [Header("ECAM and warning Light/Audio")]
         public ECAMDisplay ECAMController;
@@ -57,6 +59,8 @@ namespace A320VAU.FWS {
 
             fwsWarningMessageDatas = GetComponentsInChildren<FWSWarningMessageData>();
             _fwsWarningData = GetComponentInChildren<FWSWarningData>();
+
+            ResetWarning();
         }
 
         private void LateUpdate() {
@@ -75,6 +79,12 @@ namespace A320VAU.FWS {
             _lastMinimumCalloutIndex = -1;
         }
 
+        private void OnDisable() {
+            //对于不接入sacc event的航电脚本，似乎可以通过OnDisable认为飞机被坠毁/重置？
+            //但是这个方法会导致处于警报状态时上下飞机后报警也被重置？
+            ResetWarning();
+        }
+
         private void UpdateFWS() {
             if (Time.time - _lastFwsUpdate < FWS_UPDATE_INTERVAL) return;
             _lastFwsUpdate = Time.time;
@@ -87,9 +97,11 @@ namespace A320VAU.FWS {
             if (_hasWarningDataVisibleChange) {
                 var hasMasterWarning = false;
                 var hasMasterCaution = false;
-
-                foreach (var memo in fwsWarningMessageDatas)
-                    if (memo.isVisible && memo.Type == WarningType.Primary)
+                var hasEng1Fire = false;
+                var hasEng2Fire = false;
+                foreach (var memo in fwsWarningMessageDatas) {
+                    if (memo.isVisible && memo.Type == WarningType.Primary) {
+                        //警告灯
                         switch (memo.Level) {
                             case WarningLevel.Immediate:
                                 hasMasterWarning = true;
@@ -101,37 +113,52 @@ namespace A320VAU.FWS {
                                 hasMasterCaution = true;
                                 break;
                         }
+                        //火警灯
+                        if (memo.Id == "ENGINE1_FIRE") {
+                            hasEng1Fire = true;
+                        }
+                        if (memo.Id == "ENGINE2_FIRE") {
+                            hasEng2Fire = true;
+                        }
+                    }
+                }
 
                 if (hasMasterWarning) {
                     audioSource.Play();
-
-                    cockpitAnimator.SetBool(MASTER_WARNING_HASH, true);
+                    MasterWarningLight.SetActive(true);
                 }
 
                 if (hasMasterCaution) {
-                    cockpitAnimator.SetBool(MASTER_CAUTION_HASH, true);
-
+                    MasterCautionLight.SetActive(true);
                     audioSource.PlayOneShot(Caution);
                 }
 
                 if (!hasMasterCaution && !hasMasterWarning) {
                     audioSource.Stop();
-
-                    cockpitAnimator.SetBool(MASTER_WARNING_HASH, false);
-                    cockpitAnimator.SetBool(MASTER_CAUTION_HASH, false);
+                    MasterWarningLight.SetActive(false);
+                    MasterCautionLight.SetActive(false);
                 }
+
+                Eng1FireLight.SetActive(hasEng1Fire);
+                Eng2FireLight.SetActive(hasEng2Fire);
             }
 
             ECAMController.UpdateMemo();
         }
 
         // ReSharper disable once UnusedMember.Global
+        public void OnMasterWarningPushed() {
+            audioSource.Stop();
+            MasterWarningLight.SetActive(false);
+            MasterCautionLight.SetActive(false);
+        }
         public void ResetWarning() {
             audioSource.Stop();
-
-            cockpitAnimator.SetBool(MASTER_WARNING_HASH, false);
-            cockpitAnimator.SetBool(MASTER_CAUTION_HASH, false);
-        }
+            MasterWarningLight.SetActive(false);
+            MasterCautionLight.SetActive(false);
+            Eng1FireLight.SetActive(false);
+            Eng2FireLight.SetActive(false);
+    }
 
         private static bool Contains(string[] array, string item) {
             foreach (var temp in array)

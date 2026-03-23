@@ -5,6 +5,7 @@ using VirtualCNS;
 
 namespace A320VAU.FMGC {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [DefaultExecutionOrder(2050)]// after FWS
     public class FMGC : UdonSharpBehaviour {
         public NavaidDatabase navaidDatabase;
 

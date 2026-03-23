@@ -221,7 +221,6 @@ namespace A320VAU.Brake {
         public void SFEXT_O_PilotEnter() {
             prevTriggered = false;
             prevKeyPress = false;
-            if (!NoPilotAlwaysParkBrake)ParkBreakSet = true;
             Dial_Funcon.SetActive(ParkBreakSet);
             RequestSerialization();
         }
@@ -229,7 +228,7 @@ namespace A320VAU.Brake {
         public void SFEXT_O_PilotExit() {
             BrakeInput = 0;
             Selected = false;
-            if (!NoPilotAlwaysParkBrake) ParkBreakSet = false;
+            if (NoPilotAlwaysParkBrake) ParkBreakSet = true;
             Dial_Funcon.SetActive(ParkBreakSet);
             RequestSerialization();
         }

@@ -579,6 +579,8 @@ namespace A320VAU.SFEXT {
         public ParticleSystem thrustEffect;
         private float fireStartSpeed, thrustStartSpeed;
 
+        public GameObject agent1DischIndicator;
+
         private void Effect_Start() {
             fireStartSpeed = fireEffect.main.startSpeedMultiplier;
             thrustStartSpeed = thrustEffect.main.startSpeedMultiplier;
@@ -615,6 +617,7 @@ namespace A320VAU.SFEXT {
 
         public void Dish() {
             dished = true;
+            agent1DischIndicator.SetActive(dished);
         }
 
         private void Fault_Start() {
@@ -625,6 +628,7 @@ namespace A320VAU.SFEXT {
             fire = false;
             stall = false;
             dished = false;
+            agent1DischIndicator.SetActive(dished);
             broken = false;
         }
 

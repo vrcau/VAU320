@@ -6,6 +6,7 @@ using YuxiFlightInstruments.BasicFlightData;
 
 namespace A320VAU.ADIRU {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    [DefaultExecutionOrder(2020)]// after ADR
     public class IRS : UdonSharpBehaviour {
         private DependenciesInjector _injector;
         private YFI_FlightDataInterface _flightDataInterface;
