@@ -34289,9 +34289,6 @@ MonoBehaviour:
   EngineOnOnEnter: 1
   EngineOffOnExit: 1
   _EngineOn: 0
-  AoALiftYaw: 0
-  AoALiftPitch: 0
-  VelLiftStart: 0
 --- !u!114 &3572449966251728711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171500,7 +171497,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6216248082268124848}
   - component: {fileID: 749747733486461036}
-  - component: {fileID: 5418447697911623771}
   - component: {fileID: 5746087756897231815}
   m_Layer: 0
   m_Name: COM Frequency
@@ -171570,14 +171566,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!222 &5418447697911623771
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7855127478076871391}
-  m_CullTransparentMesh: 0
 --- !u!114 &5746087756897231815
 MonoBehaviour:
   m_ObjectHideFlags: 0

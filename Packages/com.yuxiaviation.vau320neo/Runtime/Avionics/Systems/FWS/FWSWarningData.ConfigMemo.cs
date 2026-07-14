@@ -116,7 +116,7 @@ namespace A320VAU.FWS {
                 LANDING_MEMO.MessageLine[11].isMessageVisible = true;
 
                 // FLAPS FULL
-                if (FWS.equipmentData.flapTargetIndex == 4) {
+                if (FWS.equipmentData.flapTargetIndex == 5) {
                     SetWarnVisible(ref LANDING_MEMO.MessageLine[12].isMessageVisible, false);
                     SetWarnVisible(ref LANDING_MEMO.MessageLine[13].isMessageVisible, false);
                     SetWarnVisible(ref LANDING_MEMO.MessageLine[14].isMessageVisible, true);
