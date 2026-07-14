@@ -32,7 +32,7 @@ namespace A320VAU.ND {
 
             var windSpeed = _adiru.windSpeed;
             var windDirection = _adiru.windDirection;
-            var windRelativeDirection = _adiru.irs.heading - windDirection;
+            var windRelativeDirection = _adiru.irs.heading + windDirection;
 
             windDirectionIndicator.transform.localRotation = Quaternion.AngleAxis(-windRelativeDirection, Vector3.forward);
             windDirectionText.text = windDirection.ToString("000");
